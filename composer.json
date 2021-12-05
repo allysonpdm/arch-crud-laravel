@@ -1,7 +1,7 @@
 {
     "name": "allyson/arch-laravel",
     "description": "Arquitetura base para projetos laravel.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "keywords": [
         "arquitetura",
         "arch-laravel"
