@@ -26,6 +26,7 @@ class BaseService
     private $dataSheet;
     private $params;
     private $register;
+    private $now;
 
     protected $model;
     protected object $business;
@@ -36,6 +37,7 @@ class BaseService
     const INDEX_OF_CONDITION = 1;
     const INDEX_OF_SEARCH = 2;
 
+
     public function __construct()
     {
         $this->business = new stdClass();
@@ -44,6 +46,7 @@ class BaseService
     public function setPrimaryModel($model)
     {
         $this->model = bootUp($model);
+        $this->now = date('Y-m-d H:i:s');
     }
 
     /**
@@ -371,7 +374,7 @@ class BaseService
     protected function delete()
     {
         if($this->hasRelationships()){
-            self::softDelete($this->register);
+            self::softDelete($this->register, $this->model::DELETED_AT, $this->now);
             throw new SoftDeleteException;
         }else{
             $this->register->delete();
@@ -380,9 +383,9 @@ class BaseService
         return $this;
     }
 
-    protected static function softDelete($register)
+    protected static function softDelete($register, $nameColumn, $value)
     {
-        $register->update(['deleted_at' => date('Y-m-d H:i:s')]);
+        $register->update([$nameColumn => $value]);
     }
 
     private function afterDelete()
