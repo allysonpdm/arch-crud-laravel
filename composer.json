@@ -12,7 +12,7 @@
             "name": "Allyson",
             "email": "alysonmt@gmail.com",
             "role": "Developer"
-        },
+        }
     ],
     "require": {
         "php": "^7.1|^8.0",
@@ -50,5 +50,11 @@
     },
     "config": {
         "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
     }
 }
