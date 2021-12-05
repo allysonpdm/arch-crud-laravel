@@ -15,7 +15,6 @@
             "role": "Developer"
         }
     ],
-    "minimum-stable": "dev-main",
     "require": {
         "php": "^7.1|^8.0",
         "illuminate/support": "^6.9|^7.0|^8.0",
