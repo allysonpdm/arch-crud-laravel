@@ -41,12 +41,12 @@ class BaseService
     public function __construct()
     {
         $this->business = new stdClass();
+        $this->now = date('Y-m-d H:i:s');
     }
 
     public function setPrimaryModel($model)
     {
         $this->model = bootUp($model);
-        $this->now = date('Y-m-d H:i:s');
     }
 
     /**
