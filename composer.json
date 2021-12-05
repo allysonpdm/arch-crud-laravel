@@ -1,0 +1,60 @@
+{
+    "name": "allyson/arch-laravel",
+    "description": "Arquitetura base para projetos laravel.",
+    "version": "1.0.0",
+    "keywords": [
+        "arquitetura",
+        "arch-laravel"
+    ],
+    "type": "library",
+    "authors": [
+        {
+            "name": "Allyson",
+            "email": "alysonmt@gmail.com",
+            "role": "Developer"
+        },
+    ],
+    "require": {
+        "php": "^7.1|^8.0",
+        "illuminate/support": "^6.9|^7.0|^8.0",
+        "laravel/sanctum": "^2.4",
+        "tymon/jwt-auth": "^1.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^4.0",
+        "nunomaduro/phpinsights": "^1.14",
+        "phpmd/phpmd": "^2.9",
+        "phpunit/phpunit": "^9.3.3",
+        "sebastian/phpcpd": "^6.0",
+        "squizlabs/php_codesniffer": "*"
+    },
+    "autoload": {
+        "files": [
+            "src/app/Helpers/helpers.php"
+        ],
+        "psr-4": {
+            "ArchLaravel\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ArchLaravel\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "phpcs": ".\\vendor\\bin\\phpcbf --standard=PSR12 .\\src",
+        "phpmd": ".\\vendor\\bin\\phpmd .\\src text cleancode,codesize,controversial,design,naming,unusedcode --ignore-violations-on-exit --reportfile phpmd.text",
+        "phpcpd": ".\\vendor\\bin\\phpcpd .\\src"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {}
+        }
+    }
+}
