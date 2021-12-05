@@ -17,8 +17,7 @@
     "require": {
         "php": "^7.1|^8.0",
         "illuminate/support": "^6.9|^7.0|^8.0",
-        "laravel/sanctum": "^2.4",
-        "tymon/jwt-auth": "^1.0"
+        "laravel/sanctum": "^2.4"
     },
     "require-dev": {
         "orchestra/testbench": "^4.0",
