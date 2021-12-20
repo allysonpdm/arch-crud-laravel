@@ -6,6 +6,8 @@ use App\Exceptions\BusinessException;
 use App\Exceptions\CreateException;
 use App\Exceptions\SoftDeleteException;
 use App\Rules\FieldsExistsInTableRule;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -40,12 +42,12 @@ class BaseService
     public function __construct()
     {
         $this->business = new stdClass();
+        $this->now = date('Y-m-d H:i:s');
     }
 
     public function setPrimaryModel($model)
     {
         $this->model = bootUp($model);
-        $this->now = date('Y-m-d H:i:s');
     }
 
     /**
@@ -134,14 +136,14 @@ class BaseService
         return $this;
     }
 
-    protected function applyFilters()
+    protected function applyFilters(): Builder
     {
         return $this->mandatoryConditions()
                     ->userConditions()
                     ->model;
     }
 
-    private function mandatoryConditions()
+    protected function mandatoryConditions()
     {
         foreach($this->model->queryFilters as $field => $search){
             switch($field){
@@ -156,7 +158,7 @@ class BaseService
         return $this;
     }
 
-    private function userConditions()
+    protected function userConditions()
     {
         foreach($this->params->search as $field => $search){
             $this->model = $this->searchTreatment($field, $search);
