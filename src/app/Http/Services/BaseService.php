@@ -33,20 +33,19 @@ class BaseService
 
     public $request;
 
-    const INDEX_OF_COLUMN = 0;
-    const INDEX_OF_CONDITION = 1;
-    const INDEX_OF_SEARCH = 2;
+    private const KEY_OPERATOR = 0;
+    private const KEY_VALUE = 1;
 
 
     public function __construct()
     {
         $this->business = new stdClass();
-        $this->now = date('Y-m-d H:i:s');
     }
 
     public function setPrimaryModel($model)
     {
         $this->model = bootUp($model);
+        $this->now = date('Y-m-d H:i:s');
     }
 
     /**
@@ -66,10 +65,13 @@ class BaseService
                 ],
                 'page'=> 'bail|integer',
                 'perPage' => 'bail|integer',
-                'search' => 'bail|string'
+                'search' => [
+                    'bail',
+                    new FieldsExistsInTableRule($this->model->getTable())
+                ]
             ]
         );
-        return $this->filterParameters($validated)
+        return $this->prepareFilterParameters($validated)
                     ->beforeList()
                     ->validateInternalRules()
                     ->list()
@@ -90,12 +92,12 @@ class BaseService
         return $validator->validated();
     }
 
-    protected function filterParameters($validated)
+    protected function prepareFilterParameters($validated)
     {
         $this->params = new stdClass;
         $this->params->orderBy = $validated['orderBy'] ?? [];
         $this->params->perPage = $validated['perPage'] ?? null;
-        $this->params->search = !empty($validated['search']) ? "%$validated[search]%" : null;
+        $this->params->search = $validated['search'] ?? [];
         return $this;
     }
 
@@ -134,51 +136,40 @@ class BaseService
 
     protected function applyFilters()
     {
-        $filter = $this->model->queryFilters;
-        if (!empty($filter)) {
-            $this->setConditions($filter);
-        }
-        return $this->model;
+        return $this->mandatoryConditions()
+                    ->userConditions()
+                    ->model;
     }
 
-    private function setConditions(array $filter): void
+    private function mandatoryConditions()
     {
-        foreach ($filter as $key => $array) {
-            if($key === 'OR'){
-                foreach ($array as $k => $arr)
-                    $this->model = $this->or($arr);
-            }elseif($key === 'AND'){
-                foreach ($array as $k => $arr)
-                    $this->model = $this->and($arr);
-            }else{
-                $this->model = $this->and($array);
+        foreach($this->model->queryFilters as $field => $search){
+            switch($field){
+                case 'OR':
+                    $this->model = $this->model->orWhere($search);
+                    break;
+                default:
+                    $this->model = $this->model->where($search);
             }
         }
+
+        return $this;
     }
 
-    private function or($arr){
-        return sizeof($arr) > 2
-            ? $this->model->orWhere($arr[self::INDEX_OF_COLUMN], $arr[self::INDEX_OF_CONDITION], $this->search($arr))
-            : $this->model->orWhere($this->whereParameterTreatment($arr));
-    }
-
-    private function and($arr){
-        return sizeof($arr) > 2
-            ? $this->model->where($arr[self::INDEX_OF_COLUMN], $arr[self::INDEX_OF_CONDITION], $this->search($arr))
-            : $this->model->where($this->whereParameterTreatment($arr));
-    }
-
-    private function search($arr)
+    private function userConditions()
     {
-        return $arr[self::INDEX_OF_SEARCH] ?? $this->params->search ?? null;
+        foreach($this->params->search as $field => $search){
+            $this->model = $this->searchTreatment($field, $search);
+        }
+
+        return $this;
     }
 
-    private function whereParameterTreatment($array)
+    private function searchTreatment($field, $search)
     {
-        if(array_key_exists(0, $array))
-            return [$array[self::INDEX_OF_COLUMN],  $this->search($array)];
-
-        return $array;
+        return is_array($search)
+            ? $this->model->where($field, $search[self::KEY_OPERATOR],  $search[self::KEY_VALUE])
+            : $this->model->where($field, $search);
     }
 
     protected function afterList()
@@ -329,7 +320,8 @@ class BaseService
         return $this->beforeDelete()
                     ->validateInternalRules()
                     ->delete()
-                    ->afterDelete();
+                    ->afterDelete()
+                    ->register;
     }
 
     protected static function getRelationships($model)
@@ -390,6 +382,6 @@ class BaseService
 
     private function afterDelete()
     {
-        return $this->register;
+        return $this;
     }
 }
