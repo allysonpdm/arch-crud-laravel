@@ -339,7 +339,7 @@ class BaseService
         foreach ($reflector->getMethods() as $reflectionMethod) {
             $returnType = $reflectionMethod->getReturnType();
             if ($returnType) {
-                if (in_array(class_basename($returnType->getName()), $typesOfRelationships))
+                if (in_array($returnType->getName(), $typesOfRelationships))
                     $relations[] = $reflectionMethod;
             }
         }
