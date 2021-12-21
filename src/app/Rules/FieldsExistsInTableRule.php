@@ -18,12 +18,8 @@ class FieldsExistsInTableRule implements Rule
      */
     public function __construct(string $table)
     {
-        $this->table= $table; 
-        try{
-            $this->columns = Schema::getColumnListing($table);
-        }catch(Exception $exception){
-            throw new TableNotFoundException;
-        }
+        $this->table= $table;
+        $this->columns = Schema::getColumnListing($table);
     }
 
     /**
@@ -35,6 +31,9 @@ class FieldsExistsInTableRule implements Rule
      */
     public function passes($attribute, $value)
     {
+        if(empty($this->columns))
+            throw new TableNotFoundException;
+
         foreach($value as $key => $val){
             if(!in_array($key, $this->columns)){
                 $this->notFoundField = $key;
