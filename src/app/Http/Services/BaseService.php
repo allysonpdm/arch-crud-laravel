@@ -6,8 +6,6 @@ use App\Exceptions\BusinessException;
 use App\Exceptions\CreateException;
 use App\Exceptions\SoftDeleteException;
 use App\Rules\FieldsExistsInTableRule;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -136,7 +134,7 @@ class BaseService
         return $this;
     }
 
-    protected function applyFilters(): Builder
+    protected function applyFilters()
     {
         return $this->mandatoryConditions()
                     ->userConditions()

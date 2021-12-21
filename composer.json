@@ -59,7 +59,12 @@
         "phpcs": ".\\vendor\\bin\\phpcbf --standard=PSR12 .\\src",
         "phpmd": ".\\vendor\\bin\\phpmd .\\src text cleancode,codesize,controversial,design,naming,unusedcode --ignore-violations-on-exit --reportfile phpmd.text",
         "phpcpd": ".\\vendor\\bin\\phpcpd .\\src",
-        "arch-laravel": "@php echo \"Teste\";"
+        "win-install": [
+            "xcopy .\\src\\app ..\\..\\..\\app /E /H /C /I /Y",
+            "xcopy .\\src\\stubs\\ ..\\..\\..\\stubs /E /H /C /I /Y",
+            "xcopy .\\src\\resources\\ ..\\..\\..\\resources /E /H /C /I /Y",
+            "xcopy .\\src\\database\\ ..\\..\\..\\database /E /H /C /I /Y"
+        ]
     },
     "config": {
         "sort-packages": true
