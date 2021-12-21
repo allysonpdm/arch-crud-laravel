@@ -2,6 +2,8 @@
 
 namespace App\Rules;
 
+use App\Exceptions\TableNotFoundException;
+use Exception;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Validator;
@@ -16,8 +18,12 @@ class FieldsExistsInTableRule implements Rule
      */
     public function __construct(string $table)
     {
-        $this->table= $table;
-        $this->columns = Schema::getColumnListing($table);
+        $this->table= $table; 
+        try{
+            $this->columns = Schema::getColumnListing($table);
+        }catch(Exception $exception){
+            throw new TableNotFoundException;
+        }
     }
 
     /**
