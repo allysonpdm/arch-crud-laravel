@@ -58,7 +58,8 @@
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
         "phpcs": ".\\vendor\\bin\\phpcbf --standard=PSR12 .\\src",
         "phpmd": ".\\vendor\\bin\\phpmd .\\src text cleancode,codesize,controversial,design,naming,unusedcode --ignore-violations-on-exit --reportfile phpmd.text",
-        "phpcpd": ".\\vendor\\bin\\phpcpd .\\src"
+        "phpcpd": ".\\vendor\\bin\\phpcpd .\\src",
+        "post-package-install": "@php -r \"shell_exec('mv .\\vendor\\src\\stubs .');\""
     },
     "config": {
         "sort-packages": true
