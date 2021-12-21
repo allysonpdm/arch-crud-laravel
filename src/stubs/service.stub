@@ -12,7 +12,6 @@ use Illuminate\Validation\ValidationException;
 
 class GenericService extends BaseService
 {
-
     private $id;
     private $data;
     private $dataSheet;
@@ -24,6 +23,21 @@ class GenericService extends BaseService
     protected object $business;
 
     public $request;
+
+    private const KEY_OPERATOR = 0;
+    private const KEY_VALUE = 1;
+
+
+    public function __construct()
+    {
+        $this->business = new stdClass();
+        $this->now = date('Y-m-d H:i:s');
+    }
+
+    public function setPrimaryModel($model)
+    {
+        $this->model = bootUp($model);
+    }
 
     /**
      * Display a listing of the resource.
@@ -69,6 +83,15 @@ class GenericService extends BaseService
         return $validator->validated();
     }
 
+    protected function prepareFilterParameters($validated)
+    {
+        $this->params = new stdClass;
+        $this->params->orderBy = $validated['orderBy'] ?? [];
+        $this->params->perPage = $validated['perPage'] ?? null;
+        $this->params->search = $validated['search'] ?? [];
+        return $this;
+    }
+
     protected function beforeList()
     {
         return $this;
@@ -100,6 +123,44 @@ class GenericService extends BaseService
         $this->register = $this->dataSheet->paginate($this->params->perPage);
 
         return $this;
+    }
+
+    protected function applyFilters()
+    {
+        return $this->mandatoryConditions()
+                    ->userConditions()
+                    ->model;
+    }
+
+    protected function mandatoryConditions()
+    {
+        foreach($this->model->queryFilters as $field => $search){
+            switch($field){
+                case 'OR':
+                    $this->model = $this->model->orWhere($search);
+                    break;
+                default:
+                    $this->model = $this->model->where($search);
+            }
+        }
+
+        return $this;
+    }
+
+    protected function userConditions()
+    {
+        foreach($this->params->search as $field => $search){
+            $this->model = $this->searchTreatment($field, $search);
+        }
+
+        return $this;
+    }
+
+    private function searchTreatment($field, $search)
+    {
+        return is_array($search)
+            ? $this->model->where($field, $search[self::KEY_OPERATOR],  $search[self::KEY_VALUE])
+            : $this->model->where($field, $search);
     }
 
     protected function afterList()
@@ -252,6 +313,40 @@ class GenericService extends BaseService
                     ->delete()
                     ->afterDelete()
                     ->register;
+    }
+
+    protected static function getRelationships($model)
+    {
+        $typesOfRelationships = [
+            HasOne::class,
+            HasMany::class,
+            BelongsTo::class,
+            BelongsToMany::class,
+            MorphTo::class,
+            MorphToMany::class
+        ];
+        $reflector = new ReflectionClass($model);
+        $relations = [];
+        foreach ($reflector->getMethods() as $reflectionMethod) {
+            $returnType = $reflectionMethod->getReturnType();
+            if ($returnType) {
+                if (in_array($returnType->getName(), $typesOfRelationships))
+                    $relations[] = $reflectionMethod;
+            }
+        }
+        return $relations;
+    }
+
+    protected function hasRelationships()
+    {
+        $relations = self::getRelationships($this->model);
+        $this->register =  $this->model->findOrFail($this->id);
+
+        foreach($relations as $relation){
+            if(!empty($this->register->{$relation->name}))
+                return true;
+        }
+        return false;
     }
 
     protected function beforeDelete()
