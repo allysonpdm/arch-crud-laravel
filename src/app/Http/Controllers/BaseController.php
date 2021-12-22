@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Exceptions\SoftDeleteException;
-use App\Http\Requests\BaseRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -90,7 +89,7 @@ class BaseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(BaseRequest $request)
+    public function store(Request $request)
     {
         try{
             return $this->service->create($request->validated());
