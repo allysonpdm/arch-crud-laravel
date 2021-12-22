@@ -18,7 +18,7 @@ class BaseModel extends Model
         self::UPDATED_AT,
         self::DELETED_AT
     ];
-    protected $fillable = ['nome', 'deleted_at'];
+    protected $fillable = ['deleted_at'];
 
     public static $snakeAttributes = false;
     public $guardFromUpdate = [
