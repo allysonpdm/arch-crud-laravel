@@ -12,7 +12,6 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Request as Input;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class BaseController extends Controller
@@ -26,7 +25,7 @@ class BaseController extends Controller
     public function __construct()
     {
         $this->name = self::getControllerName($this);
-        $this->request = bootUp(["App\\Http\\Requests\\{$this->name}Request", Request::class]);
+        $this->request = app("App\\Http\\Requests\\{$this->name}Request");
         $this->service = bootUp(["App\\Http\\Services\\{$this->name}Service"]);
         $this->service->setPrimaryModel(["App\\Models\\{$this->name}Model"]);
         $this->service->request = &$this->request;
@@ -94,7 +93,7 @@ class BaseController extends Controller
     public function store(BaseRequest $request)
     {
         try{
-            return $this->service->create($request->all());
+            return $this->service->create($request->validated());
         }catch(Exception $exception){
             return $this->exceptionTreatment($exception);
         }
