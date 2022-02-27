@@ -6,6 +6,7 @@ use App\Exceptions\BusinessException;
 use App\Exceptions\CreateException;
 use App\Exceptions\SoftDeleteException;
 use App\Rules\FieldsExistsInTableRule;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,20 +22,20 @@ use stdClass;
 class BaseService
 {
 
-    private $id;
-    private $data;
-    private $dataSheet;
-    private $params;
-    private $register;
-    private $now;
+    protected $id;
+    protected $data;
+    protected $dataSheet;
+    protected $params;
+    protected $now;
 
+    protected $register;
     protected $model;
     protected object $business;
 
     public $request;
 
-    private const KEY_OPERATOR = 0;
-    private const KEY_VALUE = 1;
+    protected const KEY_OPERATOR = 0;
+    protected const KEY_VALUE = 1;
 
 
     public function __construct()
@@ -165,7 +166,7 @@ class BaseService
         return $this;
     }
 
-    private function searchTreatment($field, $search)
+    protected function searchTreatment($field, $search)
     {
         return is_array($search)
             ? $this->model->where($field, $search[self::KEY_OPERATOR],  $search[self::KEY_VALUE])
@@ -380,8 +381,33 @@ class BaseService
         $register->update([$nameColumn => $value]);
     }
 
-    private function afterDelete()
+    protected function afterDelete()
     {
         return $this;
+    }
+
+    protected function exceptionTreatment($exception)
+    {
+        $type = get_class($exception);
+        switch ($type) {
+            case ValidationException::class:
+                return response($exception->validator->messages(), 422); // HTTP error 422
+            case ModelNotFoundException::class:
+                return response(__('exceptions.error.no_results'), 404);
+            case CreateException::class:
+                return response(__('exceptions.error.create'), 500);
+            case SoftDeleteException::class:
+                return response(__('exceptions.error.soft_delete'), 200);
+            case BusinessException::class:
+                return response($exception->getMessage(), 500);
+            default:
+                $response = [
+                    'Exception' => $type,
+                    'Message' => $exception->getMessage(),
+                    'File' => $exception->getFile(),
+                    'Line' => $exception->getLine(),
+                ];
+                return response($response, $exception->getCode());
+        }
     }
 }
