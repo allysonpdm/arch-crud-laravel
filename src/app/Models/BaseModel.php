@@ -15,8 +15,7 @@ class BaseModel extends Model
 
     protected $hidden = [
         self::CREATED_AT,
-        self::UPDATED_AT,
-        self::DELETED_AT
+        self::UPDATED_AT
     ];
     protected $fillable = ['deleted_at'];
 
@@ -27,6 +26,4 @@ class BaseModel extends Model
         self::UPDATED_AT,
         self::DELETED_AT
     ];
-
-    public array $queryFilters = [];
 }
