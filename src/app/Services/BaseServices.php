@@ -28,9 +28,10 @@ abstract class BaseServices implements TemplateServices
 
     public function index(array $request): Response
     {
+        $this->request = $request;
         try {
             $response = $this->beforeList()
-                ->list($request)
+                ->list()
                 ->afterList()
                 ->model
                 ->paginate($request['perPage'] ?? null)
@@ -46,10 +47,14 @@ abstract class BaseServices implements TemplateServices
         return $this;
     }
 
-    protected function list($request)
+    protected function list()
     {
-        $this->search($request['wheres'] ?? null, $request['orWheres'] ?? null)
-            ->ordenation($request['orderBy'] ?? null);
+        $wheres = $this->request['wheres'] ?? null;
+        $orWheres = $this->request['orWheres'] ?? null;
+        $ordenation = $this->request['orderBy'] ?? null;
+
+        $this->search($wheres, $orWheres)
+            ->ordenation($ordenation);
 
         return $this;
     }
@@ -118,9 +123,10 @@ abstract class BaseServices implements TemplateServices
 
     public function create(array $request): Response
     {
+        $this->request = $request;
         try {
             $response = $this->beforeInsert()
-                ->insert($request)
+                ->insert()
                 ->afterInsert()
                 ->model;
             return response($response, 201);
@@ -134,13 +140,13 @@ abstract class BaseServices implements TemplateServices
         return $this;
     }
 
-    protected function insert(array $request)
+    protected function insert()
     {
         try {
-            if (empty($request)) {
+            if (empty($this->request)) {
                 throw new CreateException;
             }
-            $this->model = $this->model::create($request);
+            $this->model = $this->model::create($this->request);
             return $this;
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -154,9 +160,10 @@ abstract class BaseServices implements TemplateServices
 
     public function update(array $request, string|int $id)
     {
+        $this->request = $request;
         try {
             $response = $this->beforeModify()
-                ->modify($request, $id)
+                ->modify($id)
                 ->afterModify()
                 ->model;
             return response($response, 200);
@@ -170,13 +177,13 @@ abstract class BaseServices implements TemplateServices
         return $this;
     }
 
-    protected function modify(array $request, string|int $id)
+    protected function modify(string|int $id)
     {
-        if (empty($request)) {
+        if (empty($this->request)) {
             throw new UpdateException;
         }
         $this->model = $this->model->findOrFail($id);
-        $this->model->update($request);
+        $this->model->update($this->request);
         return $this;
     }
 
