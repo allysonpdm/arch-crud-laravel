@@ -13,7 +13,7 @@ use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use ReflectionClass;
 
-abstract class BaseServices implements TemplateServices
+abstract class BaseService implements TemplateService
 {
 
     protected $nameModel;

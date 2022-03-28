@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class SeederBase extends Seeder
+abstract class BaseSeeder extends Seeder
 {
     protected $data;
     protected $table;
@@ -18,6 +19,7 @@ class SeederBase extends Seeder
      */
     public function run()
     {
+        //$this->call([]);
         $this->populate($this->table, $this->data);
     }
 
@@ -29,5 +31,15 @@ class SeederBase extends Seeder
         foreach ($this->chunk($data) as $chunk) {
             DB::connection($this->database)->table($table)->insert($chunk);
         }
+    }
+
+    abstract protected function getDataFromModel(Model $model);
+
+    protected static function getTipos($model){
+        $data = [];
+        foreach ($model::TIPOS as $key => $value) {
+            array_push($data, ['id' => $value, 'descricao' => $key]);
+        }
+        return $data;
     }
 }
