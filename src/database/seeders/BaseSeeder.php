@@ -33,7 +33,10 @@ abstract class BaseSeeder extends Seeder
         }
     }
 
-    abstract protected function getDataFromModel(Model $model);
+    protected function getDataFromModel(Model $model):  void
+    {
+        $this->data = self::getTipos($model);
+    }
 
     protected static function getTipos($model){
         $data = [];
