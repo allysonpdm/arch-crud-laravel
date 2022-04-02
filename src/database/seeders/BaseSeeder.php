@@ -40,8 +40,10 @@ abstract class BaseSeeder extends Seeder
 
     protected static function getTipos($model){
         $data = [];
-        foreach ($model::TIPOS as $key => $value) {
-            array_push($data, ['id' => $value, 'descricao' => $key]);
+        foreach ($model::SEEDER as $key => $value) {
+            is_array($value)
+                ? array_push($data, $value)
+                : array_push($data, ['id' => $value, 'descricao' => ucfirst($key)]);
         }
         return $data;
     }
