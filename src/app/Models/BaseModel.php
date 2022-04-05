@@ -13,11 +13,13 @@ class BaseModel extends Model
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
+    public $timestamps = false;
+
     protected $hidden = [
         self::CREATED_AT,
         self::UPDATED_AT
     ];
-    protected $fillable = ['deleted_at'];
+    protected $fillable = [self::DELETED_AT];
 
     public static $snakeAttributes = false;
     public $guardFromUpdate = [

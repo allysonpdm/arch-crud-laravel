@@ -213,6 +213,10 @@ abstract class BaseService implements TemplateService
     protected function delete(string|int $id)
     {
         $register = $this->model->findOrFail($id);
+        if(!self::isActive($register, $this->model::DELETED_AT)){
+            throw new SoftDeleteException;
+        }
+
         if (self::hasRelationships($this->model, $register)) {
             $this->model = self::softDelete($register, $this->model::DELETED_AT, $this->now);
         } else {
@@ -256,15 +260,13 @@ abstract class BaseService implements TemplateService
 
     protected static function softDelete(Model $register, string $nameColumn, string $value): Model
     {
-        if(self::isActive($register, $nameColumn)){
-            $register->update([$nameColumn => $value]);
-        }
+        $register->update([$nameColumn => $value]);
         return $register;
     }
 
     protected static function isActive(Model $register, string $nameColumn): bool
     {
-        return empty($register->{$nameColumn}) ? true: false;
+        return empty($register->{$nameColumn}) ? true : false;
     }
 
     protected function afterDelete()
