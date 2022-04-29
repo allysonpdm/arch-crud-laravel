@@ -9,7 +9,10 @@ use App\Exceptions\UpdateException;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use ReflectionClass;
 
@@ -163,9 +166,9 @@ abstract class BaseService implements TemplateService
         $this->request = $request;
         try {
             $response = $this->beforeModify()
-                ->modify($id)
-                ->afterModify()
-                ->model;
+            ->modify($id)
+            ->afterModify()
+            ->model;
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -227,14 +230,15 @@ abstract class BaseService implements TemplateService
 
     protected static function hasRelationships(Model $model, Model $register): bool
     {
+        $has = false;
         $relations = self::getRelationships($model);
 
         foreach ($relations as $relation) {
-            if (!empty($register->{$relation->name})){
-                return true;
+            if (!empty($register->{$relation})){
+                $has = true;
             }
         }
-        return false;
+        return $has;
     }
 
     protected static function getRelationships(Model $model): array
@@ -252,9 +256,10 @@ abstract class BaseService implements TemplateService
         foreach ($reflector->getMethods() as $reflectionMethod) {
             $returnType = $reflectionMethod->getReturnType();
             if ($returnType && (in_array(class_basename($returnType->getName()), $typesOfRelationships))){
-                $relations[] = $reflectionMethod;
+                $relations[] = $reflectionMethod->name;
             }
         }
+
         return $relations;
     }
 
