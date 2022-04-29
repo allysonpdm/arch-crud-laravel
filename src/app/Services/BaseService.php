@@ -161,6 +161,9 @@ abstract class BaseService implements TemplateService
 
     protected function afterInsert()
     {
+        $this->model = $this->model::findOrFail($this->model->id)
+                ->with($this->relationships)
+                ->first();
         return $this;
     }
 
@@ -189,9 +192,7 @@ abstract class BaseService implements TemplateService
             throw new UpdateException;
         }
         $this->model = $this->model
-            ->findOrFail($id)
-            ->with($this->relationships)
-            ->first();
+            ->findOrFail($id);
         $this->model
             ->update($this->request);
         return $this;
@@ -199,6 +200,9 @@ abstract class BaseService implements TemplateService
 
     protected function afterModify()
     {
+        $this->model = $this->model::findOrFail($this->model->id)
+                ->with($this->relationships)
+                ->first();
         return $this;
     }
 
