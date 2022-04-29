@@ -19,6 +19,7 @@ abstract class BaseService implements TemplateService
     protected $nameModel;
     protected $model;
     protected $request;
+    protected $relationships = [];
 
     public function __construct()
     {
@@ -73,6 +74,9 @@ abstract class BaseService implements TemplateService
             }
         }
 
+        $this->model = $this->model
+            ->with($this->relationships);
+
         return $this;
     }
 
@@ -112,7 +116,9 @@ abstract class BaseService implements TemplateService
 
     protected function select(string|int $id)
     {
-        $this->model = $this->model::findOrFail($id);
+        $this->model = $this->model::findOrFail($id)
+            ->with($this->relationships)
+            ->first();
         return $this;
     }
 
@@ -163,9 +169,9 @@ abstract class BaseService implements TemplateService
         $this->request = $request;
         try {
             $response = $this->beforeModify()
-            ->modify($id)
-            ->afterModify()
-            ->model;
+                ->modify($id)
+                ->afterModify()
+                ->model;
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -182,8 +188,12 @@ abstract class BaseService implements TemplateService
         if (empty($this->request)) {
             throw new UpdateException;
         }
-        $this->model = $this->model->findOrFail($id);
-        $this->model->update($this->request);
+        $this->model = $this->model
+            ->findOrFail($id)
+            ->with($this->relationships)
+            ->first();
+        $this->model
+            ->update($this->request);
         return $this;
     }
 
