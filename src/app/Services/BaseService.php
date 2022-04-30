@@ -102,7 +102,7 @@ abstract class BaseService implements TemplateService
             $response = $this->beforeSelect()
                 ->select($id)
                 ->afterSelect()
-                ->model;
+                ->showRegister();
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -116,9 +116,7 @@ abstract class BaseService implements TemplateService
 
     protected function select(string|int $id)
     {
-        $this->model = $this->model::findOrFail($id)
-            ->with($this->relationships)
-            ->first();
+        $this->model = $this->model::findOrFail($id);
         return $this;
     }
 
@@ -134,7 +132,7 @@ abstract class BaseService implements TemplateService
             $response = $this->beforeInsert()
                 ->insert()
                 ->afterInsert()
-                ->model;
+                ->showRegister();
             return response($response, 201);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -161,10 +159,14 @@ abstract class BaseService implements TemplateService
 
     protected function afterInsert()
     {
-        $this->model = $this->model::findOrFail($this->model->id)
+        return $this;
+    }
+
+    protected function showRegister()
+    {
+        return $this->model::findOrFail($this->model->id)
                 ->with($this->relationships)
                 ->first();
-        return $this;
     }
 
     public function update(array $request, string|int $id)
@@ -174,7 +176,7 @@ abstract class BaseService implements TemplateService
             $response = $this->beforeModify()
                 ->modify($id)
                 ->afterModify()
-                ->model;
+                ->showRegister();
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -191,18 +193,13 @@ abstract class BaseService implements TemplateService
         if (empty($this->request)) {
             throw new UpdateException;
         }
-        $this->model = $this->model
-            ->findOrFail($id);
-        $this->model
-            ->update($this->request);
+        $this->model = $this->model->findOrFail($id);
+        $this->model->update($this->request);
         return $this;
     }
 
     protected function afterModify()
     {
-        $this->model = $this->model::findOrFail($this->model->id)
-                ->with($this->relationships)
-                ->first();
         return $this;
     }
 
@@ -212,7 +209,7 @@ abstract class BaseService implements TemplateService
             $response = $this->beforeDelete()
                 ->delete($id)
                 ->afterDelete()
-                ->model;
+                ->showRegister();
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -287,6 +284,9 @@ abstract class BaseService implements TemplateService
 
     protected function afterDelete()
     {
+        $this->model = $this->model::findOrFail($this->model->id)
+                ->with($this->relationships)
+                ->first();
         return $this;
     }
 
