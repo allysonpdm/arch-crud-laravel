@@ -8,14 +8,6 @@ use Illuminate\Validation\Rule;
 
 abstract class BaseRequest extends FormRequest
 {
-    const DESENVOLVEDOR = 'Desenvolvedor';
-    const ADMINISTRADOR = 'Administrador';
-    const GERENTE = 'Gerente';
-    const DEPARTAMENTO_ADMINISTRATIVO = 'Administrativo';
-    const DEPARTAMENTO_JURIDICO = 'Jurídico';
-    const COLABORADOR = 'Colaborador';
-    const PROPRIETARIO = 'Proprietário';
-
     public const CONDITIONS_OPERATORS = ['like', '=', '!=', '<>', '<', '>', '<=', '>='];
     protected $autorizados = [];
     protected $model;
