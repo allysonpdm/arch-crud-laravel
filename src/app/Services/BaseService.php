@@ -125,7 +125,7 @@ abstract class BaseService implements TemplateService
         return $this;
     }
 
-    public function create(array $request): Response
+    public function store(array $request): Response
     {
         $this->request = $request;
         try {
