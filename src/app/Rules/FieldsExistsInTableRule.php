@@ -34,11 +34,20 @@ class FieldsExistsInTableRule implements Rule
         if(empty($this->columns))
             throw new TableNotFoundException;
 
-        foreach($value as $key => $val){
-            if(!in_array($key, $this->columns)){
-                $this->notFoundField = $key;
-                return false;
+        if(is_string($value)){
+           return $this->existsInDataBase($value);
+        }else{
+            foreach($value as $key => $val){
+                return $this->existsInDataBase($key);
             }
+        }
+    }
+
+    private function existsInDataBase($value): bool
+    {
+        if(!in_array($value, $this->columns)){
+            $this->notFoundField = $value;
+            return false;
         }
         return true;
     }

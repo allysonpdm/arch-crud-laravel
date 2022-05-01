@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 abstract class BaseSeeder extends Seeder
 {
@@ -35,15 +36,15 @@ abstract class BaseSeeder extends Seeder
 
     protected function getDataFromModel(Model $model):  void
     {
-        $this->data = self::getTipos($model);
+        $this->data = $this->getSeeder($model);
     }
 
-    protected static function getTipos($model){
+    protected function getSeeder($model){
         $data = [];
         foreach ($model::SEEDER as $key => $value) {
             is_array($value)
                 ? array_push($data, $value)
-                : array_push($data, ['id' => $value, 'descricao' => ucfirst($key)]);
+                : array_push($data, ['id' => $value, 'descricao' => Str::ucfirst(Str::lower($key))]);
         }
         return $data;
     }
