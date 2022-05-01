@@ -102,7 +102,7 @@ abstract class BaseService implements TemplateService
             $response = $this->beforeSelect()
                 ->select($id)
                 ->afterSelect()
-                ->showRegister();
+                ->showRegister($id);
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -162,11 +162,13 @@ abstract class BaseService implements TemplateService
         return $this;
     }
 
-    protected function showRegister()
+    protected function showRegister($id = null)
     {
-        return $this->model::findOrFail($this->model->id)
-                ->with($this->relationships)
-                ->first();
+        if (empty($id)) {
+            $id = $this->model->id;
+        }
+        return $this->model::with($this->relationships)
+            ->findOrFail($id);
     }
 
     public function update(array $request, string|int $id)
@@ -176,7 +178,7 @@ abstract class BaseService implements TemplateService
             $response = $this->beforeModify()
                 ->modify($id)
                 ->afterModify()
-                ->showRegister();
+                ->showRegister($id);
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -209,7 +211,7 @@ abstract class BaseService implements TemplateService
             $response = $this->beforeDelete()
                 ->delete($id)
                 ->afterDelete()
-                ->showRegister();
+                ->model;
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -227,12 +229,9 @@ abstract class BaseService implements TemplateService
         if(!self::isActive($register, $this->model::DELETED_AT)){
             throw new SoftDeleteException;
         }
-
-        if (self::hasRelationships($this->model, $register)) {
-            $this->model = self::softDelete($register, $this->model::DELETED_AT, $this->now);
-        } else {
-            $register->delete($id);
-        }
+        $this->model = self::hasRelationships($this->model, $register)
+            ? self::softDelete($register, $this->model::DELETED_AT, $this->now)
+            : $register->delete();
         return $this;
     }
 
@@ -284,9 +283,6 @@ abstract class BaseService implements TemplateService
 
     protected function afterDelete()
     {
-        $this->model = $this->model::findOrFail($this->model->id)
-                ->with($this->relationships)
-                ->first();
         return $this;
     }
 
