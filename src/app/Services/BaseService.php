@@ -270,10 +270,9 @@ abstract class BaseService implements TemplateService
         return $relations;
     }
 
-    protected static function softDelete(Model $register, string $nameColumn, string $value): Model
+    protected static function softDelete(Model $register, string $nameColumn, string $value): bool
     {
-        $register->update([$nameColumn => $value]);
-        return $register;
+        return $register->update([$nameColumn => $value]);
     }
 
     protected static function isActive(Model $register, string $nameColumn): bool
