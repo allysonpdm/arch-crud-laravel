@@ -44,7 +44,7 @@ abstract class BaseSeeder extends Seeder
         foreach ($model::SEEDER as $key => $value) {
             is_array($value)
                 ? array_push($data, $value)
-                : array_push($data, ['id' => $value, 'descricao' => Str::ucfirst(Str::lower($key))]);
+                : array_push($data, ['id' => $value, 'descricao' => Str::replace('_', ' ', Str::ucfirst(Str::lower($key)))]);
         }
         return $data;
     }

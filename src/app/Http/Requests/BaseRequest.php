@@ -9,13 +9,13 @@ use Illuminate\Validation\Rule;
 abstract class BaseRequest extends FormRequest
 {
     public const CONDITIONS_OPERATORS = ['like', '=', '!=', '<>', '<', '>', '<=', '>='];
-    protected $autorizados = [];
     protected $model;
 
     abstract public function authorize(): bool;
     abstract public function rules(): array;
 
     abstract protected function hasPermission(): bool;
+    abstract protected function isOwner(string $method): bool;
 
     protected function indexRequest(): array
     {

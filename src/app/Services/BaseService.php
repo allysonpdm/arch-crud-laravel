@@ -2,13 +2,17 @@
 
 namespace App\Services;
 
-use App\Exceptions\BusinessException;
-use App\Exceptions\CreateException;
-use App\Exceptions\SoftDeleteException;
-use App\Exceptions\UpdateException;
+use App\Exceptions\{
+    BusinessException,
+    CreateException,
+    SoftDeleteException,
+    UpdateException
+};
 use Exception;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\{
+    Model,
+    ModelNotFoundException
+};
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 use ReflectionClass;
@@ -96,7 +100,7 @@ abstract class BaseService implements TemplateService
         return $this;
     }
 
-    public function show(string|int $id): Response
+    public function show(array $request, string|int $id): Response
     {
         try {
             $response = $this->beforeSelect()
@@ -171,7 +175,7 @@ abstract class BaseService implements TemplateService
             ->findOrFail($id);
     }
 
-    public function update(array $request, string|int $id)
+    public function update(array $request, string|int $id): Response
     {
         $this->request = $request;
         try {
@@ -205,7 +209,7 @@ abstract class BaseService implements TemplateService
         return $this;
     }
 
-    public function destroy(string|int $id)
+    public function destroy(array $request, string|int $id): Response
     {
         try {
             $response = $this->beforeDelete()
@@ -241,7 +245,7 @@ abstract class BaseService implements TemplateService
         $relations = self::getRelationships($model);
 
         foreach ($relations as $relation) {
-            if (!empty($register->{$relation})){
+            if (!empty($register->{$relation}) && $register->{$relation}->count() > 0 ){
                 $has = true;
             }
         }

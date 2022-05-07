@@ -2,7 +2,7 @@
 
 namespace App\Rules;
 
-use App\Models\Pessoas;
+use App\Models\User;
 use Illuminate\Contracts\Validation\Rule;
 
 class ValidadeCodigoRecuperacaoRule implements Rule
@@ -29,12 +29,8 @@ class ValidadeCodigoRecuperacaoRule implements Rule
         if(empty($this->login)){
             return false;
         }
-        
-        $user = Pessoas::where(
-            function($query) {
-                return $query->where('cpf', $this->login)
-                    ->orWhere('cnpj', $this->login);
-            })
+
+        $user = User::where('email', $this->login)
             ->where(function($query) use ($value) {
                 return $query->where('codigoRecuperacao', $value)
                     ->where('validadeCodigoRecuperacao', '>=', now());
@@ -55,7 +51,7 @@ class ValidadeCodigoRecuperacaoRule implements Rule
      */
     public function message()
     {
-        return __('validation.validade_codigo_recuperacao');
+        return __('validation.login.validade_codigo_recuperacao');
     }
 
 }

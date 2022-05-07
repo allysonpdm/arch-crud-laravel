@@ -2,19 +2,19 @@
 
 namespace App\Rules;
 
-use App\Models\Pessoas;
+use App\Models\User;
 use Illuminate\Contracts\Validation\Rule;
 
-class LoginRule implements Rule
+class UserCodigoRecuperacaoRule implements Rule
 {
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(?string $login)
     {
-
+        $this->login = $login;
     }
 
     /**
@@ -26,7 +26,15 @@ class LoginRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        $user = Pessoas::where('cpf', $value)->orWhere('cnpj', $value)->get();
+        if(empty($this->login)){
+            return false;
+        }
+
+        $user = User::where('email', $this->login)
+            ->where(function($query) use ($value) {
+                return $query->where('codigoRecuperacao', $value);
+            })
+            ->get();
         if($user->count() != 1){
             return false;
         }
@@ -41,7 +49,7 @@ class LoginRule implements Rule
      */
     public function message()
     {
-        return __('validation.login.not_found');
+        return __('validation.login.codigo_recuperacao');
     }
 
 }
