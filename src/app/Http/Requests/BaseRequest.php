@@ -14,7 +14,7 @@ abstract class BaseRequest extends FormRequest
     abstract public function authorize(): bool;
     abstract public function rules(): array;
 
-    abstract protected function hasPermission(): bool;
+    abstract protected function hasGroupPermission(): bool;
     abstract protected function isOwner(string $method): bool;
 
     protected function indexRequest(): array
