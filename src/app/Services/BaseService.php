@@ -14,13 +14,17 @@ use Illuminate\Database\Eloquent\{
     ModelNotFoundException
 };
 use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use ReflectionClass;
 
 abstract class BaseService implements TemplateService
 {
-
     protected $nameModel;
+    protected $nameResource;
+    protected $nameCollection;
     protected $model;
     protected $request;
     protected $relationships = [];
@@ -34,13 +38,20 @@ abstract class BaseService implements TemplateService
     public function index(array $request): Response
     {
         $this->request = $request;
+        $perPage = $request['perPage'] ?? 15;
+        $page = $request['page'] ?? 1;
         try {
             $response = $this->beforeList()
                 ->list()
                 ->afterList()
-                ->model
-                ->paginate($request['perPage'] ?? null)
-                ->fragment('' . ($request['fragment'] ?? null));
+                ->model;
+
+            $response = empty($this->nameCollection)
+                ? $response
+                    ->paginate($perPage)
+                    ->fragment('' . ($request['fragment'] ?? null))
+                : $this->paginate($this->nameCollection::collection($response->get()), $perPage, $page);
+
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -98,6 +109,13 @@ abstract class BaseService implements TemplateService
     protected function afterList()
     {
         return $this;
+    }
+
+    public function paginate($items, $perPage = 15, $page = 1, $options = [])
+    {
+        $page = $page ?? Paginator::resolveCurrentPage();
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
     public function show(array $request, string|int $id): Response
@@ -169,10 +187,14 @@ abstract class BaseService implements TemplateService
     protected function showRegister($id = null)
     {
         if (empty($id)) {
-            $id = $this->model->id;
+            $id = $this->model->id ?? $this->model::where($this->request);
         }
-        return $this->model::with($this->relationships)
-            ->findOrFail($id);
+
+        $register = $this->model::with($this->relationships)->findOrFail($id);
+
+        return empty($this->nameResource)
+            ? $register
+            : new $this->nameResource($register);
     }
 
     public function update(array $request, string|int $id): Response

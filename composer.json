@@ -3,7 +3,7 @@
     "description": "Arquitetura CRUD para projetos laravel.",
     "version": "1.0.0",
     "keywords": [
-        "arquitetura",
+        "arquitetura-crud",
         "arch-laravel"
     ],
     "license": "MIT",
