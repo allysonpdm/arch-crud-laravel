@@ -8,6 +8,7 @@ use App\Exceptions\{
     SoftDeleteException,
     UpdateException
 };
+use App\Models\BaseModel;
 use Exception;
 use Illuminate\Database\Eloquent\{
     Model,
@@ -31,7 +32,7 @@ abstract class BaseService implements TemplateService
 
     public function __construct()
     {
-        $this->model = new ($this->nameModel);
+        $this->model = new ($this->nameModel ?? BaseModel::class);
         $this->now = date('Y-m-d H:i:s');
     }
 
@@ -147,6 +148,19 @@ abstract class BaseService implements TemplateService
         return $this;
     }
 
+    protected function showRegister($id = null)
+    {
+        if (empty($id)) {
+            $id = $this->model->id ?? $this->model::where($this->request);
+        }
+
+        $register = $this->model::with($this->relationships)->findOrFail($id);
+
+        return empty($this->nameResource)
+            ? $register
+            : new $this->nameResource($register);
+    }
+
     public function store(array $request): Response
     {
         $this->request = $request;
@@ -184,19 +198,6 @@ abstract class BaseService implements TemplateService
         return $this;
     }
 
-    protected function showRegister($id = null)
-    {
-        if (empty($id)) {
-            $id = $this->model->id ?? $this->model::where($this->request);
-        }
-
-        $register = $this->model::with($this->relationships)->findOrFail($id);
-
-        return empty($this->nameResource)
-            ? $register
-            : new $this->nameResource($register);
-    }
-
     public function update(array $request, string|int $id): Response
     {
         $this->request = $request;
@@ -218,12 +219,16 @@ abstract class BaseService implements TemplateService
 
     protected function modify(string|int $id)
     {
-        if (empty($this->request)) {
-            throw new UpdateException;
+        try {
+            if (empty($this->request)) {
+                throw new UpdateException;
+            }
+            $this->model = $this->model->findOrFail($id);
+            $this->model->update($this->request);
+            return $this;
+        } catch (Exception $exception) {
+            return $this->exceptionTreatment($exception);
         }
-        $this->model = $this->model->findOrFail($id);
-        $this->model->update($this->request);
-        return $this;
     }
 
     protected function afterModify()
@@ -322,19 +327,15 @@ abstract class BaseService implements TemplateService
                 $response = response($exception->validator->messages(), 422); // HTTP error 422
                 break;
             case ModelNotFoundException::class:
-                $response = response(__('exceptions.error.no_results'), 404);
+                $response = response("{ message: \"". __('exceptions.error.no_results') ."\"}", 404);
                 break;
             case CreateException::class:
-                $response = response($exception->getMessage(), $code);
-                break;
+            case BusinessException::class:
             case UpdateException::class:
                 $response = response($exception->getMessage(), $code);
                 break;
             case SoftDeleteException::class:
                 $response = response($exception->getMessage(), 200);
-                break;
-            case BusinessException::class:
-                $response = response($exception->getMessage(), $code);
                 break;
             default:
                 $response = response([
