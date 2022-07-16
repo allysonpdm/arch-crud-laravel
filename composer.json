@@ -56,10 +56,10 @@
             "xcopy .\\src\\database\\ ..\\..\\..\\database /E /H /C /I /Y"
         ],
         "unix-install": [
-            "cp -r ./src/app/ ../../../app",
-            "cp -r ./src/stubs/ ../../../stubs",
-            "cp -r ./src/resources/ ../../../resources",
-            "cp -r ./src/database/ ../../../database"
+            "cp -r src/app/ ../../../app",
+            "cp -r src/stubs/ ../../../stubs",
+            "cp -r src/resources/ ../../../resources",
+            "cp -r src/database/ ../../../database"
         ]
     },
     "config": {
