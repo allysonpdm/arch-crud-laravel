@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Rules;
+namespace ArchCrudLaravel\App\Rules;
 
-use App\Exceptions\TableNotFoundException;
+use ArchCrudLaravel\App\Exceptions\TableNotFoundException;
 use Exception;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Schema;

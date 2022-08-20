@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Services;
+namespace ArchCrudLaravel\App\Services;
 
-use App\Exceptions\{
+use ArchCrudLaravel\App\Exceptions\{
     BusinessException,
     CreateException,
     SoftDeleteException,
     UpdateException
 };
-use App\Models\BaseModel;
+use ArchCrudLaravel\App\Models\BaseModel;
 use Exception;
 use Illuminate\Database\Eloquent\{
     Model,

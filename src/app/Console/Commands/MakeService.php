@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace ArchCrudLaravel\App\Console\Commands;
 
 //use Illuminate\Console\Command;
 use Illuminate\Console\GeneratorCommand;
@@ -51,14 +51,14 @@ class MakeService extends GeneratorCommand
         return base_path() . '/stubs/service.stub';
     }
     /**
-     * Obtém o namespace padrão para a classe.
+     * Obtém o namespace ArchCrudLaravel\padrão para a classe.
      *
      * @param  string  $rootNamespace
      * @return string
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '/Http/Services';
+        return $rootnamespace ArchCrudLaravel\. '/Http/Services';
     }
 
     /**
