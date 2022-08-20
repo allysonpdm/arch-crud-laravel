@@ -42,7 +42,7 @@
             "ArchCrudLaravel\\App\\Http\\Requests\\": "src/app/Http/Requests/",
             "ArchCrudLaravel\\App\\Models\\": "src/app/Models/",
             "ArchCrudLaravel\\App\\Rules\\": "src/app/Rules/",
-            "ArchCrudLaravel\\DataBase\\Seeders\\": "src/dataBase/seeders/",
+            "ArchCrudLaravel\\Database\\Seeders\\": "src/database/seeders/",
             "ArchCrudLaravel\\Tests\\Unit\\": "src/tests/Unit"
 
         }
