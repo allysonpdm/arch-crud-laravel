@@ -45,7 +45,6 @@
             "ArchCrudLaravel\\App\\Services\\": "src/app/Services/",
             "ArchCrudLaravel\\Database\\Seeders\\": "src/database/seeders/",
             "ArchCrudLaravel\\Tests\\Unit\\": "src/tests/Unit"
-
         }
     },
     "autoload-dev": {
