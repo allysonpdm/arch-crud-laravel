@@ -35,12 +35,21 @@
             "src/app/Helpers/helpers.php"
         ],
         "psr-4": {
-            "ArchLaravel\\": "src"
+            "ArchCrudLaravel\\App\\Console\\Commands\\": "src/app/Console/Commands/",
+            "ArchCrudLaravel\\App\\Exceptions\\": "src/app/Exceptions/",
+            "ArchCrudLaravel\\App\\Http\\Controllers\\": "src/app/Http/Controllers/",
+            "ArchCrudLaravel\\App\\Http\\Resources\\": "src/app/Http/Resources/",
+            "ArchCrudLaravel\\App\\Http\\Requests\\": "src/app/Http/Requests/",
+            "ArchCrudLaravel\\App\\Models\\": "src/app/Models/",
+            "ArchCrudLaravel\\App\\Rules\\": "src/app/Rules/",
+            "ArchCrudLaravel\\App\\Services\\": "src/app/Services/",
+            "ArchCrudLaravel\\Database\\Seeders\\": "src/database/seeders/",
+            "ArchCrudLaravel\\Tests\\Unit\\": "src/tests/Unit"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ArchLaravel\\Tests\\": "tests"
+            "ArchCrudLaravel\\Tests\\": "tests"
         }
     },
     "scripts": {

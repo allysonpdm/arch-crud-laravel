@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace ArchCrudLaravel\App\Http\Controllers;
 
-use App\Services\BaseServices;
+use ArchCrudLaravel\App\Services\BaseServices;
 
 abstract class BaseController
 {

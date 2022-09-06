@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace ArchCrudLaravel\App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +13,7 @@ class BaseModel extends Model
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
+    public $table = 'archTests';
     public $timestamps = false;
 
     protected $hidden = [

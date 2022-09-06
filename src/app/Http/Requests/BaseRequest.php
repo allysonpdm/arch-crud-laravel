@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace ArchCrudLaravel\App\Http\Requests;
 
-use App\Rules\FieldsExistsInTableRule;
+use ArchCrudLaravel\App\Rules\FieldsExistsInTableRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 

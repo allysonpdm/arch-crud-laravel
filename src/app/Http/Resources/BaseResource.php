@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources;
+namespace ArchCrudLaravel\App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -22,7 +22,7 @@ abstract class BaseResource extends JsonResource
                 'deletedAt'
             ]),
             ...[
-                'ativo' => empty($this->deleteAt)? true : false,
+                'ativo' => empty($this->deleteAt),
                 'url' => "/{$this->route}/{$this->id}",
             ],
         ];

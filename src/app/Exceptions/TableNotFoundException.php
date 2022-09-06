@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exceptions;
+namespace ArchCrudLaravel\App\Exceptions;
 
 use Exception;
 

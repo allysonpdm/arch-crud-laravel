@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\SoftDeleteException;
-use App\Http\Requests\BaseRequest;
+use ArchCrudLaravel\App\Exceptions\SoftDeleteException;
+use ArchCrudLaravel\App\Http\Requests\BaseRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;

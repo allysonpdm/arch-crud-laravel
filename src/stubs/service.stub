@@ -2,10 +2,10 @@
 
 namespace App\Http\Services;
 
-use App\Exceptions\BusinessException;
-use App\Exceptions\CreateException;
-use App\Exceptions\SoftDeleteException;
-use App\Rules\FieldsExistsInTableRule;
+use ArchCrudLaravel\App\Exceptions\BusinessException;
+use ArchCrudLaravel\App\Exceptions\CreateException;
+use ArchCrudLaravel\App\Exceptions\SoftDeleteException;
+use ArchCrudLaravel\App\Rules\FieldsExistsInTableRule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
