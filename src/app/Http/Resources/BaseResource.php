@@ -19,7 +19,7 @@ abstract class BaseResource extends JsonResource
 
         return [
             ...self::sanitize($data, [
-                'deletedAt'
+                $this->resource::DELETED_AT
             ]),
             ...[
                 'ativo' => empty($this->deleteAt),
