@@ -19,12 +19,14 @@ abstract class BaseRequest extends FormRequest
 
     protected function indexRequest(): array
     {
+        $table = app($this->model)->getTable();
+        $connection = app($this->model)->getConnectionName();
         return [
             'page'=> 'integer',
             'perPage'=> 'integer',
             'orderBy'=> [
                 'array',
-                new FieldsExistsInTableRule(app($this->model)->getTable())
+                new FieldsExistsInTableRule($table, $connection)
             ],
             'orderBy.*' => [
                 Rule::in(['asc', 'desc']),
@@ -34,7 +36,7 @@ abstract class BaseRequest extends FormRequest
                 'string',
                 'required',
                 Rule::in($this->model::$searchable),
-                new FieldsExistsInTableRule(app($this->model)->getTable())
+                new FieldsExistsInTableRule($table, $connection)
             ],
             'wheres.*.condition' => [
                 'string',
@@ -48,7 +50,7 @@ abstract class BaseRequest extends FormRequest
                 'string',
                 'required',
                 Rule::in($this->model::$searchable),
-                new FieldsExistsInTableRule(app($this->model)->getTable())
+                new FieldsExistsInTableRule($table, $connection)
             ],
             'orWheres.*.condition' => [
                 'string',

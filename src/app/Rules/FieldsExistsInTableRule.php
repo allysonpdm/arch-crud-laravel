@@ -16,10 +16,12 @@ class FieldsExistsInTableRule implements Rule
      *
      * @return void
      */
-    public function __construct(string $table)
+    public function __construct(string $table, ?string $connection = null)
     {
         $this->table= $table;
-        $this->columns = Schema::getColumnListing($table);
+        $this->columns = empty($connection)
+            ? Schema::getColumnListing($table)
+            : Schema::connection($connection)->getColumnListing($table);
     }
 
     /**
