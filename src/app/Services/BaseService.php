@@ -205,7 +205,7 @@ abstract class BaseService implements TemplateService
             $response = $this->beforeModify()
                 ->modify($id)
                 ->afterModify()
-                ->showRegister($id);
+                ->showRegister($request['id'] ?? $id);
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
