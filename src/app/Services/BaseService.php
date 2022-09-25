@@ -18,6 +18,7 @@ use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use ReflectionClass;
 
@@ -29,11 +30,22 @@ abstract class BaseService implements TemplateService
     protected $model;
     protected $request;
     protected $relationships = [];
+    protected bool $transaction = true;
 
     public function __construct()
     {
         $this->model = new ($this->nameModel ?? BaseModel::class);
         $this->now = date('Y-m-d H:i:s');
+        if($this->transaction){
+            DB::beginTransaction();
+        }
+    }
+
+    public function __destruct()
+    {
+        if($this->transaction){
+            DB::commit();
+        }
     }
 
     public function index(array $request): Response
@@ -49,8 +61,8 @@ abstract class BaseService implements TemplateService
 
             $response = empty($this->nameCollection)
                 ? $response
-                    ->paginate($perPage)
-                    ->fragment('' . ($request['fragment'] ?? null))
+                ->paginate($perPage)
+                ->fragment('' . ($request['fragment'] ?? null))
                 : $this->paginate($this->nameCollection::collection($response->get()), $perPage, $page);
 
             return response($response, 200);
@@ -257,7 +269,7 @@ abstract class BaseService implements TemplateService
     protected function delete(string|int $id)
     {
         $register = $this->model->findOrFail($id);
-        if(!self::isActive($register, $this->model::DELETED_AT)){
+        if (!self::isActive($register, $this->model::DELETED_AT)) {
             throw new SoftDeleteException;
         }
         $this->model = self::hasRelationships($this->model, $register)
@@ -272,7 +284,7 @@ abstract class BaseService implements TemplateService
         $relations = self::getRelationships($model);
 
         foreach ($relations as $relation) {
-            if (!empty($register->{$relation}) && $register->{$relation}->count() > 0 ){
+            if (!empty($register->{$relation}) && $register->{$relation}->count() > 0) {
                 $has = true;
             }
         }
@@ -293,7 +305,7 @@ abstract class BaseService implements TemplateService
         $relations = [];
         foreach ($reflector->getMethods() as $reflectionMethod) {
             $returnType = $reflectionMethod->getReturnType();
-            if ($returnType && (in_array(class_basename($returnType->getName()), $typesOfRelationships))){
+            if ($returnType && (in_array(class_basename($returnType->getName()), $typesOfRelationships))) {
                 $relations[] = $reflectionMethod->name;
             }
         }
@@ -318,6 +330,9 @@ abstract class BaseService implements TemplateService
 
     protected function exceptionTreatment($exception): Response
     {
+        if($this->transaction){
+            DB::rollBack();
+        }
         $type = get_class($exception);
         $code = (int) $exception->getCode();
         $code = empty($code) ? 500 : $code;
@@ -327,7 +342,7 @@ abstract class BaseService implements TemplateService
                 $response = response($exception->validator->messages(), 422); // HTTP error 422
                 break;
             case ModelNotFoundException::class:
-                $response = response("{ message: \"". __('exceptions.error.no_results') ."\"}", 404);
+                $response = response("{ message: \"" . __('exceptions.error.no_results') . "\"}", 404);
                 break;
             case CreateException::class:
             case BusinessException::class:
