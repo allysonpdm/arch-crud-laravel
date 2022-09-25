@@ -30,22 +30,36 @@ abstract class BaseService implements TemplateService
     protected $model;
     protected $request;
     protected $relationships = [];
-    protected bool $transaction = true;
+    protected bool $useTransaction = true;
 
     public function __construct()
     {
         $this->model = new ($this->nameModel ?? BaseModel::class);
         $this->now = date('Y-m-d H:i:s');
-        if($this->transaction){
-            DB::beginTransaction();
-        }
     }
 
-    public function __destruct()
+    protected function transaction()
     {
-        if($this->transaction){
+        if ($this->useTransaction) {
+            DB::beginTransaction();
+        }
+        return $this;
+    }
+
+    protected function commit()
+    {
+        if ($this->useTransaction) {
             DB::commit();
         }
+        return $this;
+    }
+
+    protected function rollBack()
+    {
+        if ($this->useTransaction) {
+            DB::rollBack();
+        }
+        return $this;
     }
 
     public function index(array $request): Response
@@ -54,9 +68,11 @@ abstract class BaseService implements TemplateService
         $perPage = $request['perPage'] ?? 15;
         $page = $request['page'] ?? 1;
         try {
-            $response = $this->beforeList()
+            $response = $this->transaction()
+                ->beforeList()
                 ->list()
                 ->afterList()
+                ->commit()
                 ->model;
 
             $response = empty($this->nameCollection)
@@ -108,7 +124,7 @@ abstract class BaseService implements TemplateService
         return $this;
     }
 
-    private function ordenation(?array $orderBy)
+    protected function ordenation(?array $orderBy)
     {
         if (!empty($orderBy)) {
             foreach ($orderBy as $column => $order) {
@@ -134,10 +150,12 @@ abstract class BaseService implements TemplateService
     public function show(array $request, string|int $id): Response
     {
         try {
-            $response = $this->beforeSelect()
+            $response = $this->transaction()
+                ->beforeSelect()
                 ->select($id)
                 ->afterSelect()
-                ->showRegister($id);
+                ->showRegister($id)
+                ->commit();
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -177,10 +195,12 @@ abstract class BaseService implements TemplateService
     {
         $this->request = $request;
         try {
-            $response = $this->beforeInsert()
+            $response = $this->transaction()
+                ->beforeInsert()
                 ->insert()
                 ->afterInsert()
-                ->showRegister();
+                ->showRegister()
+                ->commit();
             return response($response, 201);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -214,10 +234,12 @@ abstract class BaseService implements TemplateService
     {
         $this->request = $request;
         try {
-            $response = $this->beforeModify()
+            $response = $this->transaction()
+                ->beforeModify()
                 ->modify($id)
                 ->afterModify()
-                ->showRegister($request['id'] ?? $id);
+                ->showRegister($request['id'] ?? $id)
+                ->commit();
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -251,9 +273,11 @@ abstract class BaseService implements TemplateService
     public function destroy(array $request, string|int $id): Response
     {
         try {
-            $response = $this->beforeDelete()
+            $response = $this->transaction()
+                ->beforeDelete()
                 ->delete($id)
                 ->afterDelete()
+                ->commit()
                 ->model;
             return response($response, 200);
         } catch (Exception $exception) {
@@ -330,9 +354,7 @@ abstract class BaseService implements TemplateService
 
     protected function exceptionTreatment($exception): Response
     {
-        if($this->transaction){
-            DB::rollBack();
-        }
+        $this->rollBack();
         $type = get_class($exception);
         $code = (int) $exception->getCode();
         $code = empty($code) ? 500 : $code;
