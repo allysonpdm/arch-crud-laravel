@@ -154,8 +154,8 @@ abstract class BaseService implements TemplateService
                 ->beforeSelect()
                 ->select($id)
                 ->afterSelect()
-                ->showRegister($id)
-                ->commit();
+                ->commit()
+                ->showRegister($id);
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -199,8 +199,8 @@ abstract class BaseService implements TemplateService
                 ->beforeInsert()
                 ->insert()
                 ->afterInsert()
-                ->showRegister()
-                ->commit();
+                ->commit()
+                ->showRegister();
             return response($response, 201);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -238,8 +238,8 @@ abstract class BaseService implements TemplateService
                 ->beforeModify()
                 ->modify($id)
                 ->afterModify()
-                ->showRegister($request['id'] ?? $id)
-                ->commit();
+                ->commit()
+                ->showRegister($request['id'] ?? $id);
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
