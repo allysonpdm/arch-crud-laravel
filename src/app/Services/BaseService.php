@@ -30,7 +30,7 @@ abstract class BaseService implements TemplateService
     protected $model;
     protected $request;
     protected $relationships = [];
-    protected bool $useTransaction = true;
+    protected bool $onTransaction = true;
 
     public function __construct()
     {
@@ -40,7 +40,7 @@ abstract class BaseService implements TemplateService
 
     protected function transaction()
     {
-        if ($this->useTransaction) {
+        if ($this->onTransaction) {
             DB::beginTransaction();
         }
         return $this;
@@ -48,7 +48,7 @@ abstract class BaseService implements TemplateService
 
     protected function commit()
     {
-        if ($this->useTransaction) {
+        if ($this->onTransaction) {
             DB::commit();
         }
         return $this;
@@ -56,7 +56,7 @@ abstract class BaseService implements TemplateService
 
     protected function rollBack()
     {
-        if ($this->useTransaction) {
+        if ($this->onTransaction) {
             DB::rollBack();
         }
         return $this;
