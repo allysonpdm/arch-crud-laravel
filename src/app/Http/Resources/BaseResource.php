@@ -22,8 +22,8 @@ abstract class BaseResource extends JsonResource
                 $this->resource::DELETED_AT
             ]),
             ...[
-                'ativo' => empty($this->{$this->resource::DELETED_AT}),
-                'url' => "/{$this->route}/{$this->id}",
+                '@ativo' => empty($this->{$this->resource::DELETED_AT}),
+                '@url' => "/{$this->route}/{$this->id}",
             ],
         ];
     }
