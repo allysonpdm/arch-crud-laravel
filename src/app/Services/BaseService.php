@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\{
     Model,
     ModelNotFoundException
 };
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Pagination\Paginator;
@@ -272,6 +273,7 @@ abstract class BaseService implements TemplateService
 
     public function destroy(array $request, string|int $id): Response
     {
+        $this->request = $request;
         try {
             $response = $this->transaction()
                 ->beforeDelete()
@@ -292,20 +294,21 @@ abstract class BaseService implements TemplateService
 
     protected function delete(string|int $id)
     {
+        $force = $this->request['force'] ?? false;
         $register = $this->model->findOrFail($id);
         if (!self::isActive($register, $this->model::DELETED_AT)) {
             throw new SoftDeleteException;
         }
-        $this->model = self::hasRelationships($this->model, $register)
-            ? self::softDelete($register, $this->model::DELETED_AT, $this->now)
+        $this->model = self::hasRelationships($register)
+            ? $this->softOrHardDelete($force, $register)
             : $register->delete();
         return $this;
     }
 
-    protected static function hasRelationships(Model $model, Model $register): bool
+    protected static function hasRelationships(Model $register): bool
     {
         $has = false;
-        $relations = self::getRelationships($model);
+        $relations = self::getRelationships($register);
 
         foreach ($relations as $relation) {
             if (!empty($register->{$relation}) && $register->{$relation}->count() > 0) {
@@ -337,6 +340,32 @@ abstract class BaseService implements TemplateService
         return $relations;
     }
 
+    protected function softOrHardDelete($force, $register)
+    {
+        if ($force) {
+            return self::hardDelete($register);
+        }
+
+        return self::softDelete($register, $this->model::DELETED_AT, $this->now);
+    }
+
+    protected static function hardDelete($register)
+    {
+        $relations = self::getRelationships($register);
+        foreach ($relations as $relationName) {
+            if (!empty($register->{$relationName}) && $register->{$relationName}->count() > 0) {
+                $relation = $register->{$relationName}();
+                if (method_exists($relation, 'dissociate')) {
+                    $relation->dissociate();
+                }
+                if (method_exists($relation, 'detach')) {
+                    $relation->detach();
+                }
+            }
+        }
+        return $register->delete();
+    }
+
     protected static function softDelete(Model $register, string $nameColumn, string $value): bool
     {
         return $register->update([$nameColumn => $value]);
@@ -344,7 +373,7 @@ abstract class BaseService implements TemplateService
 
     protected static function isActive(Model $register, string $nameColumn): bool
     {
-        return empty($register->{$nameColumn}) ? true : false;
+        return empty($register->{$nameColumn});
     }
 
     protected function afterDelete()
@@ -373,6 +402,9 @@ abstract class BaseService implements TemplateService
                 break;
             case SoftDeleteException::class:
                 $response = response($exception->getMessage(), 200);
+                break;
+            case QueryException::class:
+                $response = response($exception->getMessage(), 500);
                 break;
             default:
                 $response = response([

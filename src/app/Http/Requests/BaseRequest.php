@@ -22,9 +22,9 @@ abstract class BaseRequest extends FormRequest
         $table = app($this->model)->getTable();
         $connection = app($this->model)->getConnectionName();
         return [
-            'page'=> 'integer',
-            'perPage'=> 'integer',
-            'orderBy'=> [
+            'page' => 'integer',
+            'perPage' => 'integer',
+            'orderBy' => [
                 'array',
                 new FieldsExistsInTableRule($table, $connection)
             ],
@@ -61,4 +61,10 @@ abstract class BaseRequest extends FormRequest
         ];
     }
 
+    protected function destroyRequest(): array
+    {
+        return [
+            'force' => 'bail|boolean',
+        ];
+    }
 }
