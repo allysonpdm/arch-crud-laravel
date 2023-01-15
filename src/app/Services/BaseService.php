@@ -2,6 +2,7 @@
 
 namespace ArchCrudLaravel\App\Services;
 
+use ArchCrudLaravel\App\Enums\RelationshipsEnum;
 use ArchCrudLaravel\App\Exceptions\{
     BusinessException,
     CreateException,
@@ -33,14 +34,7 @@ abstract class BaseService implements TemplateService
     protected $relationships = [];
     protected bool $onTransaction = true;
     protected string|int|null $id;
-    protected array $typesOfRelationships = [
-        'HasOne',
-        'HasMany',
-        'BelongsTo',
-        'BelongsToMany',
-        'MorphTo',
-        'MorphToMany'
-    ];
+    protected array $ignoreRelationships = [];
 
     public function __construct()
     {
@@ -309,16 +303,16 @@ abstract class BaseService implements TemplateService
         if (!self::isActive($register, $this->model::DELETED_AT)) {
             throw new SoftDeleteException;
         }
-        $this->model = self::hasRelationships($register)
+        $this->model = self::hasRelationships($register, $this->ignoreRelationships)
             ? $this->softOrHardDelete($force, $register)
             : $register->delete();
         return $this;
     }
 
-    protected static function hasRelationships(Model $register): bool
+    protected static function hasRelationships(Model $register, array $ignore = []): bool
     {
         $has = false;
-        $relations = self::getRelationships($register);
+        $relations = self::getRelationships($register, $ignore);
 
         foreach ($relations as $relation) {
             if (!empty($register->{$relation}) && $register->{$relation}->count() > 0) {
@@ -328,13 +322,14 @@ abstract class BaseService implements TemplateService
         return $has;
     }
 
-    protected static function getRelationships(Model $model): array
+    protected static function getRelationships(Model $model, array $ignore = []): array
     {
+        $typesOfRelationships = array_diff(RelationshipsEnum::allValues(), $ignore);
         $reflector = new ReflectionClass($model);
         $relations = [];
         foreach ($reflector->getMethods() as $reflectionMethod) {
             $returnType = $reflectionMethod->getReturnType();
-            if ($returnType && (in_array(class_basename($returnType->getName()), $this->typesOfRelationships))) {
+            if ($returnType && (in_array(class_basename($returnType->getName()), $typesOfRelationships))) {
                 $relations[] = $reflectionMethod->name;
             }
         }

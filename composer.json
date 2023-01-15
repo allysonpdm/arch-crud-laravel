@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.1",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.2",
         "laravel/sanctum": "^2.14.1|^3.0",
@@ -43,6 +43,8 @@
             "ArchCrudLaravel\\App\\Models\\": "src/app/Models/",
             "ArchCrudLaravel\\App\\Rules\\": "src/app/Rules/",
             "ArchCrudLaravel\\App\\Services\\": "src/app/Services/",
+            "ArchCrudLaravel\\App\\Enums\\": "src/app/Enums/",
+            "ArchCrudLaravel\\App\\Enums\\Traits\\": "src/app/Enums/Traits/",
             "ArchCrudLaravel\\Database\\Seeders\\": "src/database/seeders/",
             "ArchCrudLaravel\\Tests\\Unit\\": "src/tests/Unit"
         }
