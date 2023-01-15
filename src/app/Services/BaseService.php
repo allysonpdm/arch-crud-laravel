@@ -32,6 +32,15 @@ abstract class BaseService implements TemplateService
     protected $request;
     protected $relationships = [];
     protected bool $onTransaction = true;
+    protected string|int|null $id;
+    protected array $typesOfRelationships = [
+        'HasOne',
+        'HasMany',
+        'BelongsTo',
+        'BelongsToMany',
+        'MorphTo',
+        'MorphToMany'
+    ];
 
     public function __construct()
     {
@@ -274,6 +283,7 @@ abstract class BaseService implements TemplateService
     public function destroy(array $request, string|int $id): Response
     {
         $this->request = $request;
+        $this->id = $id;
         try {
             $response = $this->transaction()
                 ->beforeDelete()
@@ -320,19 +330,11 @@ abstract class BaseService implements TemplateService
 
     protected static function getRelationships(Model $model): array
     {
-        $typesOfRelationships = [
-            'HasOne',
-            'HasMany',
-            'BelongsTo',
-            'BelongsToMany',
-            'MorphTo',
-            'MorphToMany'
-        ];
         $reflector = new ReflectionClass($model);
         $relations = [];
         foreach ($reflector->getMethods() as $reflectionMethod) {
             $returnType = $reflectionMethod->getReturnType();
-            if ($returnType && (in_array(class_basename($returnType->getName()), $typesOfRelationships))) {
+            if ($returnType && (in_array(class_basename($returnType->getName()), $this->typesOfRelationships))) {
                 $relations[] = $reflectionMethod->name;
             }
         }
