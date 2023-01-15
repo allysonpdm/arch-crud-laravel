@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Enums\Traits;
+namespace ArchCrudLaravel\App\Enums\Traits;
 
 trait GetValues
 {
