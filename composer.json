@@ -1,5 +1,5 @@
 {
-    "name": "allyson/arch-laravel",
+    "name": "allyson/arch-crud-laravel",
     "description": "Arquitetura CRUD para projetos laravel.",
     "version": "1.0.0",
     "keywords": [
@@ -11,7 +11,7 @@
     "authors": [
         {
             "name": "Allyson",
-            "email": "alysonmt@gmail.com",
+            "email": "allysonmt@gmail.com",
             "role": "Developer"
         }
     ],
