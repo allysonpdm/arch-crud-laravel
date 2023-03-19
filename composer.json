@@ -43,7 +43,7 @@
             "ArchCrudLaravel\\App\\Models\\": "src/app/Models/",
             "ArchCrudLaravel\\App\\Rules\\": "src/app/Rules/",
             "ArchCrudLaravel\\App\\Services\\": "src/app/Services/",
-            "ArchCrudLaravel\\App\\Services\\Traits": "src/app/Services/Traits",
+            "ArchCrudLaravel\\App\\Services\\Traits": "src/app/Services/Traits/",
             "ArchCrudLaravel\\App\\Enums\\": "src/app/Enums/",
             "ArchCrudLaravel\\App\\Enums\\Traits\\": "src/app/Enums/Traits/",
             "ArchCrudLaravel\\Database\\Seeders\\": "src/database/seeders/",
