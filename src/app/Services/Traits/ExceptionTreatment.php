@@ -8,7 +8,6 @@ use ArchCrudLaravel\App\Exceptions\{
     SoftDeleteException
 };
 use ArchCrudLaravel\App\Exceptions\UpdateException;
-use ArchCrudLaravel\App\Services\Traits\TransactionControl as TraitsTransactionControl;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
@@ -16,7 +15,7 @@ use Illuminate\Validation\ValidationException;
 
 trait ExceptionTreatment
 {
-    use TraitsTransactionControl;
+    use TransactionControl;
 
     protected function exceptionTreatment($exception): Response
     {
