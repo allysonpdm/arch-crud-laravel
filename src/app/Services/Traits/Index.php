@@ -18,7 +18,7 @@ trait Index
     protected $request;
     protected $relationships = [];
 
-    use TransactionControl, ExceptionTreatment;
+    use TransactionControl, ExceptionTreatment, CacheControl;
 
     public function index(array $request): Response
     {
@@ -26,7 +26,8 @@ trait Index
         $perPage = $request['perPage'] ?? 15;
         $page = $request['page'] ?? 1;
         try {
-            $response = $this->transaction()
+            $cacheKey = $this->createCacheKey();
+            $response = $this->getCache($cacheKey) ?? $this->transaction()
                 ->beforeList()
                 ->list()
                 ->afterList()
@@ -37,7 +38,9 @@ trait Index
                 ? $response
                 ->paginate($perPage)
                 ->fragment('' . ($request['fragment'] ?? null))
-                : $this->paginate($this->nameCollection::collection($response->get()), $perPage, $page);
+                : $this->paginate($this->nameCollection::collection($response), $perPage, $page);
+
+            $this->putCache($cacheKey, $response);
 
             return response($response, 200);
         } catch (Exception $exception) {

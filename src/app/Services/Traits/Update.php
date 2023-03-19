@@ -12,18 +12,23 @@ trait Update
     protected $model;
     protected $request;
 
-    use TransactionControl, ExceptionTreatment, ShowRegister;
+    use TransactionControl, ExceptionTreatment, ShowRegister, CacheControl;
 
     public function update(array $request, string|int $id): Response
     {
         $this->request = $request;
         try {
+            $cacheKey = $this->createCacheKey($id);
+
             $response = $this->transaction()
                 ->beforeModify()
                 ->modify($id)
                 ->afterModify()
                 ->commit()
                 ->showRegister($request['id'] ?? $id);
+
+            $this->putCache($cacheKey, $response);
+
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);

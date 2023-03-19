@@ -15,18 +15,21 @@ trait Destroy
     protected $relationships = [];
     protected string $now;
 
-    use TransactionControl, ExceptionTreatment, Relationships;
+    use TransactionControl, ExceptionTreatment, Relationships, CacheControl;
 
     public function destroy(array $request, string|int $id): Response
     {
         $this->request = $request;
         try {
+            $cacheKey = $this->createCacheKey($id);
+            $this->forgetCache($cacheKey);
             $response = $this->transaction()
                 ->beforeDelete()
                 ->delete($id)
                 ->afterDelete()
                 ->commit()
                 ->model;
+
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
