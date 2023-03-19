@@ -29,7 +29,9 @@ trait ExceptionTreatment
                 $response = response($exception->validator->messages(), 422); // HTTP error 422
                 break;
             case ModelNotFoundException::class:
-                $response = response("{ message: \"" . __('exceptions.error.no_results') . "\"}", 404);
+                $response = response([
+                    'Message' => __('exceptions.error.no_results')
+                ], 404);
                 break;
             case CreateException::class:
             case BusinessException::class:
