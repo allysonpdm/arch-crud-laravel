@@ -3,10 +3,96 @@ Allyson Arch-Laravel is a PHP package that provides a simple and elegant way to 
 
 ## Installation
 You can install the package via `composer`:
-```
+```bash
 composer require allyson/arch-laravel
 ```
 ## BaseRequest Usage Example
+
+**File: `./Example/ExampleRequest.php`**
+```php 
+<?php
+
+namespace App\Http\Requests\Example;
+
+use ArchCrudLaravel\App\Http\Requests\BaseRequest;
+use App\Models\Example;
+
+abstract class ExampleRequest extends BaseRequest
+{
+    protected $model = Example::class;
+
+    protected function hasGroupPermission(): bool
+    {
+        // Code...
+    }
+
+    protected function isOwner(string $method): bool
+    {
+        // Code...
+    }
+}
+```
+
+**File: `./Example/IndexRequest.php`**
+```php 
+<?php
+
+namespace App\Http\Requests\Example;
+
+class IndexRequest extends UsersRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize(): bool
+    {
+        return $this->hasGroupPermission();
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules(): array
+    {
+        return $this->indexRequest();
+    }
+}
+```
+
+**File: `./Example/DestroyRequest.php`**
+```php 
+<?php
+
+namespace App\Http\Requests\Example;
+
+class DestroyRequest extends UsersRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize(): bool
+    {
+        return $this->hasGroupPermission();
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules(): array
+    {
+        return $this->destroyRequest();
+    }
+}
+```
+
 ## BaseModel Usage Example
 ## BaseCollection Usage Example
 ## BaseResource Usage Example
@@ -41,7 +127,7 @@ In this example, we've created a new service called ExampleService that extends 
 
 Others properties to configure the service:
 - `$onTransaction`: Controls whether database rollbacks will be performed if an exception occurs. The ***value default is `true`***.
-- `$onCache`: Controls whether the results of the `show()` and `list()` methods will be cached. The `update()` method creates and updates cache values. The ***value default is `true`***.
+- `$onCache`: Controls whether the results of the `show()` and `index()` methods will be cached. The `update()` method creates and updates cache values. The ***value default is `true`***.
 - `$relationships`: You can enter an array with the relationships you want to display. It is possible to use the `getRelationships()` method to get all the relationships. The ***default is `[]` (an empty array)***.
 
 All these properties can be defined in the `__constructor()` method or in the CRUD methods, in the way that makes the most sense in your application.
@@ -118,9 +204,8 @@ Each method returns an instance of Laravel's `Response` class which represents t
 
 
 ## Credits
-[Allyson Pereira](https://github.com/allysonpdm)
-
-[All Contributors](https://packagist.org/packages/allyson/arch-laravel)
+- [Allyson Pereira](https://github.com/allysonpdm)
+- [All Contributors](https://packagist.org/packages/allyson/arch-laravel)
 
 ## License
-The MIT License (MIT). Please see [License File](https://packagist.org/packages/allyson/arch-laravel) for more information.
+The MIT License (MIT). Please see [License File](https://github.com/allysonpdm/arch-crud-laravel/blob/main/LICENSE.md) for more information.
