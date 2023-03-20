@@ -35,9 +35,9 @@ class ExampleService extends BaseService
 ```
 
 In this example, we've created a new service called ExampleService that extends the `BaseService` class. We've also defined three properties to configure the service:
-- `$nameModel`: The name of the model class that the service uses.
-- `$nameCollection`: The name of the collection resource class that the service returns when multiple instances of the model are requested.
-- `$nameResource`: The name of the item resource class that the service returns when a single instance of the model is requested.
+- `$nameModel`: The name of the model class that the service uses, if your service does not use a model it is not necessary to inform this property.
+- `$nameCollection`: The name of the collection resource class that the service returns when multiple instances of the model are requested, the use of this property is optional.
+- `$nameResource`: The name of the item resource class that the service returns when a single instance of the model is requested, the use of this property is optional.
 
 Others properties to configure the service:
 - `$onTransaction`: Controls whether database rollbacks will be performed if an exception occurs, default is true.
