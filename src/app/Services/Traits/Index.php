@@ -33,12 +33,12 @@ trait Index
                 ->afterList()
                 ->commit()
                 ->model;
-
+            $collection = method_exists($response, 'get') ? $response->get() : $response;
             $response = empty($this->nameCollection)
                 ? $response
                 ->paginate($perPage)
                 ->fragment('' . ($request['fragment'] ?? null))
-                : $this->paginate($this->nameCollection::collection($response), $perPage, $page);
+                : $this->paginate($this->nameCollection::collection($collection), $perPage, $page);
 
             $this->putCache(
                 key: $cacheKey,
