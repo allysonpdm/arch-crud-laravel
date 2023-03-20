@@ -41,7 +41,6 @@ In this example, we've created a new service called ExampleService that extends 
 
 Others properties to configure the service:
 - `$onTransaction`: Controls whether database rollbacks will be performed if an exception occurs, default is true.
-- `$onTransaction`: Controls whether database rollbacks will be performed if an exception occurs, default is true.
 - `$onCache`: Controls whether the results of the `show()` and `list()` methods will be cached. The `update()` method creates and updates cache values, the default is true.
 - `$relationships`: You can enter an array with the relationships you want to display. It is possible to use the `getRelationships()` method to get all the relationships. The default is an empty array.
 
