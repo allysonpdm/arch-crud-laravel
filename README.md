@@ -44,7 +44,7 @@ By extending the `BaseService` class, we get several benefits, including:
 - The `BaseService` handles common validation tasks automatically, such as checking if a requested resource exists or if a unique constraint is violated.
 - The `BaseService` provides a set of default response codes that can be returned by the service, making it easy to create consistent responses across the application.
 
-### Controller Usage Example
+## Controller Usage Example
 Here's an example of how to use the `BaseController` provided by Arch-Laravel in conjunction with the `ExampleService` created earlier:
 ```php
 <?php
