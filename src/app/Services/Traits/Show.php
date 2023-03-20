@@ -18,12 +18,19 @@ trait Show
     {
         try {
             $this->request = $request;
-            $response = $this->transaction()
+            $cacheKey = $this->createCacheKey(id: $id);
+
+            $response = $this->getCache(key: $cacheKey) ?? $this->transaction()
                 ->beforeSelect()
                 ->select($id)
                 ->afterSelect()
                 ->commit()
                 ->showRegister($id);
+            
+            $this->putCache(
+                key: $cacheKey,
+                value: $response
+            );
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);

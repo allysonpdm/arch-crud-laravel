@@ -27,7 +27,7 @@ trait Index
         $page = $request['page'] ?? 1;
         try {
             $cacheKey = $this->createCacheKey();
-            $response = $this->getCache($cacheKey) ?? $this->transaction()
+            $response = $this->getCache(key: $cacheKey) ?? $this->transaction()
                 ->beforeList()
                 ->list()
                 ->afterList()
@@ -40,7 +40,10 @@ trait Index
                 ->fragment('' . ($request['fragment'] ?? null))
                 : $this->paginate($this->nameCollection::collection($response), $perPage, $page);
 
-            $this->putCache($cacheKey, $response);
+            $this->putCache(
+                key: $cacheKey,
+                value: $response
+            );
 
             return response($response, 200);
         } catch (Exception $exception) {

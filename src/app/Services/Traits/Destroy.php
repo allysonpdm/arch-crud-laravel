@@ -21,8 +21,8 @@ trait Destroy
     {
         $this->request = $request;
         try {
-            $cacheKey = $this->createCacheKey($id);
-            $this->forgetCache($cacheKey);
+            $cacheKey = $this->createCacheKey(id: $id);
+            $this->forgetCache(key: $cacheKey);
             $response = $this->transaction()
                 ->beforeDelete()
                 ->delete($id)

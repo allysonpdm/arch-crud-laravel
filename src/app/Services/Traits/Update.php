@@ -18,7 +18,7 @@ trait Update
     {
         $this->request = $request;
         try {
-            $cacheKey = $this->createCacheKey($id);
+            $cacheKey = $this->createCacheKey(id: $id);
 
             $response = $this->transaction()
                 ->beforeModify()
@@ -27,7 +27,10 @@ trait Update
                 ->commit()
                 ->showRegister($request['id'] ?? $id);
 
-            $this->putCache($cacheKey, $response);
+            $this->putCache(
+                key: $cacheKey,
+                value: $response
+            );
 
             return response($response, 200);
         } catch (Exception $exception) {

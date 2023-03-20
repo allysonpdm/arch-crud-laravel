@@ -10,7 +10,7 @@ trait CacheControl
     protected $nameModel;
     protected $request;
 
-    protected function putCache(string $key, mixed $value, int $ttl = 3600)
+    protected function putCache(string $key, mixed $value, int $ttl = 3600): void
     {
         if ($this->onCache) {
             Cache::put(
@@ -30,6 +30,16 @@ trait CacheControl
             );
         }
         return null;
+    }
+
+    protected function forgetCache(string $key): bool
+    {
+        if ($this->onCache) {
+            return Cache::forget(
+                key: $key
+            );
+        }
+        return false;
     }
 
     protected function createCacheKey(int|string|null $id = null): string
