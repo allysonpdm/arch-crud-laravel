@@ -39,7 +39,7 @@ In this example, we've created a new service called ExampleService that extends 
 - `$nameCollection`: The name of the collection resource class that the service returns when multiple instances of the model are requested.
 - `$nameResource`: The name of the item resource class that the service returns when a single instance of the model is requested.
 - `$onTransaction`: Controls whether database rollbacks will be performed if an exception occurs, default is true.
-- `$onCache`: Controls whether the results of the `show()` and `list()` methods will be cached, default is true.
+- `$onCache`: Controls whether the results of the `show()` and `list()` methods will be cached. The `update()` method creates and updates cache values, the default is true.
 
 By extending the `BaseService` class, we get several benefits, including:
 - The `BaseService` provides a set of default CRUD operations (create, read, update, and delete) that can be used by the service.
