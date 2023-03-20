@@ -40,9 +40,9 @@ In this example, we've created a new service called ExampleService that extends 
 - `$nameResource`: The name of the item resource class that the service returns when a single instance of the model is requested, the use of this property is optional.
 
 Others properties to configure the service:
-- `$onTransaction`: Controls whether database rollbacks will be performed if an exception occurs, default is true.
-- `$onCache`: Controls whether the results of the `show()` and `list()` methods will be cached. The `update()` method creates and updates cache values, the default is true.
-- `$relationships`: You can enter an array with the relationships you want to display. It is possible to use the `getRelationships()` method to get all the relationships. The default is an empty array.
+- `$onTransaction`: Controls whether database rollbacks will be performed if an exception occurs. The ***value default is true***.
+- `$onCache`: Controls whether the results of the `show()` and `list()` methods will be cached. The `update()` method creates and updates cache values. The ***value default is true***.
+- `$relationships`: You can enter an array with the relationships you want to display. It is possible to use the `getRelationships()` method to get all the relationships. The ***default is an empty array***.
 
 All these properties can be defined in the `__constructor()` method or in the CRUD methods, in the way that makes the most sense in your application.
 
