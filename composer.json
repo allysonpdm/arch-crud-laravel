@@ -9,7 +9,9 @@
         "crud",
         "backend",
         "crud with cache",
-        "crud with transactions"
+        "crud with transactions",
+        "api",
+        "web"
     ],
     "license": "MIT",
     "type": "library",
