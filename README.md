@@ -137,7 +137,7 @@ class DestroyRequest extends UsersRequest
     }
 }
 ```
-The `destroyRequest()` method is intended to allow the `BaseService` to permanently remove the resource, along with its child records, or perform a soft delete. When the `destroyRequest()` method is applied, simply pass the `force: true` parameter in the request to have the architecture remove the resource permanently along with its child records. If `force: false` or the `destroyRequest()` method is not used, the default behavior for `delete()` will attempt to remove the resource permanently if it is not in use. Otherwise, a soft delete will be performed.
+The `destroyRequest()` method is intended to allow the `BaseService` to permanently remove the resource, along with its childrens records, or perform a soft delete. When the `destroyRequest()` method is applied, simply pass the `force: true` parameter in the request to have the architecture remove the resource permanently along with its child records. If `force: false` or the `destroyRequest()` method is not used, the default behavior for `delete()` will attempt to remove the resource permanently if it is not in use. Otherwise, a soft delete will be performed.
 
 ## BaseModel Usage Example
 
