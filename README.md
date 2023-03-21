@@ -63,17 +63,17 @@ class IndexRequest extends UsersRequest
     }
 }
 ```
-The indexRequest() method allows navigation through pagination, setting the number of items per page, and defining the sorting and filtering criteria for the query.
+The `indexRequest()` method allows navigation through pagination, setting the number of items per page, and defining the sorting and filtering criteria for the query.
 
 - `page` (integer): This parameter is used to specify the page number of the results to retrieve. It must be an integer value.
 - `perPage` (integer): This parameter is used to specify the number of items per page to retrieve. It must be an integer value.
 - `orderBy` (array): This parameter is used to specify the sorting criteria for the query. It must be an array containing one or more sorting criteria. Each sorting criterion is an array containing two elements: the column to sort by and the sorting direction (either 'asc' or 'desc'). The column name is validated to ensure that it exists in the table specified by the `$table` - `variable`, and the sorting direction is validated to ensure that it is either 'asc' or 'desc'.
 - `wheres` (array): This parameter is used to specify the filtering criteria for the query. It must be an array containing one or more filtering criteria. Each filtering criterion is an array containing three elements: the column to filter by, the filtering condition (e.g. '=', '<', '>=', 'like', etc.), and the value to search for. The column name is validated to ensure that it exists in the table specified by the $table variable, and the filtering condition is validated to ensure that it is one of the allowed conditions specified by the `self::CONDITIONS_OPERATORS` constant.
-- `wheres.*.column` (string): This parameter is the name of the column to filter by. It is a required string value that must exist in the $searchable array of the model, and it must exist in the table specified by the $table variable.
+- `wheres.*.column` (string): This parameter is the name of the column to filter by. It is a required string value that must exist in the `$searchable` array of the model, and it must exist in the table specified by the `$table` variable.
 - `wheres.*.condition` (string): This parameter is the filtering condition to use for the specified column. It is a required string value that must be one of the allowed conditions specified by the `self::CONDITIONS_OPERATORS` constant.
 - `wheres.*.search` (string): This parameter is the value to search for in the specified column. It is a required string value.
-- `orWheres` (array): This parameter is used to specify additional filtering criteria for the query. It works the same way as the wheres parameter, but the filtering conditions are combined using the OR operator instead of the AND operator.
-- `orWheres.*.column` (string): This parameter is the name of the column to filter by. It is a required string value that must exist in the $searchable array of the model, and it must exist in the table specified by the $table variable.
+- `orWheres` (array): This parameter is used to specify additional filtering criteria for the query. It works the same way as the wheres parameter, but the filtering conditions are combined using the `OR operator` instead of the `AND operator`.
+- `orWheres.*.column` (string): This parameter is the name of the column to filter by. It is a required string value that must exist in the `$searchable` array of the model, and it must exist in the table specified by the `$table` variable.
 - `orWheres.*.condition` (string): This parameter is the filtering condition to use for the specified column. It is a required string value that must be one of the allowed conditions specified by the `self::CONDITIONS_OPERATORS` constant.
 - `orWheres.*.search` (string): This parameter is the value to search for in the specified column. It is a required string value.
 
