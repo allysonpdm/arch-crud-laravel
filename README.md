@@ -32,6 +32,7 @@ abstract class ExampleRequest extends BaseRequest
     }
 }
 ```
+The abstract class `BaseRequest` provides two methods, `indexRequest()` and `destroyRequest()`, both of which return rules that allow the proper functioning of the `BaseService` for the `index()` and `destroy()` methods respectively. It also requires the implementation of the `hasGroupPermission()` and `isOwner()` methods, which can be implemented according to the app's needs and business rules to authorize access and use of the resource.
 
 **File: `./Example/IndexRequest.php`**
 ```php 
@@ -62,6 +63,50 @@ class IndexRequest extends UsersRequest
     }
 }
 ```
+The indexRequest() method allows navigation through pagination, setting the number of items per page, and defining the sorting and filtering criteria for the query.
+
+- `page` (integer): This parameter is used to specify the page number of the results to retrieve. It must be an integer value.
+- `perPage` (integer): This parameter is used to specify the number of items per page to retrieve. It must be an integer value.
+- `orderBy` (array): This parameter is used to specify the sorting criteria for the query. It must be an array containing one or more sorting criteria. Each sorting criterion is an array containing two elements: the column to sort by and the sorting direction (either 'asc' or 'desc'). The column name is validated to ensure that it exists in the table specified by the `$table` - `variable`, and the sorting direction is validated to ensure that it is either 'asc' or 'desc'.
+- `wheres` (array): This parameter is used to specify the filtering criteria for the query. It must be an array containing one or more filtering criteria. Each filtering criterion is an array containing three elements: the column to filter by, the filtering condition (e.g. '=', '<', '>=', 'like', etc.), and the value to search for. The column name is validated to ensure that it exists in the table specified by the $table variable, and the filtering condition is validated to ensure that it is one of the allowed conditions specified by the `self::CONDITIONS_OPERATORS` constant.
+- `wheres.*.column` (string): This parameter is the name of the column to filter by. It is a required string value that must exist in the $searchable array of the model, and it must exist in the table specified by the $table variable.
+- `wheres.*.condition` (string): This parameter is the filtering condition to use for the specified column. It is a required string value that must be one of the allowed conditions specified by the `self::CONDITIONS_OPERATORS` constant.
+- `wheres.*.search` (string): This parameter is the value to search for in the specified column. It is a required string value.
+- `orWheres` (array): This parameter is used to specify additional filtering criteria for the query. It works the same way as the wheres parameter, but the filtering conditions are combined using the OR operator instead of the AND operator.
+- `orWheres.*.column` (string): This parameter is the name of the column to filter by. It is a required string value that must exist in the $searchable array of the model, and it must exist in the table specified by the $table variable.
+- `orWheres.*.condition` (string): This parameter is the filtering condition to use for the specified column. It is a required string value that must be one of the allowed conditions specified by the `self::CONDITIONS_OPERATORS` constant.
+- `orWheres.*.search` (string): This parameter is the value to search for in the specified column. It is a required string value.
+
+**JSON Request Example**
+```json
+{
+    "perPage": 15,
+    "page": 1,
+    "orderBy": {
+        "id": "asc"
+    },
+    "wheres": [
+        {
+            "column": "name",
+            "condition": "like",
+            "search": "%zeck%"
+        },
+        {
+            "column": "years",
+            "condition": ">",
+            "search": "18"
+        }
+    ],
+    "orWheres": [
+        {
+            "column": "id",
+            "condition": "=",
+            "search": "50"
+        }
+    ]
+}
+```
+
 
 **File: `./Example/DestroyRequest.php`**
 ```php 
@@ -92,8 +137,10 @@ class DestroyRequest extends UsersRequest
     }
 }
 ```
+The `destroyRequest()` method is intended to allow the `BaseService` to permanently remove the resource, along with its child records, or perform a soft delete. When the `destroyRequest()` method is applied, simply pass the `force: true` parameter in the request to have the architecture remove the resource permanently along with its child records. If `force: false` or the `destroyRequest()` method is not used, the default behavior for `delete()` will attempt to remove the resource permanently if it is not in use. Otherwise, a soft delete will be performed.
 
 ## BaseModel Usage Example
+
 ## BaseCollection Usage Example
 ## BaseResource Usage Example
 
@@ -136,6 +183,7 @@ By extending the `BaseService` class, we get several benefits, including:
 - The `BaseService` provides a set of default CRUD operations (create, read, update, and delete) that can be used by the service.
 - The `BaseService` handles common validation tasks automatically, such as checking if a requested resource exists or if a unique constraint is violated.
 - The `BaseService` provides a set of default response codes that can be returned by the service, making it easy to create consistent responses across the application.
+- It's worth noting that when the `$nameModel` property is informed, the `destroy()` method of `BaseService` will check if the resource is being used by another entity in the database. If so, it will perform a soft delete by default. However, it is possible to provide the `force: true` parameter in the request, and this will permanently remove the resource and also perform any necessary detachments related to the removed resource.
 
 ## Controller Usage Example
 Here's an example of how to use the `BaseController` provided by Arch-Laravel in conjunction with the `ExampleService` created earlier:
