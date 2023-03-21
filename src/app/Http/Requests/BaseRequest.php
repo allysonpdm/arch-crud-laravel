@@ -8,7 +8,7 @@ use Illuminate\Validation\Rule;
 
 abstract class BaseRequest extends FormRequest
 {
-    public const CONDITIONS_OPERATORS = ['like', '=', '!=', '<>', '<', '>', '<=', '>='];
+    public const CONDITIONS_OPERATORS = ['=', '!=', '<>', '<', '>', '<=', '>=', 'LIKE', 'NOT LIKE', 'IS NULL', 'IS NOT NULL'];
     protected $model;
 
     abstract public function authorize(): bool;
