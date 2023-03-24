@@ -12,8 +12,8 @@ use Illuminate\Http\Response;
 
 trait Destroy
 {
-    protected $nameResource;
-    protected Model|Builder|null $model;
+    protected string $nameResource;
+    protected mixed $model;
     protected array $request;
     protected array $relationships = [];
     protected string $now;

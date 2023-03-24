@@ -9,8 +9,8 @@ use Illuminate\Database\Eloquent\{
 
 trait ShowRegister
 {
-    protected $nameResource;
-    protected Model|Builder|null $model;
+    protected string $nameResource;
+    protected mixed $model;
     protected array $request;
     protected array $relationships = [];
 

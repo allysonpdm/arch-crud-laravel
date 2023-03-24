@@ -12,8 +12,8 @@ use Illuminate\Http\Response;
 
 trait Update
 {
-    protected $nameResource;
-    protected Model|Builder|null $model;
+    protected string $nameResource;
+    protected mixed $model;
     protected array $request;
 
     use TransactionControl, ExceptionTreatment, ShowRegister, CacheControl;
