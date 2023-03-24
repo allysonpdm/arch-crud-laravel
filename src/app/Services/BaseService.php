@@ -11,14 +11,17 @@ use ArchCrudLaravel\App\Services\Traits\{
     Store,
     Update
 };
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{
+    Builder,
+    Model
+};
 
 abstract class BaseService implements TemplateService
 {
     protected string $nameModel;
     protected string $nameResource;
     protected string $nameCollection;
-    protected Model $model;
+    protected Model|Builder $model;
     protected array $request;
     protected array $relationships = [];
     protected bool $onTransaction = true;

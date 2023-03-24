@@ -2,12 +2,15 @@
 
 namespace ArchCrudLaravel\App\Services\Traits;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{
+    Builder,
+    Model
+};
 
 trait ShowRegister
 {
     protected string $nameResource;
-    protected Model $model;
+    protected Model|Builder $model;
     protected array $request;
     protected array $relationships = [];
 

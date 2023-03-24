@@ -3,12 +3,15 @@
 namespace ArchCrudLaravel\App\Services\Traits;
 
 use Exception;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{
+    Builder,
+    Model
+};
 use Illuminate\Http\Response;
 trait Show
 {
     protected string $nameResource;
-    protected Model $model;
+    protected Model|Builder $model;
     protected array $request;
     protected array $relationships = [];
 

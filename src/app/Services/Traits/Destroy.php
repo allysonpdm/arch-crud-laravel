@@ -10,7 +10,7 @@ use Illuminate\Http\Response;
 trait Destroy
 {
     protected string $nameResource;
-    protected Model $model;
+    protected Model|Builder $model;
     protected array $request;
     protected array $relationships = [];
     protected string $now;
