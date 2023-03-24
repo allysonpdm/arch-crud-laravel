@@ -4,7 +4,10 @@ namespace ArchCrudLaravel\App\Services\Traits;
 
 use ArchCrudLaravel\App\Exceptions\SoftDeleteException;
 use Exception;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\{
+    Builder,
+    Model
+};
 use Illuminate\Http\Response;
 
 trait Destroy
