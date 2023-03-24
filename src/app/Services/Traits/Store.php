@@ -12,8 +12,8 @@ use Illuminate\Http\Response;
 
 trait Store
 {
-    protected string $nameResource;
-    protected Model|Builder $model;
+    protected ?string $nameResource;
+    protected Model|Builder|null $model;
     protected array $request;
 
     use TransactionControl, ExceptionTreatment, ShowRegister;

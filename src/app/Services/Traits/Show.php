@@ -10,8 +10,8 @@ use Illuminate\Database\Eloquent\{
 use Illuminate\Http\Response;
 trait Show
 {
-    protected string $nameResource;
-    protected Model|Builder $model;
+    protected ?string $nameResource;
+    protected Model|Builder|null $model;
     protected array $request;
     protected array $relationships = [];
 

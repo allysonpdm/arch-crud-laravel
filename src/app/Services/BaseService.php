@@ -18,10 +18,10 @@ use Illuminate\Database\Eloquent\{
 
 abstract class BaseService implements TemplateService
 {
-    protected string $nameModel;
-    protected string $nameResource;
-    protected string $nameCollection;
-    protected Model|Builder $model;
+    protected ?string $nameModel;
+    protected ?string $nameResource;
+    protected ?string $nameCollection;
+    protected Model|Builder|null $model;
     protected array $request;
     protected array $relationships = [];
     protected bool $onTransaction = true;
