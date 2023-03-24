@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Cache;
 trait CacheControl
 {
     protected bool $onCache = true;
-    protected string $nameModel;
+    protected ?string $nameModel;
     protected array $request;
 
     protected function putCache(string $key, mixed $value, int $ttl = 3600): void

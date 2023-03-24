@@ -16,6 +16,7 @@ use Illuminate\Support\Collection;
 
 trait Index
 {
+    protected ?string $nameModel;
     protected $nameResource;
     protected $nameCollection;
     protected Model|Builder|null $model;
