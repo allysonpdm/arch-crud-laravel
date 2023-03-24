@@ -1,10 +1,10 @@
 <?php
 
-namespace ArchCrudLaravel\App\Rules;
+namespace App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 
-class CpfRule implements Rule
+class CpfValidationRule implements Rule
 {
     /**
      * Create a new rule instance.
@@ -39,29 +39,20 @@ class CpfRule implements Rule
             return false;
         }
 
-        switch ($cpf) {
-            case '00000000000':
-            case '11111111111':
-            case '22222222222':
-            case '33333333333':
-            case '44444444444':
-            case '55555555555':
-            case '66666666666':
-            case '77777777777':
-            case '88888888888':
-            case '99999999999':
+        // Verifica se todos os dígitos do CPF são iguais;
+        if (preg_match('/(\d)\1{11}/', $cpf)) {
+            return false;
+        }
+
+        // Calcula os dígitos verificadores para verificar se o CPF é válido
+        for ($t = 9; $t < 11; $t++) {
+            for ($d = 0, $c = 0; $c < $t; $c++) {
+                $d += $cpf[$c] * (($t + 1) - $c);
+            }
+            $d = ((10 * $d) % 11) % 10;
+            if ($cpf[$c] != $d) {
                 return false;
-            default:
-                // Calcula os dígitos verificadores para verificar se o CPF é válido
-                for ($t = 9; $t < 11; $t++) {
-                    for ($d = 0, $c = 0; $c < $t; $c++) {
-                        $d += $cpf[$c] * (($t + 1) - $c);
-                    }
-                    $d = ((10 * $d) % 11) % 10;
-                    if ($cpf[$c] != $d) {
-                        return false;
-                    }
-                }
+            }
         }
 
         return true;
@@ -74,6 +65,6 @@ class CpfRule implements Rule
      */
     public function message()
     {
-        return __('validation.cpf');
+        return 'O :attribute é inválido.';
     }
 }
