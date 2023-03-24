@@ -12,7 +12,7 @@ use Illuminate\Http\Response;
 
 trait Destroy
 {
-    protected ?string $nameResource;
+    protected $nameResource;
     protected Model|Builder|null $model;
     protected array $request;
     protected array $relationships = [];

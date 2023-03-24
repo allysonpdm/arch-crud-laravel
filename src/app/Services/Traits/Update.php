@@ -12,7 +12,7 @@ use Illuminate\Http\Response;
 
 trait Update
 {
-    protected ?string $nameResource;
+    protected $nameResource;
     protected Model|Builder|null $model;
     protected array $request;
 
