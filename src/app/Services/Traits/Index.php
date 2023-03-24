@@ -17,8 +17,8 @@ use Illuminate\Support\Collection;
 trait Index
 {
     protected ?string $nameModel;
-    protected string $nameResource;
-    protected string $nameCollection;
+    protected ?string $nameResource;
+    protected ?string $nameCollection;
     protected mixed $model;
     protected array $request;
     protected array $relationships = [];
