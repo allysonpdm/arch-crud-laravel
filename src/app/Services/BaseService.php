@@ -3,6 +3,7 @@
 namespace ArchCrudLaravel\App\Services;
 
 use ArchCrudLaravel\App\Models\BaseModel;
+use ArchCrudLaravel\App\Services\Contracts\TemplateService;
 use ArchCrudLaravel\App\Services\Traits\{
     Destroy,
     Index,
@@ -10,15 +11,16 @@ use ArchCrudLaravel\App\Services\Traits\{
     Store,
     Update
 };
+use Illuminate\Database\Eloquent\Model;
 
 abstract class BaseService implements TemplateService
 {
-    protected $nameModel;
-    protected $nameResource;
-    protected $nameCollection;
-    protected $model;
-    protected $request;
-    protected $relationships = [];
+    protected string $nameModel;
+    protected string $nameResource;
+    protected string $nameCollection;
+    protected Model $model;
+    protected array $request;
+    protected array $relationships = [];
     protected bool $onTransaction = true;
     protected bool $onCache = true;
     protected string $now;

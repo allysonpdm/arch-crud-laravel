@@ -1,6 +1,6 @@
 <?php
 
-namespace ArchCrudLaravel\App\Services;
+namespace ArchCrudLaravel\App\Services\Contracts;
 
 use Illuminate\Http\Response;
 

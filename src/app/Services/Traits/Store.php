@@ -4,13 +4,14 @@ namespace ArchCrudLaravel\App\Services\Traits;
 
 use ArchCrudLaravel\App\Exceptions\CreateException;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 
 trait Store
 {
-    protected $nameResource;
-    protected $model;
-    protected $request;
+    protected string $nameResource;
+    protected Model $model;
+    protected array $request;
 
     use TransactionControl, ExceptionTreatment, ShowRegister;
 

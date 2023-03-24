@@ -3,14 +3,14 @@
 namespace ArchCrudLaravel\App\Services\Traits;
 
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
-
 trait Show
 {
-    protected $nameResource;
-    protected $model;
-    protected $request;
-    protected $relationships = [];
+    protected string $nameResource;
+    protected Model $model;
+    protected array $request;
+    protected array $relationships = [];
 
     use TransactionControl, ExceptionTreatment, ShowRegister;
 

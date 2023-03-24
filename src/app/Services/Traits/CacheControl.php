@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Cache;
 trait CacheControl
 {
     protected bool $onCache = true;
-    protected $nameModel;
-    protected $request;
+    protected string $nameModel;
+    protected array $request;
 
     protected function putCache(string $key, mixed $value, int $ttl = 3600): void
     {
@@ -30,6 +30,15 @@ trait CacheControl
             );
         }
         return null;
+    }
+
+    protected function modifyCache(string $id, mixed $value, int $ttl = 3600): mixed
+    {
+        return $this->putCache(
+            key: md5($this->nameModel . $id . json_encode([])),
+            value: $value,
+            ttl: $ttl
+        );
     }
 
     protected function forgetCache(string $key): bool

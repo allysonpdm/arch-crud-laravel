@@ -9,10 +9,10 @@ use Illuminate\Http\Response;
 
 trait Destroy
 {
-    protected $nameResource;
-    protected $model;
-    protected $request;
-    protected $relationships = [];
+    protected string $nameResource;
+    protected Model $model;
+    protected array $request;
+    protected array $relationships = [];
     protected string $now;
 
     use TransactionControl, ExceptionTreatment, Relationships, CacheControl;

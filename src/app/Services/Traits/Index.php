@@ -3,6 +3,7 @@
 namespace ArchCrudLaravel\App\Services\Traits;
 
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\{
     LengthAwarePaginator,
@@ -12,11 +13,11 @@ use Illuminate\Support\Collection;
 
 trait Index
 {
-    protected $nameResource;
-    protected $nameCollection;
-    protected $model;
-    protected $request;
-    protected $relationships = [];
+    protected string $nameResource;
+    protected string $nameCollection;
+    protected Model $model;
+    protected array $request;
+    protected array $relationships = [];
 
     use TransactionControl, ExceptionTreatment, CacheControl;
 

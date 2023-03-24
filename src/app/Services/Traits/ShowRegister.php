@@ -2,12 +2,14 @@
 
 namespace ArchCrudLaravel\App\Services\Traits;
 
+use Illuminate\Database\Eloquent\Model;
+
 trait ShowRegister
 {
-    protected $nameResource;
-    protected $model;
-    protected $request;
-    protected $relationships = [];
+    protected string $nameResource;
+    protected Model $model;
+    protected array $request;
+    protected array $relationships = [];
 
 
     protected function showRegister($id = null)

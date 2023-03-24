@@ -4,13 +4,14 @@ namespace ArchCrudLaravel\App\Services\Traits;
 
 use ArchCrudLaravel\App\Exceptions\UpdateException;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Response;
 
 trait Update
 {
-    protected $nameResource;
-    protected $model;
-    protected $request;
+    protected string $nameResource;
+    protected Model $model;
+    protected array $request;
 
     use TransactionControl, ExceptionTreatment, ShowRegister, CacheControl;
 
@@ -18,8 +19,6 @@ trait Update
     {
         $this->request = $request;
         try {
-            $cacheKey = $this->createCacheKey(id: $id);
-
             $response = $this->transaction()
                 ->beforeModify()
                 ->modify($id)
@@ -27,9 +26,9 @@ trait Update
                 ->commit()
                 ->showRegister($request['id'] ?? $id);
 
-            $this->putCache(
-                key: $cacheKey,
-                value: $response
+            $this->modifyCache(
+                id: $id,
+                value: $response,
             );
 
             return response($response, 200);
