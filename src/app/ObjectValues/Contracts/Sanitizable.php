@@ -1,8 +1,8 @@
 <?php
 
-namespace App\ObjectValues\Contracts;
+namespace ArchCrudLaravel\App\ObjectValues\Contracts;
 
-use App\ObjectValues\Regex;
+use ArchCrudLaravel\App\ObjectValues\Regex;
 
 interface Sanitizable {
     /**

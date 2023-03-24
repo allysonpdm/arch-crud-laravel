@@ -1,18 +1,20 @@
 <?php
 
-namespace App\ObjectValues;
+namespace ArchCrudLaravel\App\ObjectValues;
 
-use App\ObjectValues\Contracts\{
+use ArchCrudLaravel\App\ObjectValues\Contracts\{
     Maskable,
     ObjectValue,
     Sanitizable
 };
-use App\ObjectValues\Traits\{
+use ArchCrudLaravel\App\ObjectValues\Traits\{
     Masked,
     Sanitized
 };
-use App\Rules\CnpjValidationRule;
-use App\Rules\CpfValidationRule;
+use ArchCrudLaravel\App\Rules\{
+    CnpjValidationRule,
+    CpfValidationRule
+};
 use Illuminate\Support\Facades\Validator;
 use InvalidArgumentException;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\ObjectValues;
+namespace ArchCrudLaravel\App\ObjectValues;
 
-use App\Rules\EmailMxValidationRule;
-use App\ObjectValues\Contracts\ObjectValue;
+use ArchCrudLaravel\App\Rules\EmailMxValidationRule;
+use ArchCrudLaravel\App\ObjectValues\Contracts\ObjectValue;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use InvalidArgumentException;

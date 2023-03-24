@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Rules;
+namespace ArchCrudLaravel\App\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 

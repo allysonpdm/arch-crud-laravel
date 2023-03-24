@@ -1,8 +1,8 @@
 <?php
 
-namespace App\ObjectValues\Traits;
+namespace ArchCrudLaravel\App\ObjectValues\Traits;
 
-use App\ObjectValues\Regex;
+use ArchCrudLaravel\App\ObjectValues\Regex;
 
 trait Sanitized
 {

@@ -1,15 +1,17 @@
 <?php
 
-namespace App\ObjectValues;
+namespace ArchCrudLaravel\App\ObjectValues;
 
-use App\Rules\CpfValidationRule;
-use App\ObjectValues\Contracts\{
+use ArchCrudLaravel\App\Rules\CpfValidationRule;
+use ArchCrudLaravel\App\ObjectValues\Contracts\{
     Maskable,
     ObjectValue,
     Sanitizable
 };
-use App\ObjectValues\Traits\Masked;
-use App\ObjectValues\Traits\Sanitized;
+use ArchCrudLaravel\App\ObjectValues\Traits\{
+    Masked,
+    Sanitized
+};
 use InvalidArgumentException;
 
 class Cpf extends ObjectValue implements Maskable, Sanitizable

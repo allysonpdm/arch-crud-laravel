@@ -1,9 +1,9 @@
 <?php
 
-namespace App\ObjectValues;
+namespace ArchCrudLaravel\App\ObjectValues;
 
-use App\ObjectValues\Contracts\ObjectValue;
-use App\Rules\DecimalRule;
+use ArchCrudLaravel\App\ObjectValues\Contracts\ObjectValue;
+use ArchCrudLaravel\App\Rules\DecimalRule;
 use Illuminate\Support\Facades\Validator;
 use InvalidArgumentException;
 

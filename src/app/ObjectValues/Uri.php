@@ -1,9 +1,9 @@
 <?php
 
-namespace App\ObjectValues;
+namespace ArchCrudLaravel\App\ObjectValues;
 
-use App\ObjectValues\Contracts\ObjectValue;
-use App\Rules\UriRule;
+use ArchCrudLaravel\App\ObjectValues\Contracts\ObjectValue;
+use ArchCrudLaravel\App\Rules\UriRule;
 use InvalidArgumentException;
 
 class Uri extends ObjectValue

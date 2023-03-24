@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ObjectValues\Contracts;
+namespace ArchCrudLaravel\App\ObjectValues\Contracts;
 
 use Stringable;
 

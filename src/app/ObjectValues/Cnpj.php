@@ -1,15 +1,17 @@
 <?php
 
-namespace App\ObjectValues;
+namespace ArchCrudLaravel\App\ObjectValues;
 
-use App\Rules\CnpjValidationRule;
-use App\ObjectValues\Contracts\{
+use ArchCrudLaravel\App\Rules\CnpjValidationRule;
+use ArchCrudLaravel\App\ObjectValues\Contracts\{
     Maskable,
     ObjectValue,
     Sanitizable
 };
-use App\ObjectValues\Traits\Masked;
-use App\ObjectValues\Traits\Sanitized;
+use ArchCrudLaravel\App\ObjectValues\Traits\{
+    Masked,
+    Sanitized
+};
 use InvalidArgumentException;
 
 class Cnpj extends ObjectValue implements Maskable, Sanitizable

@@ -1,12 +1,6 @@
 <?php
 
-namespace App\ObjectValues;
-
-use App\ObjectValues\Contracts\Maskable;
-use App\ObjectValues\Contracts\ObjectValue;
-use App\Rules\DecimalRule;
-use Illuminate\Support\Facades\Validator;
-use InvalidArgumentException;
+namespace ArchCrudLaravel\App\ObjectValues;
 
 class Monetario extends Decimal
 {

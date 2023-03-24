@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ObjectValues\Traits;
+namespace ArchCrudLaravel\App\ObjectValues\Traits;
 
 trait Masked
 {

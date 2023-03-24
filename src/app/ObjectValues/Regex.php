@@ -1,8 +1,8 @@
 <?php
 
-namespace App\ObjectValues;
+namespace ArchCrudLaravel\App\ObjectValues;
 
-use App\ObjectValues\Contracts\ObjectValue;
+use ArchCrudLaravel\App\ObjectValues\Contracts\ObjectValue;
 use InvalidArgumentException;
 
 class Regex extends ObjectValue
