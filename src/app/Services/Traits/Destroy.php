@@ -103,38 +103,43 @@ trait Destroy
             ignoreRelationships: $ignoreRelationships
         );
         foreach ($relations as $relationName) {
-            if (!empty($register->{$relationName})) {
-                $relation = $register->{$relationName}();
-                switch (get_class($relation)) {
-                    case BelongsTo::class:
-                    case MorphTo::class:
-                    case MorphOne::class:
-                    case MorphToMany::class:
-                    case MorphedByMany::class:
-                    case HasOneThrough::class:
-                        if ($register->{$relationName}->exists()) {
-                            $relation->dissociate();
-                        }
-                        break;
-                    case Collection::class:
-                    case BelongsToMany::class:
-                    case MorphMany::class:
-                    case HasManyThrough::class:
-                    case HasOneOrManyThrough::class:
-                        if ($register->{$relationName}->isNotEmpty()) {
-                            $relation->detach();
-                        }
-                        break;
-                    case HasOne::class:
-                    case HasMany::class:
-                        $relation->delete();
-                        break;
-                    default:
-                }
-            }
-
+            $relation = $register->{$relationName}();
+            self::removeRelations($relation, $register->{$relationName});
         }
         return $register->delete();
+    }
+
+    protected static function removeRelations($relation, $register){
+        $type = get_class($relation);
+        switch ($type) {
+            case BelongsTo::class:
+            case BelongsToMany::class:
+            case MorphTo::class:
+            case MorphOne::class:
+            case MorphToMany::class:
+            case MorphedByMany::class:
+            case HasOneThrough::class:
+                if ($relation->exists()) {
+                    $relation->dissociate();
+                }
+                break;
+            case Collection::class:
+            case MorphMany::class:
+            case HasManyThrough::class:
+            case HasOneOrManyThrough::class:
+                if ($relation->isNotEmpty()) {
+                    $relation->detach();
+                }
+                break;
+            case HasOne::class:
+            case HasMany::class:
+                if($register instanceof Model){
+                    self::hardDelete($register);
+                }
+                $relation->delete();
+                break;
+            default:
+        }
     }
 
     protected static function softDelete(Model $register, string $nameColumn, string $value): bool
