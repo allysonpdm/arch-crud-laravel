@@ -31,7 +31,7 @@ trait Index
         $perPage = $request['perPage'] ?? 15;
         $page = $request['page'] ?? 1;
         try {
-            $cacheKey = $this->createCacheKey();
+            $cacheKey = $this->createCacheKey(request: $this->request);
             $response = $this->getCache(key: $cacheKey) ?? $this->transaction()
                 ->beforeList()
                 ->list()

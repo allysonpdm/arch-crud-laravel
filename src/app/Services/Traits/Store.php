@@ -2,7 +2,7 @@
 
 namespace ArchCrudLaravel\App\Services\Traits;
 
-use ArchCrudLaravel\App\Exceptions\CreateException;
+use ArchCrudLaravel\App\Exceptions\UpdateException;
 use Exception;
 use Illuminate\Database\Eloquent\{
     Builder,
@@ -10,49 +10,57 @@ use Illuminate\Database\Eloquent\{
 };
 use Illuminate\Http\Response;
 
-trait Store
+trait Update
 {
     protected ?string $nameResource;
     protected mixed $model;
     protected array $request;
 
-    use TransactionControl, ExceptionTreatment, ShowRegister;
+    use TransactionControl, ExceptionTreatment, ShowRegister, CacheControl;
 
-    public function store(array $request): Response
+    public function update(array $request, string|int $id): Response
     {
         $this->request = $request;
         try {
+            $cacheKey = $this->createCacheKey(id: $id);
             $response = $this->transaction()
-                ->beforeInsert()
-                ->insert()
-                ->afterInsert()
+                ->beforeModify()
+                ->modify($id)
+                ->afterModify()
                 ->commit()
-                ->showRegister();
-            return response($response, 201);
+                ->showRegister($request['id'] ?? $id);
+
+            $this->putCache(
+                key: $cacheKey,
+                value: $response
+            );
+
+            return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
         }
     }
 
-    protected function beforeInsert()
+    protected function beforeModify()
     {
         return $this;
     }
 
-    protected function insert()
+    protected function modify(string|int $id)
     {
         try {
             if (empty($this->request)) {
-                throw new CreateException;
+                throw new UpdateException;
             }
-            $this->model = $this->model::create($this->request);
+            $this->model = $this->model->findOrFail($id);
+            $this->model->update($this->request);
             return $this;
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
         }
     }
 
-    protected function afterInsert()
+    protected function afterModify()
     {
         return $this;
     }

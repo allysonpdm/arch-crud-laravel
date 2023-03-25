@@ -6,7 +6,20 @@ use ArchCrudLaravel\App\Exceptions\SoftDeleteException;
 use Exception;
 use Illuminate\Database\Eloquent\{
     Builder,
+    Collection,
     Model
+};
+use Illuminate\Database\Eloquent\Relations\{
+    BelongsTo,
+    BelongsToMany,
+    HasMany,
+    HasManyThrough,
+    HasOne,
+    HasOneThrough,
+    MorphMany,
+    MorphOne,
+    MorphTo,
+    MorphToMany
 };
 use Illuminate\Http\Response;
 
@@ -79,7 +92,7 @@ trait Destroy
     }
 
     protected static function hardDelete(
-        Model $register, 
+        Model $register,
         array $ignoreTypesOfRelationships = [],
         array $ignoreRelationships = []
     )
@@ -90,15 +103,36 @@ trait Destroy
             ignoreRelationships: $ignoreRelationships
         );
         foreach ($relations as $relationName) {
-            if (!empty($register->{$relationName}) && $register->{$relationName}->count() > 0) {
+            if (!empty($register->{$relationName})) {
                 $relation = $register->{$relationName}();
-                if (method_exists($relation, 'dissociate')) {
-                    $relation->dissociate();
-                }
-                if (method_exists($relation, 'detach')) {
-                    $relation->detach();
+                switch (get_class($relation)) {
+                    case BelongsTo::class:
+                    case MorphTo::class:
+                    case MorphOne::class:
+                    case MorphToMany::class:
+                    case MorphedByMany::class:
+                    case HasOneThrough::class:
+                        if ($register->{$relationName}->exists()) {
+                            $relation->dissociate();
+                        }
+                        break;
+                    case Collection::class:
+                    case BelongsToMany::class:
+                    case MorphMany::class:
+                    case HasManyThrough::class:
+                    case HasOneOrManyThrough::class:
+                        if ($register->{$relationName}->isNotEmpty()) {
+                            $relation->detach();
+                        }
+                        break;
+                    case HasOne::class:
+                    case HasMany::class:
+                        $relation->delete();
+                        break;
+                    default:
                 }
             }
+
         }
         return $register->delete();
     }

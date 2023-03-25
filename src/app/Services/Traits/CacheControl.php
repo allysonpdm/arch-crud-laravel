@@ -32,15 +32,6 @@ trait CacheControl
         return null;
     }
 
-    protected function modifyCache(string $id, mixed $value, int $ttl = 3600): mixed
-    {
-        return $this->putCache(
-            key: md5($this->nameModel . $id . json_encode([])),
-            value: $value,
-            ttl: $ttl
-        );
-    }
-
     protected function forgetCache(string $key): bool
     {
         if ($this->onCache) {
@@ -51,8 +42,8 @@ trait CacheControl
         return false;
     }
 
-    protected function createCacheKey(int|string|null $id = null): string
+    protected function createCacheKey(int|string|null $id = null, array $request = []): string
     {
-        return md5($this->nameModel . $id . json_encode($this->request));
+        return md5($this->nameModel . $id . json_encode($request));
     }
 }

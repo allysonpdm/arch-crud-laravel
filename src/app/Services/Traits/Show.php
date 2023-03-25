@@ -22,7 +22,7 @@ trait Show
     {
         try {
             $this->request = $request;
-            $cacheKey = $this->createCacheKey(id: $id);
+            $cacheKey = $this->createCacheKey(id: $id, request: $this->request);
 
             $response = $this->getCache(key: $cacheKey) ?? $this->transaction()
                 ->beforeSelect()
@@ -30,7 +30,7 @@ trait Show
                 ->afterSelect()
                 ->commit()
                 ->showRegister($id);
-            
+
             $this->putCache(
                 key: $cacheKey,
                 value: $response
