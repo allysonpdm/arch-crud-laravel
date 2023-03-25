@@ -11,10 +11,10 @@ trait Relationships
 
     protected static function hasRelationships(Model $register): bool
     {
-        $relationshipNames = self::getRelationshipNames($model);
+        $relationshipNames = self::getRelationshipNames(model: $register);
 
         foreach ($relationshipNames as $relationshipName) {
-            if ($model->{$relationshipName}->exists()) {
+            if ($register->{$relationshipName}->exists()) {
                 return true;
             }
         }

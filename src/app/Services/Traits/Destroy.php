@@ -52,7 +52,7 @@ trait Destroy
         $register = $this->model->findOrFail($id);
         if (
             !self::isActive($register, $this->model::DELETED_AT) &&
-            $force
+            !$force
         ) {
             throw new SoftDeleteException;
         }
