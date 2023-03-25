@@ -48,14 +48,18 @@ trait Destroy
 
     protected function delete(string|int $id)
     {
+        $force = $this->request['force'] ?? false;
         $register = $this->model->findOrFail($id);
-        if (!self::isActive($register, $this->model::DELETED_AT)) {
+        if (
+            !self::isActive($register, $this->model::DELETED_AT) &&
+            $force
+        ) {
             throw new SoftDeleteException;
         }
         $this->model = self::hasRelationships($register)
             ? $this->softOrHardDelete(
                 register: $register,
-                force: $this->request['force'] ?? false
+                force: $force
             )
             : $register->delete();
         return $this;
