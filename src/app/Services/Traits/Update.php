@@ -4,10 +4,6 @@ namespace ArchCrudLaravel\App\Services\Traits;
 
 use ArchCrudLaravel\App\Exceptions\UpdateException;
 use Exception;
-use Illuminate\Database\Eloquent\{
-    Builder,
-    Model
-};
 use Illuminate\Http\Response;
 
 trait Update
