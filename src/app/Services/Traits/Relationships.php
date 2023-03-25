@@ -11,18 +11,18 @@ trait Relationships
 
     protected static function hasRelationships(Model $register): bool
     {
-        $has = false;
-        $relations = self::getRelationships($register);
+        $relationshipNames = self::getRelationshipNames($model);
 
-        foreach ($relations as $relation) {
-            if (!empty($register->{$relation}) && $register->{$relation}->count() > 0) {
-                $has = true;
+        foreach ($relationshipNames as $relationshipName) {
+            if ($model->{$relationshipName}->exists()) {
+                return true;
             }
         }
-        return $has;
+
+        return false;
     }
 
-    protected static function getRelationships(
+    protected static function getRelationshipNames(
         Model $model,
         array $ignoreTypes = [],
         array $ignoreRelationships = []
