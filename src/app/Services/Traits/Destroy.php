@@ -16,6 +16,8 @@ trait Destroy
     protected mixed $model;
     protected array $request;
     protected array $relationships = [];
+    protected array $ignoreTypesOfRelationships = [];
+    protected array $ignoreRelationships = [];
     protected string $now;
 
     use TransactionControl, ExceptionTreatment, Relationships, CacheControl;
@@ -46,29 +48,43 @@ trait Destroy
 
     protected function delete(string|int $id)
     {
-        $force = $this->request['force'] ?? false;
         $register = $this->model->findOrFail($id);
         if (!self::isActive($register, $this->model::DELETED_AT)) {
             throw new SoftDeleteException;
         }
         $this->model = self::hasRelationships($register)
-            ? $this->softOrHardDelete($force, $register)
+            ? $this->softOrHardDelete(
+                register: $register,
+                force: $this->request['force'] ?? false
+            )
             : $register->delete();
         return $this;
     }
 
-    protected function softOrHardDelete($force, $register)
+    protected function softOrHardDelete(Model $register, bool $force = false)
     {
         if ($force) {
-            return self::hardDelete($register);
+            return self::hardDelete(
+                register: $register,
+                ignoreTypesOfRelationships: $this->ignoreTypesOfRelationships,
+                ignoreRelationships: $this->ignoreRelationships
+            );
         }
 
         return self::softDelete($register, $this->model::DELETED_AT, $this->now);
     }
 
-    protected static function hardDelete($register)
+    protected static function hardDelete(
+        Model $register, 
+        array $ignoreTypesOfRelationships = [],
+        array $ignoreRelationships = []
+    )
     {
-        $relations = self::getRelationships($register);
+        $relations = self::getRelationshipNames(
+            model:$register,
+            ignoreTypes: $ignoreTypesOfRelationships,
+            ignoreRelationships: $ignoreRelationships
+        );
         foreach ($relations as $relationName) {
             if (!empty($register->{$relationName}) && $register->{$relationName}->count() > 0) {
                 $relation = $register->{$relationName}();

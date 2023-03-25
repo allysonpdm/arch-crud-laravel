@@ -3,6 +3,7 @@
 namespace ArchCrudLaravel\App\Services\Traits;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use ReflectionClass;
 
 trait Relationships
@@ -21,25 +22,24 @@ trait Relationships
         return $has;
     }
 
-    protected static function getRelationships(Model $model): array
+    protected static function getRelationships(
+        Model $model,
+        array $ignoreTypes = [],
+        array $ignoreRelationships = []
+    ): array
     {
-        $typesOfRelationships = [
-            'HasOne',
-            'HasMany',
-            'BelongsTo',
-            'BelongsToMany',
-            'MorphTo',
-            'MorphToMany'
-        ];
         $reflector = new ReflectionClass($model);
         $relations = [];
         foreach ($reflector->getMethods() as $reflectionMethod) {
             $returnType = $reflectionMethod->getReturnType();
-            if ($returnType && (in_array(class_basename($returnType->getName()), $typesOfRelationships))) {
-                $relations[] = $reflectionMethod->name;
+            if ($returnType && is_subclass_of($returnType->getName(), Relation::class)) {
+                $relationName = $reflectionMethod->name;
+                $relationType = class_basename($returnType->getName());
+                if (!in_array($relationType, $ignoreTypes) && !in_array($relationName, $ignoreRelationships)) {
+                    $relations[] = $relationName;
+                }
             }
         }
-
         return $relations;
     }
 }

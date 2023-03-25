@@ -189,7 +189,9 @@ In this example, we've created a new service called ExampleService that extends 
 Others properties to configure the service:
 - `$onTransaction`: Controls whether database rollbacks will be performed if an exception occurs. The ***value default is `true`***.
 - `$onCache`: Controls whether the results of the `show()` and `index()` methods will be cached. The `update()` method creates and updates cache values. The ***value default is `true`***.
-- `$relationships`: You can enter an array with the relationships you want to display. It is possible to use the `getRelationships()` method to get all the relationships. The ***default is `[]` (an empty array)***.
+- `$relationships`: You can enter an array with the relationships you want to display. It is possible to use the `getRelationshipNames()` method to get all the relationships. The ***default is `[]` (an empty array)***.
+- `$ignoreRelationships`: You can enter an array with the relationships names you want ignore in `hardDelete()` method. It is possible to use the `getRelationshipNames()` method to get all the relationships. The ***default is `[]` (an empty array)***.
+- `$ignoreTypesOfRelationships`: You can enter an array with the types of relationships you want ignore in `hardDelete()` method. The ***default is `[]` (an empty array)***.
 
 All these properties can be defined in the `__constructor()` method or in the CRUD methods, in the way that makes the most sense in your application.
 
