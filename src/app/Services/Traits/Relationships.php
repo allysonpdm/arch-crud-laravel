@@ -30,22 +30,23 @@ trait Relationships
 
             switch (get_class($relation)) {
                 case HasOne::class:
+                case HasMany::class:
                 case BelongsTo::class:
                 case MorphTo::class:
                 case MorphOne::class:
                 case MorphToMany::class:
                 case MorphedByMany::class:
                 case HasOneThrough::class:
-                    if ($register->{$relationshipName}->exists()) {
+
+                    if ($register->{$relationshipName}()->exists()) {
                         return true;
                     }
                     break;
-                case HasMany::class:
                 case BelongsToMany::class:
                 case MorphMany::class:
                 case HasManyThrough::class:
                 case HasOneOrManyThrough::class:
-                    if ($register->{$relationshipName}->isNotEmpty()) {
+                    if ($register->{$relationshipName}()->isNotEmpty()) {
                         return true;
                     }
                     break;

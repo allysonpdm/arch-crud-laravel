@@ -26,7 +26,10 @@ use Illuminate\Http\Response;
 trait Destroy
 {
     protected ?string $nameResource;
+    protected int|string $id;
     protected mixed $model;
+    protected Model $register;
+    protected bool $force;
     protected array $request;
     protected array $relationships = [];
     protected array $ignoreTypesOfRelationships = [];
@@ -37,8 +40,11 @@ trait Destroy
 
     public function destroy(array $request, string|int $id): Response
     {
-        $this->request = $request;
         try {
+            $this->request = $request;
+            $this->id = $id;
+            $this->register = $this->model->findOrFail($this->id);
+            $this->force = $this->request['force'] ?? false;
             $cacheKey = $this->createCacheKey(id: $id);
             $this->forgetCache(key: $cacheKey);
             $response = $this->transaction()
@@ -59,22 +65,20 @@ trait Destroy
         return $this;
     }
 
-    protected function delete(string|int $id)
+    protected function delete()
     {
-        $force = $this->request['force'] ?? false;
-        $register = $this->model->findOrFail($id);
         if (
-            !self::isActive($register, $this->model::DELETED_AT) &&
-            !$force
+            !self::isActive($this->register, $this->model::DELETED_AT) &&
+            !$this->force
         ) {
             throw new SoftDeleteException;
         }
-        $this->model = self::hasRelationships($register)
+        $this->model = self::hasRelationships($this->register)
             ? $this->softOrHardDelete(
-                register: $register,
-                force: $force
+                register: $this->register,
+                force: $this->force
             )
-            : $register->delete();
+            : $this->register->delete();
         return $this;
     }
 

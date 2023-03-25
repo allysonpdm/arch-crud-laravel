@@ -12,6 +12,7 @@ use Illuminate\Http\Response;
 trait Show
 {
     protected ?string $nameResource;
+    protected int|string $id;
     protected mixed $model;
     protected array $request;
     protected array $relationships = [];
@@ -22,14 +23,15 @@ trait Show
     {
         try {
             $this->request = $request;
-            $cacheKey = $this->createCacheKey(id: $id, request: $this->request);
+            $this->id = $id;
+            $cacheKey = $this->createCacheKey(id: $this->id, request: $this->request);
 
             $response = $this->getCache(key: $cacheKey) ?? $this->transaction()
                 ->beforeSelect()
-                ->select($id)
+                ->select()
                 ->afterSelect()
                 ->commit()
-                ->showRegister($id);
+                ->showRegister($this->id);
 
             $this->putCache(
                 key: $cacheKey,
@@ -46,9 +48,9 @@ trait Show
         return $this;
     }
 
-    protected function select(string|int $id)
+    protected function select()
     {
-        $this->model = $this->model::findOrFail($id);
+        $this->model = $this->model::findOrFail($this->id);
         return $this;
     }
 
