@@ -4,13 +4,13 @@ namespace ArchCrudLaravel\App\ObjectValues;
 
 class Monetario extends Decimal
 {
-    protected ?string $symbol = null;
     protected ?string $thousandsSeparator = '.';
     protected ?string $decimalSeparator = ',';
 
     public function __construct(
         protected mixed $value,
-        ?int $decimals = 2
+        ?int $decimals = 2,
+        protected ?string $symbol = null
     )
     {
         $value = ($value === null) ? 0 : $value;

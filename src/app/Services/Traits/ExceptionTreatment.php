@@ -42,7 +42,19 @@ trait ExceptionTreatment
                 $response = response($exception->getMessage(), 200);
                 break;
             case QueryException::class:
-                $response = response($exception->getMessage(), 500);
+                switch ($code){
+                    case 23000:
+                        $message = "Verifique se o relacionamento foi criado e garanta que o mesmo esteja correto. ";
+                        break;
+                    default:
+                    $message = null;
+                }
+                $response = response([
+                    'Exception' => $type,
+                    'Message' => "{$message}SQL: {$exception->getMessage()}",
+                    'File' => $exception->getFile(),
+                    'Line' => $exception->getLine(),
+                ], 500);
                 break;
             default:
                 $response = response([
