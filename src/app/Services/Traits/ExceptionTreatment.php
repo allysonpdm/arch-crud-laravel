@@ -51,7 +51,7 @@ trait ExceptionTreatment
                 }
                 $response = response([
                     'Exception' => $type,
-                    'Message' => "{$message}SQL: {$exception->getMessage()}",
+                    'Message' => "{$message}SQLSTATE[{$code}]: {$exception->getMessage()}",
                     'File' => $exception->getFile(),
                     'Line' => $exception->getLine(),
                 ], 500);
