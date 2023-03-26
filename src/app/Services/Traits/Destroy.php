@@ -56,7 +56,7 @@ trait Destroy
 
             $response = ($response && $this->force)
                 ? 'O registro e os vínculos foram excluídos definitivamente.'
-                : 'O registro desabilitado.';
+                : 'O registro foi desabilitado.';
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
