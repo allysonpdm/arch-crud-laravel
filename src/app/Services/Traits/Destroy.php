@@ -54,6 +54,9 @@ trait Destroy
                 ->commit()
                 ->model;
 
+            $response = ($response && $this->force)
+                ? 'O registro e os vínculos foram excluídos definitivamente.'
+                : 'O registro desabilitado.';
             return response($response, 200);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -75,23 +78,22 @@ trait Destroy
         }
         $this->model = self::hasRelationships($this->register)
             ? $this->softOrHardDelete(
-                register: $this->register,
-                force: $this->force
+                register: $this->register
             )
             : $this->register->delete();
         return $this;
     }
 
-    protected function softOrHardDelete(Model $register, bool $force = false)
+    protected function softOrHardDelete(Model $register)
     {
-        if ($force) {
+        if ($this->force) {
             return self::hardDelete(
                 register: $register,
                 ignoreTypesOfRelationships: $this->ignoreTypesOfRelationships,
                 ignoreRelationships: $this->ignoreRelationships
             );
         }
-
+        $this->force = false;
         return self::softDelete($register, $this->model::DELETED_AT, $this->now);
     }
 

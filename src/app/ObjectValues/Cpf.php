@@ -31,7 +31,7 @@ class Cpf extends ObjectValue implements Maskable, Sanitizable
         $rule = new CpfValidationRule;
 
         if (!$rule->passes('', $value)) {
-            throw new InvalidArgumentException('CPF inválido.');
+            throw new InvalidArgumentException("O CPF: '$value' é inválido.");
         }
     }
 

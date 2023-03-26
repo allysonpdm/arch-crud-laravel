@@ -31,7 +31,7 @@ class Cnpj extends ObjectValue implements Maskable, Sanitizable
         $rule = new CnpjValidationRule;
 
         if (!$rule->passes('', $value)) {
-            throw new InvalidArgumentException('CNPJ inválido.');
+            throw new InvalidArgumentException("O CNPJ: '$value' é inválido.");
         }
     }
 

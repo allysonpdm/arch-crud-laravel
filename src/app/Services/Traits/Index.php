@@ -5,7 +5,8 @@ namespace ArchCrudLaravel\App\Services\Traits;
 use Exception;
 use Illuminate\Database\Eloquent\{
     Builder,
-    Model
+    Model,
+    ModelNotFoundException
 };
 use Illuminate\Http\Response;
 use Illuminate\Pagination\{
@@ -89,6 +90,10 @@ trait Index
 
         $this->model = $this->model
             ->with($this->relationships);
+
+        if(!$this->model->exists()){
+            throw new ModelNotFoundException;
+        }
 
         return $this;
     }
