@@ -44,14 +44,14 @@ trait ExceptionTreatment
             case QueryException::class:
                 switch ($code){
                     case 23000:
-                        $message = "Verifique se o relacionamento foi criado e garanta que o mesmo esteja correto. ";
+                        $message = "Verifique se o relacionamento foi criado e garanta que o mesmo esteja correto. SQLSTATE[{$code}]: ";
                         break;
                     default:
                     $message = null;
                 }
                 $response = response([
                     'Exception' => $type,
-                    'Message' => "{$message}SQLSTATE[{$code}]: {$exception->getMessage()}",
+                    'Message' => "{$message} {$exception->getMessage()}",
                     'File' => $exception->getFile(),
                     'Line' => $exception->getLine(),
                 ], 500);
