@@ -2,15 +2,15 @@
 
 namespace ArchCrudLaravel\App\Http\Requests\Traits;
 
+use ArchCrudLaravel\App\Models\BaseModel;
 use ArchCrudLaravel\App\Rules\FieldsExistsInTableRule;
 use Illuminate\Validation\Rule;
-use Illuminate\Database\Eloquent\Model;
 
 trait IndexRules
 {
-    public const CONDITIONS_OPERATORS = ['=', '!=', '<>', '<', '>', '<=', '>=', 'LIKE', 'NOT LIKE', 'IS NULL', 'IS NOT NULL'];
+    public array $conditionsOperators = ['=', '!=', '<>', '<', '>', '<=', '>=', 'LIKE', 'NOT LIKE', 'IS NULL', 'IS NOT NULL'];
 
-    protected Model $model;
+    protected $model;
 
     protected function indexRules(): array
     {
@@ -30,13 +30,13 @@ trait IndexRules
             'wheres.*.column' => [
                 'string',
                 'required',
-                Rule::in($this->model::$searchable),
+                Rule::in($this->model->searchable),
                 new FieldsExistsInTableRule($table, $connection)
             ],
             'wheres.*.condition' => [
                 'string',
                 'required',
-                Rule::in(self::CONDITIONS_OPERATORS),
+                Rule::in($this->conditionsOperators),
             ],
             'wheres.*.search' => 'required|string',
 
@@ -44,13 +44,13 @@ trait IndexRules
             'orWheres.*.column' => [
                 'string',
                 'required',
-                Rule::in($this->model::$searchable),
+                Rule::in($this->model->searchable),
                 new FieldsExistsInTableRule($table, $connection)
             ],
             'orWheres.*.condition' => [
                 'string',
                 'required',
-                Rule::in(self::CONDITIONS_OPERATORS)
+                Rule::in($this->conditionsOperators)
             ],
             'orWheres.*.search' => 'string|required',
         ];

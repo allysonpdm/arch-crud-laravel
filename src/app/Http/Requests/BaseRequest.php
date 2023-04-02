@@ -5,13 +5,13 @@ namespace ArchCrudLaravel\App\Http\Requests;
 use ArchCrudLaravel\App\Http\Requests\Traits\{
     IndexRules,
     UpdateRules,
-    DeleteRules
+    DestroyRules
 };
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract class BaseRequest extends FormRequest
 {
-    use IndexRules, UpdateRules, DeleteRules;
+    use IndexRules, UpdateRules, DestroyRules;
     
     abstract public function authorize(): bool;
     abstract public function rules(): array;

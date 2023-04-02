@@ -20,6 +20,7 @@ abstract class BaseModel extends Model
         self::UPDATED_AT
     ];
     protected $fillable = [self::DELETED_AT];
+    protected array $searchable = [];
 
     public static $snakeAttributes = false;
     public $guardFromUpdate = [

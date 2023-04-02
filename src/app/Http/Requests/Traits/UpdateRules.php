@@ -2,11 +2,11 @@
 
 namespace ArchCrudLaravel\App\Http\Requests\Traits;
 
-use Illuminate\Database\Eloquent\Model;
+use ArchCrudLaravel\App\Models\BaseModel;
 
 trait UpdateRules
 {
-    protected Model $model;
+    protected $model;
 
     protected function updateRules(): array
     {
