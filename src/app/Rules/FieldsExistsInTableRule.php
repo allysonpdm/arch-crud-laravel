@@ -10,13 +10,14 @@ use Illuminate\Support\Facades\Validator;
 
 class FieldsExistsInTableRule implements Rule
 {
-    private $columns;
+    private array $columns;
+    private string $notFoundField;
     /**
      * Create a new rule instance.
      *
      * @return void
      */
-    public function __construct(string $table, ?string $connection = null)
+    public function __construct(protected string $table, protected ?string $connection = null)
     {
         $this->table= $table;
         $this->columns = empty($connection)
@@ -33,19 +34,20 @@ class FieldsExistsInTableRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        if(empty($this->columns))
+        if(empty($this->columns)){
             throw new TableNotFoundException;
+        }
 
         if(is_string($value)){
            return $this->existsInDataBase($value);
-        }else{
-            foreach($value as $key => $val){
-                return $this->existsInDataBase($key);
-            }
+        }
+
+        foreach($value as $key => $val){
+            return $this->existsInDataBase($key);
         }
     }
 
-    private function existsInDataBase($value): bool
+    private function existsInDataBase(mixed $value): bool
     {
         if(!in_array($value, $this->columns)){
             $this->notFoundField = $value;

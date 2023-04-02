@@ -67,4 +67,11 @@ abstract class BaseRequest extends FormRequest
             'force' => 'bail|boolean',
         ];
     }
+
+    protected function updateRequest(): array
+    {
+        return [
+            $this->model::DELETED_AT => 'bail|date_format:"Y-m-d H:i:s"|after_or_equal:today',
+        ];
+    }
 }

@@ -29,4 +29,26 @@ class BaseModel extends Model
         self::UPDATED_AT,
         self::DELETED_AT
     ];
+
+    protected array $parentKeys = [];
+
+    public function addParentKey(string $parentKey)
+    {
+        if (!in_array($parentKey, $this->parentKeys)) {
+            $this->parentKeys[] = $parentKey;
+        }
+    }
+
+    public function removeParentKey(string $parentKey)
+    {
+        $key = array_search($parentKey, $this->parentKeys);
+        if ($key !== false) {
+            unset($this->parentKeys[$key]);
+        }
+    }
+
+    public function columnExists(string $columnName): bool
+    {
+        return Schema::hasColumn($this->table, $columnName);
+    }
 }

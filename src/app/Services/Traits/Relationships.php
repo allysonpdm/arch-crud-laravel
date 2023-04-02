@@ -21,6 +21,8 @@ use ReflectionClass;
 trait Relationships
 {
 
+    protected array $visited = [];
+
     protected static function hasRelationships(Model $register): bool
     {
         $relationshipNames = self::getRelationshipNames(model: $register);
@@ -77,5 +79,27 @@ trait Relationships
             }
         }
         return $relations;
+    }
+
+    protected static function isSupportedRelation($relation): bool
+    {
+        return (
+            $relation instanceof HasOne ||
+            $relation instanceof HasMany ||
+            $relation instanceof MorphOne ||
+            $relation instanceof MorphMany
+        );
+    }
+
+    protected function isModelVisited(Model $register): bool
+    {
+        $modelKey = get_class($register) . ':' . $register->getKey();
+        return isset($this->visited[$modelKey]);
+    }
+
+    protected function markModelVisited(Model $register): void
+    {
+        $modelKey = get_class($register) . ':' . $register->getKey();
+        $this->visited[$modelKey] = true;
     }
 }

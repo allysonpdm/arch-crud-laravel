@@ -70,12 +70,10 @@ trait Destroy
 
     protected function delete()
     {
-        if (
-            !self::isActive($this->register, $this->model::DELETED_AT) &&
-            !$this->force
-        ) {
+        if (!self::isActive($this->register, $this->model::DELETED_AT, $this->force)) {
             throw new SoftDeleteException;
         }
+
         $this->model = self::hasRelationships($this->register)
             ? $this->softOrHardDelete(
                 register: $this->register
@@ -101,10 +99,9 @@ trait Destroy
         Model $register,
         array $ignoreTypesOfRelationships = [],
         array $ignoreRelationships = []
-    )
-    {
+    ) {
         $relations = self::getRelationshipNames(
-            model:$register,
+            model: $register,
             ignoreTypes: $ignoreTypesOfRelationships,
             ignoreRelationships: $ignoreRelationships
         );
@@ -115,47 +112,69 @@ trait Destroy
         return $register->delete();
     }
 
-    protected static function removeRelations($relation, $register){
-        $type = get_class($relation);
-        switch ($type) {
-            case BelongsTo::class:
-            case BelongsToMany::class:
-            case MorphTo::class:
-            case MorphOne::class:
-            case MorphToMany::class:
-            case MorphedByMany::class:
-            case HasOneThrough::class:
-                if ($relation->exists()) {
-                    $relation->dissociate();
+    protected function softDelete(Model $register, string $nameColumn, string $value): bool
+    {
+        if ($this->isModelVisited($register)) {
+            return true;
+        }
+
+        $this->markModelVisited($register);
+
+        if ($register->exists) {
+            $this->processRelatedItemsForSoftDelete($register, $nameColumn, $value);
+            return $register->update([$nameColumn => $value]);
+        }
+
+        return false;
+    }
+
+    protected static function removeRelations($relation, $register)
+    {
+        if ($register === null) {
+            return;
+        }
+
+        if (self::isSupportedRelation($relation)) {
+            foreach ($register as $related) {
+                if ($related instanceof Model) {
+                    self::hardDelete($related);
                 }
-                break;
-            case Collection::class:
-            case MorphMany::class:
-            case HasManyThrough::class:
-            case HasOneOrManyThrough::class:
-                if ($relation->isNotEmpty()) {
-                    $relation->detach();
-                }
-                break;
-            case HasOne::class:
-            case HasMany::class:
-                if($register instanceof Model){
-                    self::hardDelete($register);
-                }
-                $relation->delete();
-                break;
-            default:
+            }
         }
     }
 
-    protected static function softDelete(Model $register, string $nameColumn, string $value): bool
+    protected function processRelatedItemsForSoftDelete(Model $register, string $nameColumn, string $value): void
     {
-        return $register->update([$nameColumn => $value]);
+        $relations = self::getRelationshipNames(model: $register);
+
+        foreach ($relations as $relationName) {
+            $relation = $register->{$relationName}();
+
+            if (self::isSupportedRelation($relation)) {
+                $relatedItems = $register->{$relationName};
+                $this->processSoftDeleteOnRelatedItems($relatedItems, $nameColumn, $value);
+            }
+        }
     }
 
-    protected static function isActive(Model $register, string $nameColumn): bool
+    protected function processSoftDeleteOnRelatedItems($relatedItems, string $nameColumn, string $value): void
     {
-        return empty($register->{$nameColumn});
+        if ($relatedItems instanceof Collection || is_array($relatedItems)) {
+            foreach ($relatedItems as $related) {
+                if ($related !== null && $related instanceof Model && $related->exists) {
+                    $this->softDelete(register: $related, nameColumn: $nameColumn, value: $value);
+                }
+            }
+        } elseif ($relatedItems instanceof Model) {
+            if ($relatedItems !== null && $relatedItems->exists) {
+                $this->softDelete(register: $relatedItems, nameColumn: $nameColumn, value: $value);
+            }
+        }
+    }
+
+    protected static function isActive(Model $register, string $nameColumn, bool $force): bool
+    {
+        return empty($register->{$nameColumn}) || $force;
     }
 
     protected function afterDelete()

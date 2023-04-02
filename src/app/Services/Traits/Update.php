@@ -57,7 +57,16 @@ trait Update
             if (empty($this->request)) {
                 throw new UpdateException;
             }
-            $this->register->update($this->request);
+
+            if (
+                array_key_exists($this->model::DELETED_AT, $this->request) &&
+                $this->request[$this->model::DELETED_AT] === null
+            ) {
+                $this->reactivate();
+            } else {
+                $this->register->update($this->request);
+            }
+
             return $this;
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
@@ -67,5 +76,49 @@ trait Update
     protected function afterModify()
     {
         return $this;
+    }
+
+    protected function reactivate()
+    {
+        if ($this->isModelVisited($this->register)) {
+            return;
+        }
+
+        $this->markModelVisited($this->register);
+
+        $this->register->update([$this->model::DELETED_AT => null]);
+        $relations = self::getRelationshipNames(model: $this->register);
+
+        foreach ($relations as $relationName) {
+            $relation = $this->register->{$relationName}();
+
+            if (self::isSupportedRelation($relation)) {
+                $relatedItems = $this->register->{$relationName};
+                $this->processReactivateOnRelatedItems($relatedItems);
+            }
+        }
+    }
+
+    protected function processReactivateOnRelatedItems($relatedItems)
+    {
+        if ($relatedItems instanceof Collection || is_array($relatedItems)) {
+            foreach ($relatedItems as $related) {
+                if ($related !== null && $related instanceof Model && $related->exists) {
+                    $this->reactivateRelatedItems($related);
+                }
+            }
+        } elseif ($relatedItems instanceof Model) {
+            if ($relatedItems !== null && $relatedItems->exists) {
+                $this->reactivateRelatedItems($relatedItems);
+            }
+        }
+    }
+
+    protected function reactivateRelatedItems($relatedItems)
+    {
+        $originalRegister = $this->register;
+        $this->register = $relatedItems;
+        $this->reactivate();
+        $this->register = $originalRegister;
     }
 }
