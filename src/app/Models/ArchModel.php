@@ -13,7 +13,7 @@ class ArchModel extends BaseModel
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
-    public $table = 'archTests';
+    public $table = 'arch';
     public $timestamps = false;
 
     protected $hidden = [
