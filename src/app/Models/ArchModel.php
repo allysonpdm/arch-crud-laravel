@@ -2,10 +2,10 @@
 
 namespace ArchCrudLaravel\App\Models;
 
+use ArchCrudLaravel\App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 
-abstract class BaseModel extends Model
+class ArchModel extends BaseModel
 {
     use HasFactory;
 
@@ -13,6 +13,7 @@ abstract class BaseModel extends Model
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
+    public $table = 'archTests';
     public $timestamps = false;
 
     protected $hidden = [

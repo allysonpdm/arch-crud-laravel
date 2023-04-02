@@ -2,7 +2,7 @@
 
 namespace ArchCrudLaravel\Tests\Unit;
 
-use ArchCrudLaravel\App\Models\BaseModel;
+use ArchCrudLaravel\App\Models\ArchModel;
 use ArchCrudLaravel\App\Services\BaseService;
 use Exception;
 use Illuminate\Http\Response;
@@ -55,7 +55,7 @@ class ArchTest extends TestCase
 
     public function test_protected_method_paginate()
     {
-        $this->testReturnPrivateMethod(LengthAwarePaginator::class, 'paginate', [BaseModel::all()]);
+        $this->testReturnPrivateMethod(LengthAwarePaginator::class, 'paginate', [ArchModel::all()]);
     }
 
     public function test_method_index()
@@ -71,7 +71,7 @@ class ArchTest extends TestCase
 
     public function test_protected_method_select()
     {
-        $this->testReturnPrivateMethod(BaseService::class, 'select', [BaseModel::all()->random()->id]);
+        $this->testReturnPrivateMethod(BaseService::class, 'select', [ArchModel::all()->random()->id]);
     }
 
     public function test_protected_method_after_select()
@@ -81,12 +81,12 @@ class ArchTest extends TestCase
 
     public function test_protected_method_show_register()
     {
-        $this->testReturnPrivateMethod(BaseModel::class, 'showRegister', [BaseModel::all()->random()->id]);
+        $this->testReturnPrivateMethod(ArchModel::class, 'showRegister', [ArchModel::all()->random()->id]);
     }
 
     public function test_method_show()
     {
-        $model = BaseModel::all()
+        $model = ArchModel::all()
                     ->random();
         $stub = $this->getMockForAbstractClass(BaseService::class);
         $this->assertInstanceOf(Response::class, $stub->show([], $model->id));
@@ -120,7 +120,7 @@ class ArchTest extends TestCase
 
     public function test_protected_method_modify()
     {
-        $this->testReturnPrivateMethod(Response::class, 'modify', [BaseModel::all()->random()->id]);
+        $this->testReturnPrivateMethod(Response::class, 'modify', [ArchModel::all()->random()->id]);
     }
 
     public function test_protected_method_after_modify()
@@ -130,7 +130,7 @@ class ArchTest extends TestCase
 
     public function test_method_update()
     {
-        $model = BaseModel::all()
+        $model = ArchModel::all()
                     ->random();
         $stub = $this->getMockForAbstractClass(BaseService::class);
         $this->assertInstanceOf(Response::class, $stub->update([], $model->id));
@@ -143,7 +143,7 @@ class ArchTest extends TestCase
 
     public function test_protected_method_delete()
     {
-        $this->testReturnPrivateMethod(BaseService::class, 'delete', [BaseModel::all()->random()->id]);
+        $this->testReturnPrivateMethod(BaseService::class, 'delete', [ArchModel::all()->random()->id]);
     }
 
     public function test_protected_method_after_delete()
@@ -153,7 +153,7 @@ class ArchTest extends TestCase
 
     public function test_method_destroy()
     {
-        $model = BaseModel::all()
+        $model = ArchModel::all()
                     ->random();
         $stub = $this->getMockForAbstractClass(BaseService::class);
         $this->assertInstanceOf(Response::class, $stub->destroy([], $model->id));
