@@ -2,11 +2,16 @@
 
 namespace ArchCrudLaravel\App\Http\Resources;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 abstract class BaseResource extends JsonResource
 {
-    protected $route;
+    protected string $route;
+    protected int|string $id;
+    protected Model $resource;
+
+
     /**
      * Transform the resource into an array.
      *
