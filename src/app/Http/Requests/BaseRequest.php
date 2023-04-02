@@ -71,7 +71,7 @@ abstract class BaseRequest extends FormRequest
     protected function updateRequest(): array
     {
         return [
-            $this->model::DELETED_AT => 'bail|date_format:"Y-m-d H:i:s"|after_or_equal:today',
+            $this->model::DELETED_AT => 'bail|nullable|date_format:"Y-m-d H:i:s"|after_or_equal:today',
         ];
     }
 }

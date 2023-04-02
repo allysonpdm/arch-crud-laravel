@@ -60,12 +60,12 @@ trait Update
 
             if (
                 array_key_exists($this->model::DELETED_AT, $this->request) &&
-                $this->request[$this->model::DELETED_AT] === null
+                $this->request[$this->model::DELETED_AT] === null &&
+                $this->register->{$this->model::DELETED_AT} !== $this->request[$this->model::DELETED_AT]
             ) {
                 $this->reactivate();
-            } else {
-                $this->register->update($this->request);
-            }
+            } 
+            $this->register->update($this->request);
 
             return $this;
         } catch (Exception $exception) {
