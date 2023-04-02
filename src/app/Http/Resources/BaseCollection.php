@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\{
 
 class BaseCollection extends ResourceCollection
 {
-    protected Collection $collection;
+    protected $collection;
     /**
      * Transform the resource collection into an array.
      *

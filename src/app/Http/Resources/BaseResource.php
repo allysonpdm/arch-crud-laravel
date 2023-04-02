@@ -7,10 +7,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 abstract class BaseResource extends JsonResource
 {
-    protected string $route;
+    protected $route;
     protected int|string $id;
-    protected Model $resource;
-
+    public $resource;
 
     /**
      * Transform the resource into an array.
