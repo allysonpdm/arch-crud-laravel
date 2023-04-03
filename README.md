@@ -275,10 +275,13 @@ class ExampleController extends BaseController
 
 ```
 
-Neste exemplo, criamos um novo controlador chamado `ExampleController`, que estende a classe `BaseController`. Também definimos uma propriedade `$nameService` para indicar qual serviço este controlador utiliza.
-Cada método no controlador corresponde a uma ação padrão CRUD. O método `store()` lida com a criação de um novo recurso, o método `index()` lida com a listagem de recursos, o método `show()` lida com a exibição de um recurso específico, o método `update()` lida com a atualização de um recurso existente e o método `destroy()` lida com a exclusão de um recurso existente.
-Cada método recebe uma instância de uma classe de ***Request*** (por exemplo, `StoreRequest` ou `UpdateRequest`), que é usada para validar e recuperar os dados enviados pelo cliente. O método `validated()` é **DEVE** sempre ser usado para recuperar os dados validados da solicitação.
-Cada método retorna uma instância da classe `Response` do Laravel, que representa a resposta HTTP retornada pelo controlador. O serviço `ExampleService` é usado para lidar com as operações CRUD subjacentes e retorna a resposta correta com base no resultado da operação.
+Neste exemplo, criamos um novo controlador chamado `ExampleController`, que estende a classe `BaseController`. Também definimos uma propriedade `$nameService` para indicar qual serviço este controlador utiliza. O serviço `ExampleService` é usado para lidar com as operações CRUD subjacentes e retorna a resposta correta com base no resultado da operação.
+
+Cada método no controlador corresponde a uma ação padrão CRUD. O método `store()` lida com a criação de um novo recurso, o método `index()` lida com a listagem de recursos, o método `show()` lida com a exibição de um recurso específico, o método `update()` lida com a atualização de um recurso existente e o método `destroy()` lida com a exclusão de um recurso existente, eles retornam uma instância da classe `Response` do Laravel, que representa a resposta HTTP retornada pelo controlador.
+
+Todos os métodos do CRUD recebem uma instância de uma classe de ***Request*** (por exemplo, `StoreRequest` ou `UpdateRequest`), que é usada para validar e recuperar os dados enviados pelo cliente. O método `$request->validated()` é **DEVE** sempre ser usado para recuperar os dados validados da solicitação.
+
+Cada método 
 
 ## Credits
 - [Allyson Pereira](https://github.com/allysonpdm)
