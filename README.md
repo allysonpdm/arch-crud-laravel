@@ -1,16 +1,15 @@
 # Allyson/Arch-Laravel
-Allyson Arch-Laravel is a PHP package that provides a simple and elegant way to organize your Laravel application architecture. It aims to promote modularity and scalability by providing a set of tools and conventions that make it easy to structure your application codebase into independent modules.
+Allyson Arch-Laravel é um pacote PHP que fornece uma maneira simples e elegante de organizar a arquitetura do seu aplicativo Laravel. Tem como objetivo promover a modularidade e escalabilidade, fornecendo um conjunto de ferramentas e convenções que facilitam a estruturação da base de código do seu aplicativo em módulos independentes.
 
 ## Installation
-You can install the package via `composer`:
+Você pode instalar o pacote via `composer`:
 ```bash
 composer require allyson/arch-laravel
 ```
 
-## How to use
+## Como usar
 
-
-## BaseRequest Usage Example
+### Exemplo de uso do BaseRequest
 
 **File: `./Example/ExampleRequest.php`**
 ```php 
@@ -36,7 +35,7 @@ abstract class ExampleRequest extends BaseRequest
     }
 }
 ```
-The abstract class `BaseRequest` provides two methods, `indexRequest()` and `destroyRequest()`, both of which return rules that allow the proper functioning of the `BaseService` for the `index()` and `destroy()` methods respectively. It also requires the implementation of the `hasGroupPermission()` and `isOwner()` methods, which can be implemented according to the app's needs and business rules to authorize access and use of the resource.
+A classe abstrata BaseRequest fornece os métodos: `indexRules()`, `updateRules()` e  `destroyRules()`, eles retornam um array com regras que permitem o funcionamento adequado do `BaseService` para os métodos `index()`, `update()`, `destroy()`, respectivamente. Podendo ser concatenados com suas próprias regras de negócios. Também é necessário implementar os métodos `hasGroupPermission()` e `isOwner()`, que podem ser implementados de acordo com as necessidades do aplicativo e regras de negócio para autorizar o acesso e uso do recurso.
 
 **File: `./Example/IndexRequest.php`**
 ```php 
@@ -63,11 +62,11 @@ class IndexRequest extends UsersRequest
      */
     public function rules(): array
     {
-        return $this->indexRequest();
+        return $this->indexRules();
     }
 }
 ```
-The `indexRequest()` method allows navigation through pagination, setting the number of items per page, and defining the sorting and filtering criteria for the query.
+O método `indexRules()` permite navegação através de paginação, definindo o número de itens por página e estabelecendo os critérios de ordenação e filtragem para a consulta.
 
 **JSON Request Example**
 ```json
@@ -98,21 +97,20 @@ The `indexRequest()` method allows navigation through pagination, setting the nu
     ]
 }
 ```
-**Details:**
-- `page` ***(integer)***: This parameter is used to specify the page number of the results to retrieve. It must be an integer value.
-- `perPage` ***(integer)***: This parameter is used to specify the number of items per page to retrieve. It must be an integer value.
-- `orderBy` ***(array)***: This parameter is used to specify the sorting criteria for the query. It must be an array containing one or more sorting criteria. Each sorting criterion is an array containing two elements: the column to sort by and the sorting direction (either 'asc' or 'desc'). The column name is validated to ensure that it exists in the table specified by the `$table` - `variable`, and the sorting direction is validated to ensure that it is either 'asc' or 'desc'.
-- `wheres` ***(array)***: This parameter is used to specify the filtering criteria for the query. It must be an array containing one or more filtering criteria. Each filtering criterion is an array containing three elements: the column to filter by, the filtering condition (e.g. '=', '<', '>=', 'like', etc.), and the value to search for. The column name is validated to ensure that it exists in the table specified by the $table variable, and the filtering condition is validated to ensure that it is one of the allowed conditions specified by the `self::CONDITIONS_OPERATORS` constant.
-- `wheres.*.column` ***(string)***: This parameter is the name of the column to filter by. It is a **required** string value that must exist in the `$searchable` array of the model, and it must exist in the table specified by the `$table` variable.
-- `wheres.*.condition` ***(string)***: This parameter is the filtering condition to use for the specified column. It is a **required** string value that must be one of the allowed conditions specified by the `self::CONDITIONS_OPERATORS` constant.
-- `wheres.*.search` ***(string)***: This parameter is the value to search for in the specified column. It is a **required** string value.
-- `orWheres` ***(array)***: This parameter is used to specify additional filtering criteria for the query. It works the same way as the wheres parameter, but the filtering conditions are combined using the `OR operator` instead of the `AND operator`.
-- `orWheres.*.column` ***(string)***: This parameter is the name of the column to filter by. It is a **required** string value that must exist in the `$searchable` array of the model, and it must exist in the table specified by the `$table` variable.
-- `orWheres.*.condition` ***(string)***: This parameter is the filtering condition to use for the specified column. It is a **required** string value that must be one of the allowed conditions specified by the `self::CONDITIONS_OPERATORS` constant.
-- `orWheres.*.search` ***(string)***: This parameter is the value to search for in the specified column. It is a **required** string value.
-
+**Detalhes:**
+- `page` ***(integer)***: Este parâmetro é usado para especificar o número da página dos resultados a serem recuperados. Deve ser um valor inteiro.
+- `perPage` ***(integer)***: Este parâmetro é usado para especificar o número de itens por página a serem recuperados. Deve ser um valor inteiro.
+- `orderBy` ***(array)***: Este parâmetro é usado para especificar os critérios de ordenação para a consulta. Deve ser uma matriz contendo um ou mais critérios de ordenação. Cada critério de ordenação é uma matriz contendo dois elementos: a coluna pela qual ordenar e a direção da ordenação (ascendente ou descendente). O nome da coluna é validado para garantir que existe na tabela especificada pela variável `$table`, e a direção da ordenação é validada para garantir que seja *'asc'* ou *'desc'*.
+- `wheres` ***(array)***: Este parâmetro é usado para especificar os critérios de filtragem para a consulta. Deve ser uma matriz contendo um ou mais critérios de filtragem. Cada critério de filtragem é uma matriz contendo três elementos: a coluna pela qual filtrar, a condição de filtragem (por exemplo, '=', '<', '>=', 'like', etc.) e o valor a ser procurado. O nome da coluna é validado para garantir que existe na tabela especificada pela variável `$table`, e a condição de filtragem é validada para garantir que seja uma das condições permitidas especificadas pelos `$conditionsOperators`.
+- `wheres.*.column` ***(string)***: Este parâmetro é o nome da coluna pela qual filtrar. É um valor de **string obrigatório** que deve existir no array `$searchable` do modelo e deve existir na tabela especificada pela variável `$table`.
+- `wheres.*.condition` ***(string)***: Este parâmetro é a condição de filtragem a ser usada para a coluna especificada. É um valor de **string obrigatório** que deve ser uma das condições permitidas especificadas pela constante `$conditionsOperators`.
+- `wheres.*.search` ***(string)***: Este parâmetro é o valor a ser procurado na coluna especificada. É um valor de **string obrigatório**.
+- orWheres ***(array)***: Este parâmetro é usado para especificar critérios de filtragem adicionais para a consulta. Funciona da mesma forma que o parâmetro wheres, mas as condições de filtragem são combinadas usando o `operador OR` em vez do `operador AND`.
+- `orWheres.*.column` ***(string)***: Este parâmetro é o nome da coluna pela qual filtrar. É um valor de **string obrigatório** que deve existir no array `$searchable` do modelo e deve existir na tabela especificada pela variável `$table`.
+- `orWheres.*.condition` ***(string)***: Este parâmetro é a condição de filtragem a ser usada para a coluna especificada. É um valor de **string obrigatório** que deve ser uma das condições permitidas especificadas pela constante `$conditionsOperators`.
+- `orWheres.*.search` ***(string)***: Este parâmetro é o valor a ser procurado na coluna especificada. É um valor de **string obrigatório**.
 ```php
-const CONDITIONS_OPERATORS = ['=', '!=', '<>', '<', '>', '<=', '>=', 'LIKE', 'NOT LIKE', 'IS NULL', 'IS NOT NULL'];
+public array $conditionsOperators = ['=', '!=', '<>', '<', '>', '<=', '>=', 'LIKE', 'NOT LIKE', 'IS NULL', 'IS NOT NULL'];
 ```
 
 **File: `./Example/DestroyRequest.php`**
@@ -140,11 +138,11 @@ class DestroyRequest extends UsersRequest
      */
     public function rules(): array
     {
-        return $this->destroyRequest();
+        return $this->destroyRules();
     }
 }
 ```
-The `destroyRequest()` method is intended to allow the `BaseService` to permanently remove the resource, along with its children records, or perform a soft delete. When the `destroyRequest()` method is applied, simply pass the `force: true` parameter in the request to have the architecture remove the resource permanently along with its child records. If `force: false` or the `destroyRequest()` method is not used, the default behavior for `delete()` will attempt to remove the resource permanently if it is not in use. Otherwise, a soft delete will be performed.
+O método `destroyRules()` tem como propósito possibilitar que o BaseService elimine um recurso de forma permanente, juntamente com seus registros dependentes, ou realize uma exclusão suave. Ao aplicar o método `destroyRules()`, basta fornecer o parâmetro `force: true` na solicitação para que a estrutura remova o recurso de modo definitivo, junto aos seus vínculos, de maneira recursiva. Caso o parâmetro `force` não seja fornecido na requisição ou seja igual a `false`, o comportamento padrão do método `delete()` será remover o recurso de forma permanente apenas se não estiver em uso. Se estiver em uso, será executada uma exclusão suave. Tanto a exclusão permanente *(hard delete)* quanto a suave *(soft delete)* ocorrem de forma recursiva.
 
 **JSON Request Example**
 ```json
@@ -153,15 +151,14 @@ The `destroyRequest()` method is intended to allow the `BaseService` to permanen
 }
 ```
 
-## BaseModel Usage Example
+### BaseModel Usage Example
 
-## BaseCollection Usage Example
+### BaseCollection Usage Example
 
-## BaseResource Usage Example
+### BaseResource Usage Example
 
-## BaseService Usage Example
-The `BaseService` is a class provided by Arch-Laravel that can be used to simplify the creation of Laravel services. Here's an example of how to use it:
-
+### Exemplo de Uso do BaseService
+O `BaseService` é uma classe fornecida pelo Arch-Laravel que pode ser usada para simplificar a criação de serviços no Laravel. Aqui está um exemplo de como utilizá-lo:
 ```php
 <?php
 
@@ -181,28 +178,48 @@ class ExampleService extends BaseService
 
 ```
 
-In this example, we've created a new service called ExampleService that extends the `BaseService` class. We've also defined three properties to configure the service:
-- `$nameModel`: The name of the model class that the service uses, if your service does not use a model it is not necessary to inform this property.
-- `$nameCollection`: The name of the collection resource class that the service returns when multiple instances of the model are requested, the use of this property is optional.
-- `$nameResource`: The name of the item resource class that the service returns when a single instance of the model is requested, the use of this property is optional.
+Neste exemplo, criamos um novo serviço chamado `ExampleService` que estende a classe `BaseService`.
 
-Others properties to configure the service:
-- `$onTransaction`: Controls whether database rollbacks will be performed if an exception occurs. The ***value default is `true`***.
-- `$onCache`: Controls whether the results of the `show()` and `index()` methods will be cached. The `update()` method creates and updates cache values. The ***value default is `true`***.
-- `$relationships`: You can enter an array with the relationships you want to display. It is possible to use the `getRelationshipNames()` method to get all the relationships. The ***default is `[]` (an empty array)***.
-- `$ignoreRelationships`: You can enter an array with the relationships names you want ignore in `hardDelete()` method. It is possible to use the `getRelationshipNames()` method to get all the relationships. The ***default is `[]` (an empty array)***.
-- `$ignoreTypesOfRelationships`: You can enter an array with the types of relationships you want ignore in `hardDelete()` method. The ***default is `[]` (an empty array)***.
+**Propriedades**
 
-All these properties can be defined in the `__constructor()` method or in the CRUD methods, in the way that makes the most sense in your application.
+- `$nameModel`: O nome da classe do modelo que o serviço utiliza, se o seu serviço não usar um modelo, não é necessário informar essa propriedade.
+- `$nameCollection`: O nome da classe de recurso de coleção que o serviço retorna quando várias instâncias do modelo são solicitadas, o uso desta propriedade é opcional.
+- `$nameResource`: O nome da classe de recurso do item que o serviço retorna quando uma única instância do modelo é solicitada, o uso desta propriedade é opcional.
+- `$onTransaction`: Controla se os rollbacks de banco de dados serão realizados se ocorrer uma exceção. O ***valor padrão é `true`***.
+- `$onCache`: Controla se os resultados dos métodos `show()` e `index()` serão armazenados em cache. O método `update()` cria e atualiza os valores do cache. O ***valor padrão é `true`***.
+- `$relationships`: Você pode inserir um array com os relacionamentos que deseja exibir. É possível usar o método `getRelationshipNames()` para obter todos os relacionamentos. O ***padrão é `[]` (um array vazio)***.
+- `$ignoreRelationships`: Você pode inserir um array com os nomes dos relacionamentos que deseja ignorar no método `hardDelete()`. É possível usar o método `getRelationshipNames()` para obter todos os relacionamentos. O ***padrão é `[]` (um array vazio)***.
+- `$ignoreTypesOfRelationships`: Você pode inserir um array com os tipos de relacionamentos que deseja ignorar no método `hardDelete()`. O ***padrão é `[]` (um array vazio)***.
 
-By extending the `BaseService` class, we get several benefits, including:
-- The `BaseService` provides a set of default CRUD operations (create, read, update, and delete) that can be used by the service.
-- The `BaseService` handles common validation tasks automatically, such as checking if a requested resource exists or if a unique constraint is violated.
-- The `BaseService` provides a set of default response codes that can be returned by the service, making it easy to create consistent responses across the application.
-- It's worth noting that when the `$nameModel` property is informed, the `destroy()` method of `BaseService` will check if the resource is being used by another entity in the database. If so, it will perform a soft delete by default. However, it is possible to provide the `force: true` parameter in the request, and this will permanently remove the resource and also perform any necessary detachments related to the removed resource.
+Todas essas propriedades podem ser definidas no método `__constructor()` ou nos métodos CRUD, da forma que fizer mais sentido em sua aplicação.
+
+**Metódos**
+
+O `BaseService` conta com os métodos que podem ser empregados para adaptar o fluxo de processos conforme as exigências dos seus aplicativos:
+
+- `beforeInsert()`: executado antes da inserção de dados.
+- `afterInsert()`: executado após a inserção de dados.
+- `beforeList()`: executado antes da listagem de dados.
+- `afterList()`: executado após a listagem de dados.
+- `beforeSelect()`: executado antes da seleção de um registro.
+- `afterSelect()`: executado após a seleção de um registro.
+- `beforeModify()`: executado antes da modificação de um registro.
+- `afterModify()`: executado após a modificação de um registro.
+- `beforeDelete()`: executado antes da exclusão de um registro.
+- `afterDelete()`: executado após a exclusão de um registro.
+
+**Vantagens**
+
+A utilização da classe `BaseService` traz consigo inúmeras vantagens, como:
+
+- **Operações CRUD padrão**: O `BaseService` oferece um conjunto padrão de operações CRUD (create, read, update e delete), facilitando a implementação destas funcionalidades nos serviços derivados.
+- **Respostas consistentes**: A classe fornece um conjunto padrão de códigos de resposta, garantindo respostas consistentes e padronizadas em toda a aplicação.
+- **Gerenciamento de relacionamentos**: Quando a propriedade `$nameModel` é informada, o método `destroy()` do `BaseService` verifica se o recurso está sendo utilizado por outras entidades no banco de dados, utilizando os relacionamentos declarados na model. Um *soft delete* será executado por padrão caso existam vínculos, mas é possível forçar a remoção permanente do recurso, juntamente com a desanexação das entidades relacionadas, utilizando o parâmetro `force: true`.
+- **Recuperação de soft deletes**: É possível reverter os *soft deletes* ao atualizar o campo `$model::DELETED_AT` do registro, sendo a restauração executada de maneira recursiva.
+Ao estender a classe `BaseService`, você garante uma base sólida e consistente para os serviços de sua aplicação, agilizando o desenvolvimento e facilitando a manutenção.
 
 ## Controller Usage Example
-Here's an example of how to use the `BaseController` provided by Arch-Laravel in conjunction with the `ExampleService` created earlier:
+Aqui está um exemplo de como usar o `BaseController` fornecido pelo Arch-Laravel em conjunto com o `ExampleService` criado anteriormente:
 ```php
 <?php
 
@@ -211,7 +228,7 @@ namespace App\Http\Controllers\Api;
 use ArchCrudLaravel\App\Http\Controllers\BaseController;
 use App\Http\Requests\Example\{
     DeleteRequest,
-    IndexRequest,
+    indexRules,
     StoreRequest,
     ShowRequest,
     UpdateRequest
@@ -258,14 +275,10 @@ class ExampleController extends BaseController
 
 ```
 
-In this example, we create a new controller called `ExampleController` which extends the `BaseController` class. We also define a `$nameService` property to indicate which service this controller uses.
-
-Each method in the controller corresponds to a standard CRUD action. The `store()` method handles creating a new resource, the `index()` method handles listing resources, the `show()` method handles displaying a specific resource, the `update()` method handles updating an existing resource, and the `destroy()` method handles deleting an existing resource.
-
-Each method receives an instance of a request class (e.g. `StoreRequest` or `UpdateRequest`) which is used to validate and retrieve the data sent by the client. The `validated()` method is used to retrieve the validated data from the request.
-
-Each method returns an instance of Laravel's `Response` class which represents the HTTP response returned by the controller. The `ExampleService` service is used to handle the underlying CRUD operations and returns the correct response based on the result of the operation.
-
+Neste exemplo, criamos um novo controlador chamado `ExampleController`, que estende a classe `BaseController`. Também definimos uma propriedade `$nameService` para indicar qual serviço este controlador utiliza.
+Cada método no controlador corresponde a uma ação padrão CRUD. O método `store()` lida com a criação de um novo recurso, o método `index()` lida com a listagem de recursos, o método `show()` lida com a exibição de um recurso específico, o método `update()` lida com a atualização de um recurso existente e o método `destroy()` lida com a exclusão de um recurso existente.
+Cada método recebe uma instância de uma classe de ***Request*** (por exemplo, `StoreRequest` ou `UpdateRequest`), que é usada para validar e recuperar os dados enviados pelo cliente. O método `validated()` é **DEVE** sempre ser usado para recuperar os dados validados da solicitação.
+Cada método retorna uma instância da classe `Response` do Laravel, que representa a resposta HTTP retornada pelo controlador. O serviço `ExampleService` é usado para lidar com as operações CRUD subjacentes e retorna a resposta correta com base no resultado da operação.
 
 ## Credits
 - [Allyson Pereira](https://github.com/allysonpdm)
