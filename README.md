@@ -151,7 +151,44 @@ O método `destroyRules()` tem como propósito possibilitar que o BaseService el
 }
 ```
 
-### BaseModel Usage Example
+### Exemplo de uso do BaseModel
+A classe `BaseModel` é uma classe abstrata que pode ser estendida para criar modelos na sua aplicação Laravel. Abaixo está um exemplo de como usar a classe `BaseModel` para criar um modelo `Paises`.
+```php
+<?php
+
+namespace App\Models;
+
+use ArchCrudLaravel\App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Relations\{
+    HasMany
+};
+
+class Paises extends BaseModel
+{
+    public $table = 'paises';
+    protected $fillable = [
+        'nome',
+        self::DELETED_AT
+    ];
+
+    public array $searchable = [
+        'nome',
+        self::DELETED_AT
+    ];
+
+    public function estados(): HasMany
+    {
+        return $this->hasMany(Estados::class, 'paisId');
+    }
+}
+
+```
+
+No exemplo acima, a propriedade `$searchable` permite que você especifique quais campos podem ser pesquisados ​​ao usar o método index da classe `BaseService`. Isso é útil ao implementar a funcionalidade de pesquisa na sua aplicação.
+
+Além disso, a classe `BaseModel` fornece as constantes `DELETED_AT`, `UPDATED_AT` e `CREATED_AT` para permitir fácil referenciamento dos timestamps padrão do Laravel. No entanto, você também pode sobrescrever essas constantes fornecendo uma string contendo o nome da coluna na tabela.
+
+Para o correto funcionamento do método `$service->destroy()`, os relacionamentos **DEVEM** ser tipados.
 
 ### BaseCollection Usage Example
 
@@ -219,7 +256,7 @@ A utilização da classe `BaseService` traz consigo inúmeras vantagens, como:
 
 Ao estender a classe `BaseService`, você garante uma base sólida e consistente para os serviços de sua aplicação, agilizando o desenvolvimento e facilitando a manutenção.
 
-## Controller Usage Example
+### Controller Usage Example
 Aqui está um exemplo de como usar o `BaseController` fornecido pelo Arch-Laravel em conjunto com o `ExampleService` criado anteriormente:
 ```php
 <?php
