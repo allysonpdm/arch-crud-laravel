@@ -216,6 +216,7 @@ A utilização da classe `BaseService` traz consigo inúmeras vantagens, como:
 - **Respostas consistentes**: A classe fornece um conjunto padrão de códigos de resposta, garantindo respostas consistentes e padronizadas em toda a aplicação.
 - **Gerenciamento de relacionamentos**: Quando a propriedade `$nameModel` é informada, o método `destroy()` do `BaseService` verifica se o recurso está sendo utilizado por outras entidades no banco de dados, utilizando os relacionamentos declarados na model. Um *soft delete* será executado por padrão caso existam vínculos, mas é possível forçar a remoção permanente do recurso, juntamente com a desanexação das entidades relacionadas, utilizando o parâmetro `force: true`.
 - **Recuperação de soft deletes**: É possível reverter os *soft deletes* ao atualizar o campo `$model::DELETED_AT` do registro, sendo a restauração executada de maneira recursiva.
+
 Ao estender a classe `BaseService`, você garante uma base sólida e consistente para os serviços de sua aplicação, agilizando o desenvolvimento e facilitando a manutenção.
 
 ## Controller Usage Example
@@ -280,8 +281,6 @@ Neste exemplo, criamos um novo controlador chamado `ExampleController`, que este
 Cada método no controlador corresponde a uma ação padrão CRUD. O método `store()` lida com a criação de um novo recurso, o método `index()` lida com a listagem de recursos, o método `show()` lida com a exibição de um recurso específico, o método `update()` lida com a atualização de um recurso existente e o método `destroy()` lida com a exclusão de um recurso existente, eles retornam uma instância da classe `Response` do Laravel, que representa a resposta HTTP retornada pelo controlador.
 
 Todos os métodos do CRUD recebem uma instância de uma classe de ***Request*** (por exemplo, `StoreRequest` ou `UpdateRequest`), que é usada para validar e recuperar os dados enviados pelo cliente. O método `$request->validated()` é **DEVE** sempre ser usado para recuperar os dados validados da solicitação.
-
-Cada método 
 
 ## Credits
 - [Allyson Pereira](https://github.com/allysonpdm)
