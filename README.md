@@ -43,7 +43,7 @@ A classe abstrata BaseRequest fornece os métodos: `indexRules()`, `updateRules(
 
 namespace App\Http\Requests\Example;
 
-class IndexRequest extends UsersRequest
+class IndexRequest extends ExampleRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -119,7 +119,7 @@ public array $conditionsOperators = ['=', '!=', '<>', '<', '>', '<=', '>=', 'LIK
 
 namespace App\Http\Requests\Example;
 
-class DestroyRequest extends UsersRequest
+class DestroyRequest extends ExampleRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -148,6 +148,48 @@ O método `destroyRules()` tem como propósito possibilitar que o BaseService el
 ```json
 {
     "force": true
+}
+```
+
+**File: `./Example/UpdateRequest.php`**
+```php 
+<?php
+
+namespace App\Http\Requests\Example;
+
+class UpdateRequest extends ExampleRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize(): bool
+    {
+        return $this->hasGroupPermission();
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array
+     */
+    public function rules(): array
+    {
+        return [
+            ...$this->updateRules()
+            'field' => 'bail|required|integer',
+            'field2' => 'bail|nullable|string'
+        ];
+    }
+}
+```
+O método `updateRules()` possui um conjunto de validações que possibilitará que o BaseService restaure os registros, juntamente com seus vínculos. Para isso basta fornecer o parâmetro `$model::DELETED_AT` na solicitação para que a estrutura reabilite o registro de maneira recursiva.
+
+**JSON Request Example**
+```json
+{
+    "deleted_at": "2023-01-01 01:30:59"
 }
 ```
 
