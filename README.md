@@ -184,12 +184,12 @@ class UpdateRequest extends ExampleRequest
     }
 }
 ```
-O método `updateRules()` possui um conjunto de validações que possibilitará que o BaseService restaure os registros, juntamente com seus vínculos. Para isso basta fornecer o parâmetro `$model::DELETED_AT` na solicitação para que a estrutura reabilite o registro de maneira recursiva.
+O método `updateRules()` possui um conjunto de validações que possibilitará que o BaseService restaure os registros, juntamente com seus vínculos. Para isso basta fornecer o parâmetro `$model::DELETED_AT` como nulo na solicitação para que a estrutura reabilite o registro de maneira recursiva.
 
 **JSON Request Example**
 ```json
 {
-    "deleted_at": "2023-01-01 01:30:59"
+    "deleted_at": null
 }
 ```
 
