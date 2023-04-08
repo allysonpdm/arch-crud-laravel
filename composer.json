@@ -56,6 +56,7 @@
             "ArchCrudLaravel\\App\\Services\\Traits\\": "src/app/Services/Traits/",
             "ArchCrudLaravel\\App\\Enums\\": "src/app/Enums/",
             "ArchCrudLaravel\\App\\Enums\\Traits\\": "src/app/Enums/Traits/",
+            "ArchCrudLaravel\\App\\Enums\\Traits\\": "src/app/Enums/Http/",
             "ArchCrudLaravel\\Database\\Seeders\\": "src/database/seeders/",
             "ArchCrudLaravel\\Tests\\Unit\\": "src/tests/Unit"
         }

@@ -184,7 +184,7 @@ class UpdateRequest extends ExampleRequest
     }
 }
 ```
-O método `updateRules()` possui um conjunto de validações que possibilitará que o BaseService restaure os registros, juntamente com seus vínculos. Para isso basta fornecer o parâmetro `$model::DELETED_AT` como nulo na solicitação para que a estrutura reabilite o registro de maneira recursiva.
+O método `updateRules()` possui um conjunto de validações que possibilitará que o BaseService restaure o registro, juntamente com seus vínculos. Para isso basta fornecer o parâmetro `$model::DELETED_AT` como nulo na solicitação para que a estrutura reabilite o registro de maneira recursiva.
 
 **JSON Request Example**
 ```json
@@ -226,7 +226,7 @@ class Paises extends BaseModel
 
 ```
 
-No exemplo acima, a propriedade `$searchable` permite que você especifique quais campos podem ser pesquisados ​​ao usar o método index da classe `BaseService`. Isso é útil ao implementar a funcionalidade de pesquisa na sua aplicação.
+No exemplo acima, a propriedade `$searchable` permite que você especifique quais campos podem ser pesquisados ​​ao usar o método `index()` da classe `BaseService`. Isso é útil ao implementar a funcionalidade de pesquisa na sua aplicação.
 
 Além disso, a classe `BaseModel` fornece as constantes `DELETED_AT`, `UPDATED_AT` e `CREATED_AT` para permitir fácil referenciamento dos timestamps padrão do Laravel. No entanto, você também pode sobrescrever essas constantes fornecendo uma string contendo o nome da coluna na tabela.
 
