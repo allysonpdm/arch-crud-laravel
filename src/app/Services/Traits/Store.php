@@ -29,7 +29,7 @@ trait Store
                 ->afterInsert()
                 ->commit()
                 ->showRegister();
-            return response($response, StatusCode::CREATED);
+            return response($response, StatusCode::CREATED->value);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
         }

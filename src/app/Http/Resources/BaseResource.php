@@ -8,7 +8,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 abstract class BaseResource extends JsonResource
 {
     protected $route;
-    protected int|string $id;
+    protected null|int|string $id;
     public $resource;
 
     /**

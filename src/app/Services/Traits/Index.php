@@ -52,7 +52,7 @@ trait Index
                 value: $response
             );
 
-            return response($response, StatusCode::OK);
+            return response($response, StatusCode::OK->value);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
         }

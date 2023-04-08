@@ -2,6 +2,7 @@
 
 namespace ArchCrudLaravel\App\Services\Traits;
 
+use ArchCrudLaravel\App\Enums\Http\StatusCode;
 use ArchCrudLaravel\App\Exceptions\SoftDeleteException;
 use Exception;
 use Illuminate\Database\Eloquent\{
@@ -57,7 +58,7 @@ trait Destroy
             $response = ($response && $this->force)
                 ? 'O registro e os vínculos foram excluídos definitivamente.'
                 : 'O registro foi desabilitado.';
-            return response($response, 200);
+            return response($response, StatusCode::OK->value);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
         }

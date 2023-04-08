@@ -27,7 +27,7 @@ trait ExceptionTreatment
 
         switch ($type) {
             case ValidationException::class:
-                $response = response($exception->validator->messages(), StatusCode::UNPROCESSABLE_ENTITY); // HTTP error 422
+                $response = response($exception->validator->messages(), StatusCode::UNPROCESSABLE_ENTITY->value); // HTTP error 422
                 break;
             case ModelNotFoundException::class:
                 $response = response([
@@ -40,7 +40,7 @@ trait ExceptionTreatment
                 $response = response($exception->getMessage(), $code);
                 break;
             case SoftDeleteException::class:
-                $response = response($exception->getMessage(), StatusCode::OK);
+                $response = response($exception->getMessage(), StatusCode::OK->value);
                 break;
             case QueryException::class:
                 switch ($code){
@@ -55,7 +55,7 @@ trait ExceptionTreatment
                     'Message' => "{$message} {$exception->getMessage()}",
                     'File' => $exception->getFile(),
                     'Line' => $exception->getLine(),
-                ], StatusCode::INTERNAL_SERVER_ERROR);
+                ], StatusCode::INTERNAL_SERVER_ERROR->value);
                 break;
             default:
                 $response = response([

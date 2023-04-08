@@ -2,6 +2,7 @@
 
 namespace ArchCrudLaravel\App\Services\Traits;
 
+use ArchCrudLaravel\App\Enums\Http\StatusCode;
 use ArchCrudLaravel\App\Exceptions\UpdateException;
 use Exception;
 use Illuminate\Http\Response;
@@ -40,7 +41,7 @@ trait Update
                 value: $response
             );
 
-            return response($response, 200);
+            return response($response, StatusCode::OK->value);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
         }
