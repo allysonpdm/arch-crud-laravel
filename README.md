@@ -100,7 +100,7 @@ O método `indexRules()` permite navegação através de paginação, definindo 
 **Detalhes:**
 - `page` ***(integer)***: Este parâmetro é usado para especificar o número da página dos resultados a serem recuperados. Deve ser um valor inteiro.
 - `perPage` ***(integer)***: Este parâmetro é usado para especificar o número de itens por página a serem recuperados. Deve ser um valor inteiro.
-- `orderBy` ***(array)***: Este parâmetro é usado para especificar os critérios de ordenação para a consulta. Deve ser uma matriz contendo um ou mais critérios de ordenação. Cada critério de ordenação é uma matriz contendo dois elementos: a coluna pela qual ordenar e a direção da ordenação (ascendente ou descendente). O nome da coluna é validado para garantir que existe na tabela especificada pela variável `$table`, e a direção da ordenação é validada para garantir que seja *'asc'* ou *'desc'*.
+- `orderBy` ***(array)***: Este parâmetro é usado para especificar os critérios de ordenação para a consulta. Deve ser uma matriz contendo um ou mais critérios de ordenação. Cada critério de ordenação é uma matriz contendo dois elementos: a coluna pela qual ordenar e a direção da ordenação (ascendente ou descendente). O nome da coluna é validado para garantir que existe na tabela especificada pela variável `$table`, e a direção da ordenação é validada para garantir que seja _'asc'_ ou _'desc'_.
 - `wheres` ***(array)***: Este parâmetro é usado para especificar os critérios de filtragem para a consulta. Deve ser uma matriz contendo um ou mais critérios de filtragem. Cada critério de filtragem é uma matriz contendo três elementos: a coluna pela qual filtrar, a condição de filtragem (por exemplo, '=', '<', '>=', 'like', etc.) e o valor a ser procurado. O nome da coluna é validado para garantir que existe na tabela especificada pela variável `$table`, e a condição de filtragem é validada para garantir que seja uma das condições permitidas especificadas pelos `$conditionsOperators`.
 - `wheres.*.column` ***(string)***: Este parâmetro é o nome da coluna pela qual filtrar. É um valor de **string obrigatório** que deve existir no array `$searchable` do modelo e deve existir na tabela especificada pela variável `$table`.
 - `wheres.*.condition` ***(string)***: Este parâmetro é a condição de filtragem a ser usada para a coluna especificada. É um valor de **string obrigatório** que deve ser uma das condições permitidas especificadas pela constante `$conditionsOperators`.
@@ -286,6 +286,11 @@ O `BaseService` conta com os métodos que podem ser empregados para adaptar o fl
 - `afterModify()`: executado após a modificação de um registro.
 - `beforeDelete()`: executado antes da exclusão de um registro.
 - `afterDelete()`: executado após a exclusão de um registro.
+
+Além disso, há métodos de controle que podem ser úteis nos _cases_ de seu serviço. Esses métodos incluem:
+- `hasRelationships()`: retorna um `true` se o modelo tiver relacionamentos definidos.
+- `getRelationshipNames()`: retorna os nomes dos relacionamentos do modelo.
+- `setCustomExceptionMappings()`: permite personalizar os tratamentos exceções, padronizando as respostas da API.
 
 **Vantagens**
 
