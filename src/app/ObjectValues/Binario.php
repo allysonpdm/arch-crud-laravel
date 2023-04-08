@@ -5,8 +5,9 @@ namespace ArchCrudLaravel\App\ObjectValues;
 use ArchCrudLaravel\App\ObjectValues\Contracts\ObjectValue;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Stringable;
 
-class Binario extends ObjectValue
+class Binario extends ObjectValue implements Stringable
 {
     protected bool $showTrueValue;
     protected bool $showFalseValue;

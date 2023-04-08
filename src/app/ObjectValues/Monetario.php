@@ -2,7 +2,9 @@
 
 namespace ArchCrudLaravel\App\ObjectValues;
 
-class Monetario extends Decimal
+use Stringable;
+
+class Monetario extends Decimal implements Stringable
 {
     protected ?string $thousandsSeparator = '.';
     protected ?string $decimalSeparator = ',';

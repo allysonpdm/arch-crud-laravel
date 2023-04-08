@@ -6,8 +6,9 @@ use ArchCrudLaravel\App\ObjectValues\Contracts\ObjectValue;
 use ArchCrudLaravel\App\Rules\DecimalRule;
 use Illuminate\Support\Facades\Validator;
 use InvalidArgumentException;
+use Stringable;
 
-class Decimal extends ObjectValue
+class Decimal extends ObjectValue implements Stringable
 {
     protected ?string $decimalSeparator = '.';
     protected ?string $thousandsSeparator = '';
@@ -39,7 +40,7 @@ class Decimal extends ObjectValue
         $this->thousandsSeparator = $separator;
     }
 
-    protected function validate($value): void
+    protected function validate(mixed $value): void
     {
         $validator = Validator::make(
             ['decimal' => $value],

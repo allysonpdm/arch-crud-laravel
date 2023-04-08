@@ -5,7 +5,7 @@ namespace ArchCrudLaravel\App\ObjectValues;
 use ArchCrudLaravel\App\ObjectValues\Contracts\ObjectValue;
 use InvalidArgumentException;
 
-class Regex extends ObjectValue
+class Regex extends ObjectValue implements Stringable
 {
     public function __construct(
         protected mixed $value,

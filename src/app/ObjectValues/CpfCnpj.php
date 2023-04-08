@@ -17,8 +17,9 @@ use ArchCrudLaravel\App\Rules\{
 };
 use Illuminate\Support\Facades\Validator;
 use InvalidArgumentException;
+use Stringable;
 
-class CpfCnpj extends ObjectValue implements Maskable, Sanitizable
+class CpfCnpj extends ObjectValue implements Maskable, Sanitizable, Stringable
 {
     use Masked, Sanitized;
 

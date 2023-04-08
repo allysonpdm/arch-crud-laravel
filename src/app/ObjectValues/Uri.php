@@ -5,8 +5,9 @@ namespace ArchCrudLaravel\App\ObjectValues;
 use ArchCrudLaravel\App\ObjectValues\Contracts\ObjectValue;
 use ArchCrudLaravel\App\Rules\UriRule;
 use InvalidArgumentException;
+use Stringable;
 
-class Uri extends ObjectValue
+class Uri extends ObjectValue implements Stringable
 {
     public function __construct(protected mixed $value)
     {

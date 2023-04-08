@@ -4,7 +4,7 @@ namespace ArchCrudLaravel\App\ObjectValues\Contracts;
 
 use Stringable;
 
-abstract class ObjectValue implements Stringable
+abstract class ObjectValue
 {
     public function __construct(protected mixed $value)
     {
@@ -13,7 +13,6 @@ abstract class ObjectValue implements Stringable
     }
 
     protected abstract function validate(mixed $value): void;
-    public abstract function __toString();
 
     public function getValue(): mixed
     {

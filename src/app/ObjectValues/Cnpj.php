@@ -13,8 +13,9 @@ use ArchCrudLaravel\App\ObjectValues\Traits\{
     Sanitized
 };
 use InvalidArgumentException;
+use Stringable;
 
-class Cnpj extends ObjectValue implements Maskable, Sanitizable
+class Cnpj extends ObjectValue implements Maskable, Sanitizable, Stringable
 {
     use Masked, Sanitized;
 

@@ -7,8 +7,9 @@ use ArchCrudLaravel\App\ObjectValues\Contracts\ObjectValue;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Stringable;
 
-class Email extends ObjectValue
+class Email extends ObjectValue implements Stringable
 {
     protected function validate(mixed $value): void
     {
