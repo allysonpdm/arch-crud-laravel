@@ -290,7 +290,7 @@ O `BaseService` conta com os métodos que podem ser empregados para adaptar o fl
 Além disso, há métodos de controle que podem ser úteis nos _cases_ de seu serviço. Esses métodos incluem:
 - `hasRelationships()`: retorna um `true` se o modelo tiver relacionamentos definidos.
 - `getRelationshipNames()`: retorna os nomes dos relacionamentos do modelo.
-- `setCustomExceptionMappings()`: permite personalizar os tratamentos exceções, padronizando as respostas da API.
+- `setCustomExceptionMappings()`: permite personalizar os tratamentos exceções, padronizando as respostas da API. Cada item do parâmetro `$mappings` deve ser uma instância de `CustomExceptionMapping`.
 
 **Vantagens**
 
