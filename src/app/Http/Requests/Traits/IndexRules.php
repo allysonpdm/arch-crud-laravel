@@ -16,6 +16,7 @@ trait IndexRules
     {
         $table = app($this->model)->getTable();
         $connection = app($this->model)->getConnectionName();
+        $connection = app($this->model)->searchable;
         return [
             'page' => 'integer',
             'perPage' => 'integer',
@@ -30,7 +31,7 @@ trait IndexRules
             'wheres.*.column' => [
                 'string',
                 'required',
-                Rule::in($this->model->searchable),
+                Rule::in($searchable),
                 new FieldsExistsInTableRule($table, $connection)
             ],
             'wheres.*.condition' => [
@@ -44,7 +45,7 @@ trait IndexRules
             'orWheres.*.column' => [
                 'string',
                 'required',
-                Rule::in($this->model->searchable),
+                Rule::in($searchable),
                 new FieldsExistsInTableRule($table, $connection)
             ],
             'orWheres.*.condition' => [
