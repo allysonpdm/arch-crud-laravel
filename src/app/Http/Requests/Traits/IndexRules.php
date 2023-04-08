@@ -16,7 +16,7 @@ trait IndexRules
     {
         $table = app($this->model)->getTable();
         $connection = app($this->model)->getConnectionName();
-        $connection = app($this->model)->searchable;
+        $searchable = app($this->model)->searchable;
         return [
             'page' => 'integer',
             'perPage' => 'integer',
