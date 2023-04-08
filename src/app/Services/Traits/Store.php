@@ -2,6 +2,7 @@
 
 namespace ArchCrudLaravel\App\Services\Traits;
 
+use ArchCrudLaravel\App\Enums\Http\StatusCode;
 use ArchCrudLaravel\App\Exceptions\CreateException;
 use Exception;
 use Illuminate\Database\Eloquent\{
@@ -28,7 +29,7 @@ trait Store
                 ->afterInsert()
                 ->commit()
                 ->showRegister();
-            return response($response, 201);
+            return response($response, StatusCode::CREATED);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
         }

@@ -2,6 +2,7 @@
 
 namespace ArchCrudLaravel\App\Services\Traits;
 
+use ArchCrudLaravel\App\Enums\Http\StatusCode;
 use Exception;
 use Illuminate\Database\Eloquent\{
     Builder,
@@ -37,7 +38,7 @@ trait Show
                 key: $cacheKey,
                 value: $response
             );
-            return response($response, 200);
+            return response($response, StatusCode::OK);
         } catch (Exception $exception) {
             return $this->exceptionTreatment($exception);
         }

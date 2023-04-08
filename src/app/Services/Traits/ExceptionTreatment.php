@@ -2,6 +2,7 @@
 
 namespace ArchCrudLaravel\App\Services\Traits;
 
+use ArchCrudLaravel\App\Enums\Http\StatusCode;
 use ArchCrudLaravel\App\Exceptions\{
     BusinessException,
     CreateException,
@@ -22,11 +23,11 @@ trait ExceptionTreatment
         $this->rollBack();
         $type = get_class($exception);
         $code = (int) $exception->getCode();
-        $code = empty($code) ? 500 : $code;
+        $code = empty($code) ? StatusCode::INTERNAL_SERVER_ERROR : $code;
 
         switch ($type) {
             case ValidationException::class:
-                $response = response($exception->validator->messages(), 422); // HTTP error 422
+                $response = response($exception->validator->messages(), StatusCode::UNPROCESSABLE_ENTITY); // HTTP error 422
                 break;
             case ModelNotFoundException::class:
                 $response = response([
@@ -39,7 +40,7 @@ trait ExceptionTreatment
                 $response = response($exception->getMessage(), $code);
                 break;
             case SoftDeleteException::class:
-                $response = response($exception->getMessage(), 200);
+                $response = response($exception->getMessage(), StatusCode::OK);
                 break;
             case QueryException::class:
                 switch ($code){
@@ -54,7 +55,7 @@ trait ExceptionTreatment
                     'Message' => "{$message} {$exception->getMessage()}",
                     'File' => $exception->getFile(),
                     'Line' => $exception->getLine(),
-                ], 500);
+                ], StatusCode::INTERNAL_SERVER_ERROR);
                 break;
             default:
                 $response = response([
