@@ -9,9 +9,8 @@ composer require allyson/arch-laravel
 
 ## Como usar
 
-### Exemplo de uso do BaseRequest
-
-**File: `./Example/ExampleRequest.php`**
+### BaseRequest
+1. **File: `./Example/ExampleRequest.php`**
 ```php 
 <?php
 
@@ -37,7 +36,7 @@ abstract class ExampleRequest extends BaseRequest
 ```
 A classe abstrata BaseRequest fornece os métodos: `indexRules()`, `updateRules()` e  `destroyRules()`, eles retornam um array com regras que permitem o funcionamento adequado do `BaseService` para os métodos `index()`, `update()`, `destroy()`, respectivamente. Podendo ser concatenados com suas próprias regras de negócios. Também é necessário implementar os métodos `hasGroupPermission()` e `isOwner()`, que podem ser implementados de acordo com as necessidades do aplicativo e regras de negócio para autorizar o acesso e uso do recurso.
 
-**File: `./Example/IndexRequest.php`**
+2. **File: `./Example/IndexRequest.php`**
 ```php 
 <?php
 
@@ -113,7 +112,7 @@ O método `indexRules()` permite navegação através de paginação, definindo 
 public array $conditionsOperators = ['=', '!=', '<>', '<', '>', '<=', '>=', 'LIKE', 'NOT LIKE', 'IS NULL', 'IS NOT NULL'];
 ```
 
-**File: `./Example/DestroyRequest.php`**
+3. **File: `./Example/DestroyRequest.php`**
 ```php 
 <?php
 
@@ -151,7 +150,7 @@ O método `destroyRules()` tem como propósito possibilitar que o BaseService el
 }
 ```
 
-**File: `./Example/UpdateRequest.php`**
+4. **File: `./Example/UpdateRequest.php`**
 ```php 
 <?php
 
@@ -193,8 +192,10 @@ O método `updateRules()` possui um conjunto de validações que possibilitará 
 }
 ```
 
-### Exemplo de uso do BaseModel
+### BaseModel
 A classe `BaseModel` é uma classe abstrata que pode ser estendida para criar modelos na sua aplicação Laravel. Abaixo está um exemplo de como usar a classe `BaseModel` para criar um modelo `Paises`.
+
+1. **File: `./Example/Paises.php`**
 ```php
 <?php
 
@@ -232,12 +233,14 @@ Além disso, a classe `BaseModel` fornece as constantes `DELETED_AT`, `UPDATED_A
 
 Para o correto funcionamento do método `$service->destroy()`, os relacionamentos **DEVEM** ser tipados.
 
-### BaseCollection Usage Example
+### BaseCollection
 
-### BaseResource Usage Example
+### BaseResource
 
-### Exemplo de Uso do BaseService
+### BaseService
 O `BaseService` é uma classe fornecida pelo Arch-Laravel que pode ser usada para simplificar a criação de serviços no Laravel. Aqui está um exemplo de como utilizá-lo:
+
+1. **File: `./Example/BaseService.php`**
 ```php
 <?php
 
@@ -303,8 +306,10 @@ A utilização da classe `BaseService` traz consigo inúmeras vantagens, como:
 
 Ao estender a classe `BaseService`, você garante uma base sólida e consistente para os serviços de sua aplicação, agilizando o desenvolvimento e facilitando a manutenção.
 
-### Controller Usage Example
+### Controller
 Aqui está um exemplo de como usar o `BaseController` fornecido pelo Arch-Laravel em conjunto com o `ExampleService` criado anteriormente:
+
+1. **File: `./Example/BaseController.php`**
 ```php
 <?php
 

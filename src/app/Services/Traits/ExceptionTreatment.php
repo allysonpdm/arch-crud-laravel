@@ -118,17 +118,6 @@ trait ExceptionTreatment
         );
     }
 
-    public function setCustomExceptionMappings(array $mappings): self
-    {
-        foreach ($mappings as $key => $mapping) {
-            if (!($mapping instanceof CustomExceptionMapping)) {
-                throw new InvalidArgumentException("Cada item do array deve ser uma instância de CustomExceptionMapping.");
-            }
-        }
-        $this->customExceptionMappings = self::reduceMappings($mappings);
-        return $this;
-    }
-
     protected function defaultExceptionMappings(array $values): array
     {
         $mappings = [];
@@ -149,5 +138,16 @@ trait ExceptionTreatment
             },
             []
         );
+    }
+
+    public function setCustomExceptionMappings(array $mappings): self
+    {
+        foreach ($mappings as $key => $mapping) {
+            if (!($mapping instanceof CustomExceptionMapping)) {
+                throw new InvalidArgumentException("Cada item do array deve ser uma instância de CustomExceptionMapping.");
+            }
+        }
+        $this->customExceptionMappings = self::reduceMappings($mappings);
+        return $this;
     }
 }

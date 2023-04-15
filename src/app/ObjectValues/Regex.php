@@ -4,6 +4,7 @@ namespace ArchCrudLaravel\App\ObjectValues;
 
 use ArchCrudLaravel\App\ObjectValues\Contracts\ObjectValue;
 use InvalidArgumentException;
+use Stringable;
 
 class Regex extends ObjectValue implements Stringable
 {
