@@ -40,5 +40,4 @@ class Cnpj extends ObjectValue implements Maskable, Sanitizable, Stringable
     {
         return str_pad($this->value, 14, '0', STR_PAD_LEFT);
     }
-
 }

@@ -1,4 +1,7 @@
+#!/usr/bin/env php
 <?php
+
+echo "Iniciando o processo de cópia dos arquivos de teste...\n";
 
 function recurseCopy($src, $dest)
 {
