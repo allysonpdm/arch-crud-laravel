@@ -58,7 +58,7 @@ class MakeService extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootnamespace ArchCrudLaravel\. '/Http/Services';
+        return $rootnamespace .'/Services';
     }
 
     /**

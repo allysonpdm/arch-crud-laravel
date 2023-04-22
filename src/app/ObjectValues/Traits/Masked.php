@@ -5,6 +5,7 @@ namespace ArchCrudLaravel\App\ObjectValues\Traits;
 trait Masked
 {
     protected string $mask;
+    protected mixed $value;
 
     public function masked(): string
     {

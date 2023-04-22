@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
 class GenericService extends BaseService
 {
-    
+    protected ?string $nameModel;
+    protected ?string $nameCollection;
+    protected ?string $nameResource;
 }

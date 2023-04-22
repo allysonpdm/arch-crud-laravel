@@ -7,6 +7,7 @@ use ArchCrudLaravel\App\ObjectValues\Regex;
 trait Sanitized
 {
     protected string $regex;
+    protected mixed $value;
 
     public function sanitized(): string
     {

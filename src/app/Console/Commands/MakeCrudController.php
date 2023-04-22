@@ -58,7 +58,7 @@ class MakeCrudController extends GeneratorCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootnamespace ArchCrudLaravel\. '/Http/Controllers';
+        return $rootNamespace . '/Http/Controllers';
     }
 
     /**
