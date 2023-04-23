@@ -6,6 +6,7 @@ use ArchCrudLaravel\App\ObjectValues\CustomExceptionMapping;
 use Exception;
 use InvalidArgumentException;
 use Tests\TestCase;
+use TypeError;
 
 class CustomExceptionMappingTest extends TestCase
 {
@@ -29,9 +30,9 @@ class CustomExceptionMappingTest extends TestCase
 
     public function testInvalidHandler()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(TypeError::class);
 
-        new CustomExceptionMapping(Exception::class, 'TypeError');
+        new CustomExceptionMapping(Exception::class, 'InvalidHandler');
     }
 
     public function testArrayAccess()
