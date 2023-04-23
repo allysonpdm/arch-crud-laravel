@@ -9,11 +9,12 @@ use Tests\TestCase;
 class SanitizedTest extends TestCase
 {
     protected string $regex;
-    protected mixed $value = 'a1b2c3';
+    protected mixed $value;
     use Sanitized;
 
     public function testSetRegex()
     {
+        $this->value = 'a1b2c3';
         $this->setRegex(new Regex('[0-9]'));
         
         $this->assertEquals('[0-9]', $this->regex);
@@ -21,6 +22,7 @@ class SanitizedTest extends TestCase
 
     public function testSanitized()
     {
+        $this->value = 'a1b2c3';
         $this->setRegex(new Regex('[a-z]'));
         $formattedValue = $this->sanitized();
 
