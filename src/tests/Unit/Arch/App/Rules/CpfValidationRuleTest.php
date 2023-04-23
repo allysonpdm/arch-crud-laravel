@@ -29,7 +29,7 @@ class CpfValidationRuleTest extends TestCase
     {
         return [
             ['529.982.247-25'],
-            ['353.998.560-56'],
+            ['054.465.400-50'],
             ['39053344705'],
         ];
     }
