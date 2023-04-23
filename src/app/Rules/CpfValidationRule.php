@@ -40,7 +40,7 @@ class CpfValidationRule implements Rule
         }
 
         // Verifica se todos os dígitos do CPF são iguais;
-        if (preg_match('/(\d)\1{11}/', $cpf)) {
+        if (preg_match('/(\d)\1{10}/', $cpf)) {
             return false;
         }
 

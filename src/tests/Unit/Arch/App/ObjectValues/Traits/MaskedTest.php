@@ -13,7 +13,6 @@ class MaskedTest extends TestCase
 
     public function testSetMask()
     {
-        $this->value = 123457890;
         $this->setMask('##.##.##-##');
         
         $this->assertEquals('##.##.##-##', $this->mask);
@@ -21,7 +20,7 @@ class MaskedTest extends TestCase
 
     public function testMaskedValue()
     {
-        $this->value = 123457890;
+        $this->value = 1234567890;
         $this->setMask('(##) ####-####');
         $formattedValue = $this->masked();
 

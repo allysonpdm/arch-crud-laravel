@@ -31,6 +31,6 @@ class RegexTest extends TestCase
             insensitive: true
         );
 
-        $this->assertEquals('/\d{3}-\d{2}-\d{4}/gmi', (string) $regex);
+        $this->assertEquals('/\d{3}-\d{2}-\d{4}/mig', (string) $regex);
     }
 }
