@@ -32,10 +32,6 @@ class CustomExceptionMapping extends ObjectValue implements ArrayAccess, Countab
             ) {
                 throw new InvalidArgumentException("A chave deve ser uma string representando o nome de uma classe de exceção válida.");
             }
-    
-            if (!($handler instanceof Closure)) {
-                throw new InvalidArgumentException("O valor deve ser uma função anônima (closure).");
-            }
         }
     }
 

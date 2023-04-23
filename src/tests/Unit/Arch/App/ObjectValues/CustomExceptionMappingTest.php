@@ -31,7 +31,7 @@ class CustomExceptionMappingTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new CustomExceptionMapping(Exception::class, 'InvalidHandler');
+        new CustomExceptionMapping(Exception::class, 'TypeError');
     }
 
     public function testArrayAccess()
