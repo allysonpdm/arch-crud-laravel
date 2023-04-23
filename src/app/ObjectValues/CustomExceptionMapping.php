@@ -26,7 +26,11 @@ class CustomExceptionMapping extends ObjectValue implements ArrayAccess, Countab
     protected function validate(mixed $value): void
     {
         foreach ($value as $exceptionClass => $handler) {
-            if (!class_exists($exceptionClass) || !is_subclass_of($exceptionClass, Exception::class)) {
+            if (
+                !class_exists($exceptionClass) ||
+                !is_subclass_of($exceptionClass, Exception::class) ||
+                !($exceptionClass instanceof Exception)
+                ) {
                 throw new InvalidArgumentException("A chave deve ser uma string representando o nome de uma classe de exceção válida.");
             }
     

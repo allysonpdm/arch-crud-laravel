@@ -10,9 +10,9 @@ class CnpjTest extends TestCase
 {
     public function testValidCnpj()
     {
-        $cnpj = new Cnpj('45.987.101/0001-98');
+        $cnpj = new Cnpj('32.631.433/0001-31');
 
-        $this->assertEquals('45987101000198', (string) $cnpj);
+        $this->assertEquals('32631433000131', (string) $cnpj);
     }
 
     public function testInvalidCnpj()
@@ -24,15 +24,15 @@ class CnpjTest extends TestCase
 
     public function testCnpjSanitization()
     {
-        $cnpj = new Cnpj('45.987.101/0001-98');
+        $cnpj = new Cnpj('32.631.433/0001-31');
 
-        $this->assertEquals('45987101000198', $cnpj->sanitized());
+        $this->assertEquals('32631433000131', $cnpj->sanitized());
     }
 
     public function testCnpjMasked()
     {
-        $cnpj = new Cnpj('45987101000198');
+        $cnpj = new Cnpj('32631433000131');
 
-        $this->assertEquals('45.987.101/0001-98', $cnpj->masked());
+        $this->assertEquals('32.631.433/0001-31', $cnpj->masked());
     }
 }

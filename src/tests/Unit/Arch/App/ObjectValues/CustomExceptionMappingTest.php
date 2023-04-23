@@ -11,7 +11,7 @@ class CustomExceptionMappingTest extends TestCase
 {
     public function testValidCustomExceptionMapping()
     {
-        $customExceptionMapping = new CustomExceptionMapping(Exception::class, function ($e) {
+        $customExceptionMapping = new CustomExceptionMapping(InvalidArgumentException::class, function ($e) {
             return 'Error: ' . $e->getMessage();
         });
 
