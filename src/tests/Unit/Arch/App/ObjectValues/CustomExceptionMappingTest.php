@@ -3,6 +3,7 @@
 namespace ArchCrudLaravel\Tests\Unit\Arch\App\ObjectValues;
 
 use ArchCrudLaravel\App\ObjectValues\CustomExceptionMapping;
+use Closure;
 use Exception;
 use InvalidArgumentException;
 use Tests\TestCase;
@@ -42,7 +43,7 @@ class CustomExceptionMappingTest extends TestCase
         });
 
         $this->assertTrue(isset($customExceptionMapping[Exception::class]));
-        $this->assertInstanceOf(\Closure::class, $customExceptionMapping[Exception::class]);
+        $this->assertInstanceOf(Closure::class, $customExceptionMapping[Exception::class]);
     }
 
     public function testArrayAccessReadOnly()
