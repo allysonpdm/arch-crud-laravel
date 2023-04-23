@@ -46,9 +46,9 @@ class CacheControlTest extends TestCase
         $key3 = $this->createCacheKey(null, ['foo' => 'baz']);
         $key4 = $this->createCacheKey(2);
 
-        $this->assertEquals(md5('ExampleModel' . ''), $key1);
-        $this->assertEquals(md5('ExampleModel1{"foo":"bar"}'), $key2);
-        $this->assertEquals(md5('ExampleModel{"foo":"baz"}'), $key3);
-        $this->assertEquals(md5('ExampleModel2'), $key4);
+        $this->assertEquals(md5($this->nameModel . '' . json_encode([])), $key1);
+        $this->assertEquals(md5($this->nameModel . 1 . json_encode(['foo' => 'bar'])), $key2);
+        $this->assertEquals(md5($this->nameModel . null . json_encode(['foo' => 'baz'])), $key3);
+        $this->assertEquals(md5($this->nameModel . 2 . json_encode([])), $key4);
     }
 }

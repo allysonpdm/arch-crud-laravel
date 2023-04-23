@@ -17,13 +17,13 @@ class SanitizedTest extends TestCase
         $this->value = 'a1b2c3';
         $this->setRegex(new Regex('[0-9]'));
         
-        $this->assertEquals('[0-9]', $this->regex);
+        $this->assertEquals('/[0-9]/', $this->regex);
     }
 
     public function testSanitized()
     {
         $this->value = 'a1b2c3';
-        $this->setRegex(new Regex('[a-z]'));
+        $this->setRegex(new Regex('[0-9]'));
         $formattedValue = $this->sanitized();
 
         $this->assertEquals('abc', $formattedValue);
