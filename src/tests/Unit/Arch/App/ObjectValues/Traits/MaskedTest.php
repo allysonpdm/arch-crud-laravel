@@ -8,11 +8,12 @@ use Tests\TestCase;
 class MaskedTest extends TestCase
 {
     protected string $mask;
-    protected mixed $value = 123457890;
+    protected mixed $value;
     use Masked;
 
     public function testSetMask()
     {
+        $this->value = 123457890;
         $this->setMask('##.##.##-##');
         
         $this->assertEquals('##.##.##-##', $this->mask);
@@ -20,6 +21,7 @@ class MaskedTest extends TestCase
 
     public function testMaskedValue()
     {
+        $this->value = 123457890;
         $this->setMask('(##) ####-####');
         $formattedValue = $this->masked();
 
