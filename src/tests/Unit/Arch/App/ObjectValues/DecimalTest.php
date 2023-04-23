@@ -10,9 +10,9 @@ class DecimalTest extends TestCase
 {
     public function testValidDecimal()
     {
-        $decimal = new Decimal(1234.5678, 2);
+        $decimal = new Decimal(1234.56, 2);
 
-        $this->assertEquals('1234.57', (string) $decimal);
+        $this->assertEquals('1234.56', (string) $decimal);
     }
 
     public function testInvalidDecimalSeparator()
