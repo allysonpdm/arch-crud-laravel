@@ -15,19 +15,19 @@ class DecimalTest extends TestCase
         $this->assertEquals('1234.56', (string) $decimal);
     }
 
+    public function testInvalid()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        new Decimal('invalid_value', 2);
+    }
+
     public function testInvalidSeparator()
     {
         $this->expectException(InvalidArgumentException::class);
 
         $decimal = new Decimal(1234.5678, 2);
         $decimal->setDecimalSeparator('/');
-    }
-
-    public function testInvalid()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        new Decimal('invalid_value', 2);
     }
 
     public function testValidWithCustomSeparators()

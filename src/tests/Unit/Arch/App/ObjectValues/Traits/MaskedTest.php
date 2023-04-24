@@ -18,12 +18,26 @@ class MaskedTest extends TestCase
         $this->assertEquals('##.##.##-##', $this->mask);
     }
 
-    public function testMaskedValue()
+    /**
+     * @dataProvider maskedValueProvider
+     */
+    public function testMaskedValue($value, $mask, $expected)
     {
-        $this->value = 1234567890;
-        $this->setMask('(##) ####-####');
+        $this->value = $value;
+        $this->setMask($mask);
         $formattedValue = $this->masked();
 
-        $this->assertEquals('(12) 3456-7890', $formattedValue);
+        $this->assertEquals($expected, $formattedValue);
     }
+
+    public function maskedValueProvider()
+    {
+    return [
+        [1234567890, '(##) ####-####', '(12) 3456-7890'],
+        [52998224725, '###.###.###-##', '529.982.247-25'],
+        ['99999999999', '###.###.###-##', '999.999.999-99'],
+        ['32631433000131', '##.###.###/####-##', '32.631.433/0001-31'],
+        [75113190, '#####-###', '75113-180'],
+    ];
+}
 }
