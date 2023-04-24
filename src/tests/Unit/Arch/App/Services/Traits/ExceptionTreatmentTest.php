@@ -28,7 +28,7 @@ class ExceptionTreatmentTest extends TestCase
         $response = $this->exceptionTreatment($exception);
 
         $this->assertEquals(StatusCode::UNPROCESSABLE_ENTITY->value, $response->getStatusCode());
-        $this->assertArrayHasKey('email', $response->getData(true));
+        $this->assertJson($response->getContent(), 'email');
     }
 
     public function testModelNotFoundException()
@@ -37,7 +37,7 @@ class ExceptionTreatmentTest extends TestCase
         $response = $this->exceptionTreatment($exception);
 
         $this->assertEquals(StatusCode::NOT_FOUND->value, $response->getStatusCode());
-        $this->assertArrayHasKey('Message', $response->getData(true));
+        $this->assertJson($response->getContent(), 'message');
     }
 
     public function testBusinessException()
@@ -51,12 +51,12 @@ class ExceptionTreatmentTest extends TestCase
 
     public function testQueryException()
     {
-        $exception = new QueryException('A query error occurred.', 23000, null);
+        $exception = new QueryException('A query error occurred.', [], new Exception('Previous exception.'));
         $response = $this->exceptionTreatment($exception);
 
         $this->assertEquals(StatusCode::INTERNAL_SERVER_ERROR->value, $response->getStatusCode());
-        $this->assertArrayHasKey('Exception', $response->getData(true));
-        $this->assertArrayHasKey('Message', $response->getData(true));
+        $this->assertJson($response->getContent(), 'Exception');
+        $this->assertJson($response->getContent(), 'message');
     }
 
     public function testCustomExceptionMappings()
@@ -77,7 +77,7 @@ class ExceptionTreatmentTest extends TestCase
         $response = $this->exceptionTreatment($exception);
 
         $this->assertEquals(StatusCode::BAD_REQUEST->value, $response->getStatusCode());
-        $this->assertArrayHasKey('CustomMessage', $response->getData(true));
+        $this->assertJson($response->getContent(), 'CustomMessage');
     }
 
     public function testInvalidCustomExceptionMapping()
