@@ -44,7 +44,7 @@ class UriTest extends TestCase
             ['invalid-url'],
             ['example.com'],
             ['http:/example.com'],
-            ['https://www.example.com?query=invalid&param=value'],
+            ['https://www.example.com&query=invalid&param=value'],
         ];
     }
 

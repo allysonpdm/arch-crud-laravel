@@ -33,6 +33,10 @@ class EmailMxValidationRule implements Rule
 
         $domain = trim($parts[1]);
 
+        if (empty($domain)) {
+            return false;
+        }
+
         return checkdnsrr($domain, 'MX');
     }
 

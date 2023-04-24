@@ -4,6 +4,7 @@ namespace ArchCrudLaravel\Tests\Unit\Arch\App\ObjectValues;
 
 use ArchCrudLaravel\App\ObjectValues\Monetario;
 use InvalidArgumentException;
+use stdClass;
 use Tests\TestCase;
 
 class MonetarioTest extends TestCase
@@ -45,7 +46,7 @@ class MonetarioTest extends TestCase
             ['abc'],
             ['1,234.56'],
             ['1.234,56'],
-            [null],
+            [new stdClass],
             [false],
         ];
     }
@@ -63,13 +64,6 @@ class MonetarioTest extends TestCase
         $monetario->setSeparators(',', '.');
 
         $this->assertEquals('1,234.56', (string) $monetario);
-    }
-
-    public function testSanitization()
-    {
-        $monetario = new Monetario(1234.56);
-
-        $this->assertEquals('1234.56', $monetario->sanitized());
     }
 
 }

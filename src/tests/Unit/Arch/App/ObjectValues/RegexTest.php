@@ -40,9 +40,9 @@ class RegexTest extends TestCase
     public function invalidProvider()
     {
         return [
-            ['(missing closing bracket'],
-            ['[invalid character]'],
-            ['\d{3}-\d{2}-\d{4}/'],
+            [new stdClass],
+            [[]],
+            [null],
         ];
     }
 

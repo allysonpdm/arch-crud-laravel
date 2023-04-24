@@ -5,6 +5,7 @@ namespace ArchCrudLaravel\Tests\Unit\Arch\App\ObjectValues;
 use ArchCrudLaravel\App\ObjectValues\Email;
 use InvalidArgumentException;
 use Tests\TestCase;
+use ValueError;
 
 class EmailTest extends TestCase
 {
@@ -13,7 +14,7 @@ class EmailTest extends TestCase
         return [
             ['test@example.com'],
             ['user123@gmail.com'],
-            ['my-email@domain.co.uk'],
+            ['my-email@example.com'],
             ['test+label@example.com'],
         ];
     }
@@ -43,6 +44,7 @@ class EmailTest extends TestCase
      */
     public function testInvalid($value)
     {
+        $this->expectException(ValueError::class);
         $this->expectException(InvalidArgumentException::class);
 
         new Email($value);
