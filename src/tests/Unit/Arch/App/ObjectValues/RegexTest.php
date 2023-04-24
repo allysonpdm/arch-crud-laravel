@@ -8,21 +8,45 @@ use Tests\TestCase;
 
 class RegexTest extends TestCase
 {
-    public function testValidRegex()
+    /**
+     * @dataProvider validProvider
+     */
+    public function testValid($value)
     {
-        $regex = new Regex('\d{3}-\d{2}-\d{4}');
+        $regex = new Regex($value);
 
-        $this->assertEquals('/\d{3}-\d{2}-\d{4}/', (string) $regex);
+        $this->assertEquals('/' . $value . '/', (string) $regex);
     }
 
-    public function testInvalidRegex()
+    public function validProvider()
+    {
+        return [
+            ['\d{3}-\d{2}-\d{4}'],
+            ['^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'],
+            ['[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidProvider
+     */
+    public function testInvalid($value)
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new Regex(['invalid']);
+        new Regex($value);
     }
 
-    public function testRegexWithOptions()
+    public function invalidProvider()
+    {
+        return [
+            ['(missing closing bracket'],
+            ['[invalid character]'],
+            ['\d{3}-\d{2}-\d{4}/'],
+        ];
+    }
+
+    public function testWithOptions()
     {
         $regex = new Regex(
             value: '\d{3}-\d{2}-\d{4}',

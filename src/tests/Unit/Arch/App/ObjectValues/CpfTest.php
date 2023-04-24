@@ -8,28 +8,28 @@ use Tests\TestCase;
 
 class CpfTest extends TestCase
 {
-    public function testValidCpf()
+    public function testValid()
     {
         $cpf = new Cpf('529.982.247-25');
 
         $this->assertEquals('52998224725', (string) $cpf);
     }
 
-    public function testInvalidCpf()
+    public function testInvalid()
     {
         $this->expectException(InvalidArgumentException::class);
 
         new Cpf('111.111.111-11');
     }
 
-    public function testCpfSanitization()
+    public function testSanitization()
     {
         $cpf = new Cpf('529.982.247-25');
 
         $this->assertEquals('52998224725', $cpf->sanitized());
     }
 
-    public function testCpfMasked()
+    public function testMasked()
     {
         $cpf = new Cpf('52998224725');
 

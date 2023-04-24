@@ -8,24 +8,15 @@ use Tests\TestCase;
 class CnpjValidationRuleTest extends TestCase
 {
     /**
-     * @dataProvider validCnpjDataProvider
+     * @dataProvider validDataProvider
      */
-    public function testValidCnpj($cnpj)
+    public function testValid($cnpj)
     {
         $rule = new CnpjValidationRule();
         $this->assertTrue($rule->passes('cnpj', $cnpj));
     }
 
-    /**
-     * @dataProvider invalidCnpjDataProvider
-     */
-    public function testInvalidCnpj($cnpj)
-    {
-        $rule = new CnpjValidationRule();
-        $this->assertFalse($rule->passes('cnpj', $cnpj));
-    }
-
-    public function validCnpjDataProvider()
+    public function validDataProvider()
     {
         return [
             ['60.872.504/0001-23'],
@@ -34,7 +25,16 @@ class CnpjValidationRuleTest extends TestCase
         ];
     }
 
-    public function invalidCnpjDataProvider()
+    /**
+     * @dataProvider invalidDataProvider
+     */
+    public function testInvalid($cnpj)
+    {
+        $rule = new CnpjValidationRule();
+        $this->assertFalse($rule->passes('cnpj', $cnpj));
+    }
+
+    public function invalidDataProvider()
     {
         return [
             ['11.111.111/1111-11'],

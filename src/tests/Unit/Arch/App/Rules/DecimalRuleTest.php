@@ -9,30 +9,15 @@ use Tests\TestCase;
 class DecimalRuleTest extends TestCase
 {
     /**
-     * @dataProvider validDecimalDataProvider
+     * @dataProvider validDataProvider
      */
-    public function testValidDecimal($decimalPlaces, $value)
+    public function testValid($decimalPlaces, $value)
     {
         $rule = new DecimalRule($decimalPlaces);
         $this->assertTrue($rule->passes('decimal', $value));
     }
 
-    /**
-     * @dataProvider invalidDecimalDataProvider
-     */
-    public function testInvalidDecimal($decimalPlaces, $value)
-    {
-        $rule = new DecimalRule($decimalPlaces);
-        $this->assertFalse($rule->passes('decimal', $value));
-    }
-
-    public function testInvalidDecimalPlaces()
-    {
-        $this->expectException(InvalidArgumentException::class);
-        new DecimalRule(-1);
-    }
-
-    public function validDecimalDataProvider()
+    public function validDataProvider()
     {
         return [
             [2, '123.45'],
@@ -43,7 +28,16 @@ class DecimalRuleTest extends TestCase
         ];
     }
 
-    public function invalidDecimalDataProvider()
+    /**
+     * @dataProvider invalidDataProvider
+     */
+    public function testInvalid($decimalPlaces, $value)
+    {
+        $rule = new DecimalRule($decimalPlaces);
+        $this->assertFalse($rule->passes('decimal', $value));
+    }
+
+    public function invalidDataProvider()
     {
         return [
             [2, '123.456'],
@@ -53,5 +47,11 @@ class DecimalRuleTest extends TestCase
             [0, '123.1'],
             [0, '-123.1'],
         ];
+    }
+
+    public function testInvalidPlaces()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new DecimalRule(-1);
     }
 }

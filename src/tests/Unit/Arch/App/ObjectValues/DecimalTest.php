@@ -8,14 +8,14 @@ use Tests\TestCase;
 
 class DecimalTest extends TestCase
 {
-    public function testValidDecimal()
+    public function testValid()
     {
         $decimal = new Decimal(1234.56, 2);
 
         $this->assertEquals('1234.56', (string) $decimal);
     }
 
-    public function testInvalidDecimalSeparator()
+    public function testInvalidSeparator()
     {
         $this->expectException(InvalidArgumentException::class);
 
@@ -23,14 +23,14 @@ class DecimalTest extends TestCase
         $decimal->setDecimalSeparator('/');
     }
 
-    public function testInvalidDecimalValue()
+    public function testInvalid()
     {
         $this->expectException(InvalidArgumentException::class);
 
         new Decimal('invalid_value', 2);
     }
 
-    public function testValidDecimalWithCustomSeparators()
+    public function testValidWithCustomSeparators()
     {
         $decimal = new Decimal(1234567.891, 3);
         $decimal->setDecimalSeparator(',');

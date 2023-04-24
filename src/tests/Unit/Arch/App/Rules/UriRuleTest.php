@@ -8,24 +8,15 @@ use Tests\TestCase;
 class UriRuleTest extends TestCase
 {
     /**
-     * @dataProvider validUriDataProvider
+     * @dataProvider validDataProvider
      */
-    public function testValidUri($uri)
+    public function testValid($uri)
     {
         $rule = new UriRule();
         $this->assertTrue($rule->passes('uri', $uri));
     }
 
-    /**
-     * @dataProvider invalidUriDataProvider
-     */
-    public function testInvalidUri($uri)
-    {
-        $rule = new UriRule();
-        $this->assertFalse($rule->passes('uri', $uri));
-    }
-
-    public function validUriDataProvider()
+    public function validDataProvider()
     {
         return [
             ['https://www.example.com'],
@@ -35,7 +26,16 @@ class UriRuleTest extends TestCase
         ];
     }
 
-    public function invalidUriDataProvider()
+    /**
+     * @dataProvider invalidDataProvider
+     */
+    public function testInvalid($uri)
+    {
+        $rule = new UriRule();
+        $this->assertFalse($rule->passes('uri', $uri));
+    }
+
+    public function invalidDataProvider()
     {
         return [
             ['example.com'],

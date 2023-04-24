@@ -8,21 +8,47 @@ use Tests\TestCase;
 
 class UriTest extends TestCase
 {
-    public function testValidUri()
+    /**
+     * @dataProvider validProvider
+     */
+    public function testValid($value)
     {
-        $uri = new Uri('https://www.example.com');
+        $uri = new Uri($value);
 
-        $this->assertEquals('https://www.example.com', (string) $uri);
+        $this->assertEquals($value, (string) $uri);
     }
 
-    public function testInvalidUri()
+    public function validProvider()
+    {
+        return [
+            ['https://www.example.com'],
+            ['http://localhost:8000'],
+            ['ftp://ftp.example.com'],
+            ['https://www.example.com/path/to/resource?param=value#fragment'],
+        ];
+    }
+
+    /**
+     * @dataProvider invalidProvider
+     */
+    public function testInvalid($value)
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new Uri('invalid-url');
+        new Uri($value);
     }
 
-    public function testUriToString()
+    public function invalidProvider()
+    {
+        return [
+            ['invalid-url'],
+            ['example.com'],
+            ['http:/example.com'],
+            ['https://www.example.com?query=invalid&param=value'],
+        ];
+    }
+
+    public function testToString()
     {
         $uri = new Uri('https://www.example.com/path/to/resource?param=value#fragment');
 

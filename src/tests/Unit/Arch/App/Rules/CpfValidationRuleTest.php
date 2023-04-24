@@ -8,24 +8,15 @@ use Tests\TestCase;
 class CpfValidationRuleTest extends TestCase
 {
     /**
-     * @dataProvider validCpfDataProvider
+     * @dataProvider validDataProvider
      */
-    public function testValidCpf($cpf)
+    public function testValid($cpf)
     {
         $rule = new CpfValidationRule();
         $this->assertTrue($rule->passes('cpf', $cpf));
     }
 
-    /**
-     * @dataProvider invalidCpfDataProvider
-     */
-    public function testInvalidCpf($cpf)
-    {
-        $rule = new CpfValidationRule();
-        $this->assertFalse($rule->passes('cpf', $cpf));
-    }
-
-    public function validCpfDataProvider()
+    public function validDataProvider()
     {
         return [
             ['529.982.247-25'],
@@ -34,7 +25,16 @@ class CpfValidationRuleTest extends TestCase
         ];
     }
 
-    public function invalidCpfDataProvider()
+    /**
+     * @dataProvider invalidDataProvider
+     */
+    public function testInvalid($cpf)
+    {
+        $rule = new CpfValidationRule();
+        $this->assertFalse($rule->passes('cpf', $cpf));
+    }
+
+    public function invalidDataProvider()
     {
         return [
             ['111.111.111-11'],

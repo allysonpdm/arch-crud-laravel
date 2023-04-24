@@ -8,28 +8,28 @@ use Tests\TestCase;
 
 class CnpjTest extends TestCase
 {
-    public function testValidCnpj()
+    public function testValid()
     {
         $cnpj = new Cnpj('32.631.433/0001-31');
 
         $this->assertEquals('32631433000131', (string) $cnpj);
     }
 
-    public function testInvalidCnpj()
+    public function testInvalid()
     {
         $this->expectException(InvalidArgumentException::class);
 
         new Cnpj('11.111.111/1111-11');
     }
 
-    public function testCnpjSanitization()
+    public function testSanitization()
     {
         $cnpj = new Cnpj('32.631.433/0001-31');
 
         $this->assertEquals('32631433000131', $cnpj->sanitized());
     }
 
-    public function testCnpjMasked()
+    public function testMasked()
     {
         $cnpj = new Cnpj('32631433000131');
 
