@@ -4,6 +4,7 @@ namespace ArchCrudLaravel\Tests\Unit\Arch\App\ObjectValues;
 
 use ArchCrudLaravel\App\ObjectValues\Regex;
 use InvalidArgumentException;
+use stdClass;
 use Tests\TestCase;
 
 class RegexTest extends TestCase
@@ -42,7 +43,7 @@ class RegexTest extends TestCase
         return [
             [new stdClass],
             [[]],
-            [null],
+            [null]
         ];
     }
 
