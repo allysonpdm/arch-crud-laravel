@@ -1,68 +1,52 @@
 <?php
 
+namespace ArchCrudLaravel\Tests\Unit\Arch\App\Services\Traits;
+
 use ArchCrudLaravel\App\Services\Traits\TransactionControl;
 use Illuminate\Support\Facades\DB;
-use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 use Tests\TestCase;
 
 class TransactionControlTest extends TestCase
 {
-    use MockeryPHPUnitIntegration;
+    use TransactionControl;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->onTransaction = true;
+    }
 
     public function testTransaction()
     {
-        // create mock object for DB facade
-        $dbMock = Mockery::mock(DB::class);
-        $dbMock->shouldReceive('beginTransaction')->once();
+        $this->transaction();
 
-        // replace actual DB facade with the mock
-        $this->app->instance('db', $dbMock);
-
-        // instantiate the class that uses the trait
-        $class = new class {
-            use TransactionControl;
-        };
-
-        // call the transaction method and assert that the mock was called
-        $this->assertSame($class, $class->transaction());
-        $dbMock->shouldHaveReceived('beginTransaction')->once();
+        $this->assertTrue(DB::transactionLevel() > 0);
     }
 
     public function testCommit()
     {
-        // create mock object for DB facade
-        $dbMock = Mockery::mock(DB::class);
-        $dbMock->shouldReceive('commit')->once();
+        $this->transaction();
+        $this->commit();
 
-        // replace actual DB facade with the mock
-        $this->app->instance('db', $dbMock);
-
-        // instantiate the class that uses the trait
-        $class = new class {
-            use TransactionControl;
-        };
-
-        // call the commit method and assert that the mock was called
-        $this->assertSame($class, $class->commit());
-        $dbMock->shouldHaveReceived('commit')->once();
+        $this->assertEquals(0, DB::transactionLevel());
     }
 
-    public function testRollback()
+    public function testRollBack()
     {
-        // create mock object for DB facade
-        $dbMock = Mockery::mock(DB::class);
-        $dbMock->shouldReceive('rollBack')->once();
+        $this->transaction();
+        $this->rollBack();
 
-        // replace actual DB facade with the mock
-        $this->app->instance('db', $dbMock);
+        $this->assertEquals(0, DB::transactionLevel());
+    }
 
-        // instantiate the class that uses the trait
-        $class = new class {
-            use TransactionControl;
-        };
+    public function testTransactionDisabled()
+    {
+        $this->onTransaction = false;
 
-        // call the rollback method and assert that the mock was called
-        $this->assertSame($class, $class->rollBack());
-        $dbMock->shouldHaveReceived('rollBack')->once();
+        $this->transaction();
+        $this->commit();
+
+        $this->assertEquals(0, DB::transactionLevel());
     }
 }
