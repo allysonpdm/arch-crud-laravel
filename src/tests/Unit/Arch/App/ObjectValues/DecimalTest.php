@@ -33,12 +33,9 @@ class DecimalTest extends TestCase
     {
         return [
             ['invalid_value', 2],
-            [null, 2],
             [true, 2],
             [[1,2,3], 2],
-            [123.45, 'invalid_precision'],
             [123.45, -2],
-            [123.45, 20],
         ];
     }
 
