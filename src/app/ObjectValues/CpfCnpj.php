@@ -69,7 +69,7 @@ class CpfCnpj extends ObjectValue implements Maskable, Sanitizable, Stringable
         return !$this->isCpf();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->isCpf() ? new Cpf($this->value) : new Cnpj($this->value);
     }

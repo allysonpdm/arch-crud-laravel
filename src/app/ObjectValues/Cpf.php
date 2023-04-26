@@ -36,7 +36,7 @@ class Cpf extends ObjectValue implements Maskable, Sanitizable, Stringable
         }
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return str_pad($this->value, 11, '0', STR_PAD_LEFT);
     }
