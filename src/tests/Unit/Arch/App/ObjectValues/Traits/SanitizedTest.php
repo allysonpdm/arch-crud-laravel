@@ -24,10 +24,10 @@ class SanitizedTest extends TestCase
     /**
      * @dataProvider sanitizedValueProvider
      */
-    public function testSanitized($value, $regex, $expected)
+    public function testSanitized(string $value, Regex $regex, string $expected)
     {
         $this->value = $value;
-        $this->setRegex(new Regex($regex));
+        $this->setRegex($regex);
         $formattedValue = $this->sanitized();
 
         $this->assertEquals($expected, $formattedValue);
@@ -36,11 +36,11 @@ class SanitizedTest extends TestCase
     public function sanitizedValueProvider()
     {
         return [
-            ['a1b2c3', '[a-z]', '123'],
-            ['a1b2c3', '[0-9]', 'abc'],
-            ['999.999.999-99', '.-', '99999999999'],
-            ['32.631.433/0001-31', './-', '32631433000131'],
-            ['Anapólis', 'ó', 'Anaplis'],
+            ['a1b2c3', new Regex('[a-z]'), '123'],
+            ['a1b2c3', new Regex('[0-9]'), 'abc'],
+            ['999.999.999-99', new Regex('[^\d]'), '99999999999'],
+            ['32.631.433/0001-31', new Regex('[^\d]'), '32631433000131'],
+            ['Anapólis', new Regex(value:'[^a-zA-Z]', ungreedy:true), 'Anaplis'],
         ];
     }
 }
