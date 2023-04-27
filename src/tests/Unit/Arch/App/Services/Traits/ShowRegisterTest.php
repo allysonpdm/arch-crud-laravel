@@ -19,16 +19,16 @@ class ShowRegisterTest extends TestCase
 
         // Configuração inicial
         $this->model = new class extends Model {
-            protected $table = 'test_table';
+            protected $table = 'tests';
         };
-        $this->request = ['column' => 'value'];
+        $this->request = ['testShowRegister' => 'valueTeste'];
         $this->relationships = ['relationship'];
     }
 
     public function testShowRegisterById()
     {
         // Cria um registro de teste
-        $id = DB::table('test_table')->insertGetId([
+        $id = DB::table('tests')->insertGetId([
             'column' => 'value',
             'relationship' => 'related_value',
         ]);
@@ -44,7 +44,7 @@ class ShowRegisterTest extends TestCase
     public function testShowRegisterByRequest()
     {
         // Cria um registro de teste
-        DB::table('test_table')->insert([
+        DB::table('tests')->insert([
             'column' => 'value',
             'relationship' => 'related_value',
         ]);
@@ -59,7 +59,7 @@ class ShowRegisterTest extends TestCase
     public function testShowRegisterWithResource()
     {
         // Cria um registro de teste
-        $id = DB::table('test_table')->insertGetId([
+        $id = DB::table('tests')->insertGetId([
             'column' => 'value',
             'relationship' => 'related_value',
         ]);

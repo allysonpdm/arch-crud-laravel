@@ -11,7 +11,7 @@ class ArchProvider extends ServiceProvider
         // Publica a migration
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/database/migrations' => database_path('migrations'),
+                __DIR__.'/../../database/migrations' => database_path('migrations'),
             ], 'migrations');
         }
     }
