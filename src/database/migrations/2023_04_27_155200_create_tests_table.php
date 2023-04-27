@@ -1,33 +1,35 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 
-class CreateTestsTable extends Migration
+class AddMigrationToProvider extends Command
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
-    public function up()
-    {
-        Schema::create('temp_tests', function (Blueprint $table) {
-            $table->id();
-            $table->string('key', 30)->unique()->index();
-            $table->text('value');
-            $table->timestamps();
-        });
-    }
+    protected $signature = 'migration:add {migration}';
+    
+    protected $description = 'Adiciona uma migration ao Provider.';
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
+    public function handle()
     {
-        Schema::dropIfExists('temp_tests');
+        $migration = $this->argument('migration');
+        $path = database_path('migrations/'.$migration);
+
+        if (! File::exists($path)) {
+            $this->error('Migration '.$migration.' não existe.');
+            return;
+        }
+
+        $provider = app()->getProvider(MyPackageServiceProvider::class);
+        $migrations = $provider->migrations;
+
+        if (in_array($migration, $migrations)) {
+            $this->info('Migration '.$migration.' já foi adicionada ao Provider.');
+            return;
+        }
+
+        $migrations[] = $migration;
+        $provider->migrations = $migrations;
+        $provider->register();
+        $this->info('Migration '.$migration.' adicionada ao Provider.');
     }
-};
+}
