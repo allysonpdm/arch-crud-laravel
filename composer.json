@@ -51,6 +51,7 @@
             "ArchCrudLaravel\\App\\Models\\": "src/app/Models/",
             "ArchCrudLaravel\\App\\ObjectValues\\": "src/app/ObjectValues/",
             "ArchCrudLaravel\\App\\Rules\\": "src/app/Rules/",
+            "ArchCrudLaravel\\App\\Providers\\": "src/app/Providers/",
             "ArchCrudLaravel\\App\\Services\\": "src/app/Services/",
             "ArchCrudLaravel\\App\\Services\\Contracts\\": "src/app/Services/Contracts/",
             "ArchCrudLaravel\\App\\Services\\Traits\\": "src/app/Services/Traits/",
