@@ -9,7 +9,6 @@ use ArchCrudLaravel\App\Models\Tests\{
 use ArchCrudLaravel\App\Services\Traits\ShowRegister;
 use ArchCrudLaravel\App\Providers\ArchProvider;
 use ArchCrudLaravel\App\Http\Resources\Tests\TestResource;
-use ArchCrudLaravel\Tests\Traits\MigrationControl;
 use Illuminate\Database\Eloquent\{
     Builder,
     Model
@@ -25,7 +24,7 @@ class ShowRegisterTest extends TestCase
     protected TestsModel $testModel;
     protected RelationsModel $relationModel;
 
-    use ShowRegister, MigrationControl;
+    use ShowRegister;
 
     protected function setUp(): void
     {
