@@ -8,6 +8,7 @@ use ArchCrudLaravel\App\Models\Tests\{
 };
 use ArchCrudLaravel\App\Services\Traits\ShowRegister;
 use ArchCrudLaravel\App\Providers\ArchProvider;
+use ArchCrudLaravel\App\Http\Resources\Tests\TestResource;
 use Illuminate\Database\Eloquent\{
     Builder,
     Model
@@ -84,29 +85,14 @@ class ShowRegisterTest extends TestCase
 
     public function testShowRegisterWithResource()
     {
-        // Cria um registro de teste
-        $id = DB::table('tests')->insertGetId([
-            'column' => 'value',
-            'relationship' => 'related_value',
-        ]);
-
         // Configura a classe de recurso
-        $this->nameResource = new class($this->model) extends \Illuminate\Http\Resources\Json\JsonResource {
-            public function toArray($request)
-            {
-                return [
-                    'id' => $this->id,
-                    'column' => $this->column . '_formatted',
-                    'relationship' => $this->relationship . '_formatted',
-                ];
-            }
-        };
+        $this->nameResource = TestResource::class;
 
         // Testa a busca com recurso
-        $result = $this->showRegister($id);
-        $this->assertInstanceOf(get_class($this->nameResource), $result);
-        $this->assertEquals($id, $result->id);
-        $this->assertEquals('value_formatted', $result->column);
-        //$this->assertEquals('related_value_formatted', $result->relationship);
+        $result = $this->showRegister($this->testModel->id);
+        $this->assertInstanceOf($this->nameResource, $result);
+        $this->assertEquals($this->testModel->id, $result->id);
+        $this->assertEquals($this->request['key'], $result->key);
+        $this->assertEquals($this->request['value'], $result->value);
     }
 }
