@@ -58,7 +58,7 @@ class ShowRegisterTest extends TestCase
     {
         $migrator = app('migrator');
         $migrator->rollback([database_path('migrations')]);
-        $this->removeDuplicateFiles(__DIR__.'/../../../../../../database/migrations', database_path('migrations'));
+        $this->removeMigrations(__DIR__.'/../../../../../../database/migrations', database_path('migrations'));
         parent::tearDown();
     }
 
@@ -96,25 +96,18 @@ class ShowRegisterTest extends TestCase
         $this->assertEquals($this->request['value'], $result->value);
     }
 
-    private function removeDuplicateFiles($directoryX, $directoryY)
+    private function removeMigrations($directoryX, $directoryY)
     {
-        // Cria um objeto FilesystemIterator para o diretório X
         $directoryXIterator = new FilesystemIterator($directoryX);
-        var_dump($directoryY);
 
-        // Cria um array para armazenar os nomes dos arquivos em X
         $directoryXFiles = [];
         foreach ($directoryXIterator as $fileInfo) {
             if ($fileInfo->isFile()) {
                 $directoryXFiles[] = $fileInfo->getFilename();
             }
         }
-        var_dump($directoryXFiles);
 
-        // Cria um objeto FilesystemIterator para o diretório Y
         $directoryYIterator = new FilesystemIterator($directoryY);
-
-        // Remove os arquivos com o mesmo nome em Y
         foreach ($directoryYIterator as $fileInfo) {
             if ($fileInfo->isFile() && in_array($fileInfo->getFilename(), $directoryXFiles)) {
                 unlink($directoryY . '/' . $fileInfo->getFilename());
