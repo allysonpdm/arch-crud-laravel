@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 trait MigrationControl
 {
-    protected function executeMigration(ServiceProvider $provider)
+    protected function executeMigration(string $provider): void
     {
         // Publica a migration
         $this->artisan('vendor:publish', [
