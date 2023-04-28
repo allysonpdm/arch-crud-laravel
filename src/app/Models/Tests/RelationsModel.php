@@ -1,6 +1,6 @@
 <?php
 
-namespace ArchCrudLaravel\App\Models;
+namespace ArchCrudLaravel\App\Models\Tests;
 
 use ArchCrudLaravel\App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
