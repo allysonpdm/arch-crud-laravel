@@ -32,7 +32,7 @@ class ShowRegisterTest extends TestCase
         parent::setUp();
 
         // Publica a migration
-        $this->executeMigration(ArchProvider::class);
+        $this->runMigration(ArchProvider::class);
 
         // Configuração inicial
         $this->model = new TestsModel;
