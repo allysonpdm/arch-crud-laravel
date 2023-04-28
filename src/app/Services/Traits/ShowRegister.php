@@ -19,7 +19,7 @@ trait ShowRegister
     protected function showRegister($id = null)
     {
         if (empty($id)) {
-            $id = $this->model->id ?? $this->model::where($this->request);
+            $id = $this->model->id ?? $this->model::where($this->request)->first()->id;
         }
 
         $register = $this->model::with($this->relationships)->findOrFail($id);

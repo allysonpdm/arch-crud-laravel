@@ -27,6 +27,6 @@ class CreateTestsRelationsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('test_relations');
+        Schema::dropIfExists('tests_relations');
     }
 };

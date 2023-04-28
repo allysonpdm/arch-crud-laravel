@@ -4,6 +4,7 @@ namespace ArchCrudLaravel\App\Models\Tests;
 
 use ArchCrudLaravel\App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class TestsModel extends BaseModel
 {
@@ -20,7 +21,11 @@ class TestsModel extends BaseModel
         self::CREATED_AT,
         self::UPDATED_AT
     ];
-    protected $fillable = [self::DELETED_AT];
+    protected $fillable = [
+        'key',
+        'value',
+        self::DELETED_AT
+    ];
 
     public static $snakeAttributes = false;
     public $guardFromUpdate = [
@@ -50,5 +55,10 @@ class TestsModel extends BaseModel
     public function columnExists(string $columnName): bool
     {
         return Schema::hasColumn($this->table, $columnName);
+    }
+
+    public function relation(): HasOne
+    {
+        return $this->hasOne(RelationsModel::class, 'test_id');
     }
 }

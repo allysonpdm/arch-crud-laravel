@@ -14,14 +14,17 @@ class RelationsModel extends BaseModel
     public const UPDATED_AT = 'updated_at';
     public const DELETED_AT = 'deleted_at';
 
-    public $table = 'arch';
+    public $table = 'tests_relations';
     public $timestamps = false;
 
     protected $hidden = [
         self::CREATED_AT,
         self::UPDATED_AT
     ];
-    protected $fillable = [self::DELETED_AT];
+    protected $fillable = [
+        'test_id',
+        self::DELETED_AT
+    ];
 
     public static $snakeAttributes = false;
     public $guardFromUpdate = [

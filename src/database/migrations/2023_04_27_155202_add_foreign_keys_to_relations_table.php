@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAddForeignKeysToTestsRelationsTable extends Migration
+class AddForeignKeysToTestsRelationsTable extends Migration
 {
     /**
      * Run the migrations.
