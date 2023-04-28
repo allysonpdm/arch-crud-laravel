@@ -56,7 +56,7 @@ class RelationsModel extends BaseModel
         return Schema::hasColumn($this->table, $columnName);
     }
 
-    public function test(): HashOne
+    public function test(): HasOne
     {
         return $this->hasOne(TestsModel::class, 'test_id');
     }
