@@ -32,7 +32,13 @@ class ShowRegisterTest extends TestCase
         parent::setUp();
 
         // Publica a migration
-        $this->runMigration(ArchProvider::class);
+        $this->artisan('vendor:publish', [
+            '--provider' => ArchProvider::class,
+            '--tag' => 'migrations'
+        ]);
+
+        // Executa a migration
+        $this->artisan('migrate');
 
         // Configuração inicial
         $this->model = new TestsModel;
@@ -50,7 +56,8 @@ class ShowRegisterTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->rollbackMigrations();
+        $migrator = app('migrator');
+        $migrator->rollback([database_path('migrations')]);
         parent::tearDown();
     }
 
