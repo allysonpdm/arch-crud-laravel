@@ -24,7 +24,7 @@ class ShowRegisterTest extends TestCase
 {
     protected TestsModel $testModel;
     protected RelationsModel $relationModel;
-    
+
     use ShowRegister, MigrationControl;
 
     protected function setUp(): void
