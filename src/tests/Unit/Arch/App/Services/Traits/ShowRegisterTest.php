@@ -9,6 +9,7 @@ use ArchCrudLaravel\App\Models\Tests\{
 use ArchCrudLaravel\App\Services\Traits\ShowRegister;
 use ArchCrudLaravel\App\Providers\ArchProvider;
 use ArchCrudLaravel\App\Http\Resources\Tests\TestResource;
+use ArchCrudLaravel\Tests\Traits\MigrationControl;
 use Illuminate\Database\Eloquent\{
     Builder,
     Model
@@ -21,23 +22,17 @@ use Tests\TestCase;
 
 class ShowRegisterTest extends TestCase
 {
-    use ShowRegister;
-
     protected TestsModel $testModel;
     protected RelationsModel $relationModel;
+    
+    use ShowRegister, MigrationControl;
 
     protected function setUp(): void
     {
         parent::setUp();
 
         // Publica a migration
-        $this->artisan('vendor:publish', [
-            '--provider' => ArchProvider::class,
-            '--tag' => 'migrations'
-        ]);
-
-        // Executa a migration
-        $this->artisan('migrate');
+        $this->executeMigration(ArchProvider::class);
 
         // Configuração inicial
         $this->model = new TestsModel;
@@ -51,15 +46,6 @@ class ShowRegisterTest extends TestCase
         $this->testModel = TestsModel::create($this->request);
         RelationsModel::create(['test_id' => $this->testModel->id]);
         $this->relationModel = RelationsModel::find($this->testModel->id);
-    }
-
-    protected function tearDown(): void
-    {
-        // Remove a tabela de testes
-        $migrator = app('migrator');
-        $migrator->rollback([database_path('migrations')]);
-
-        parent::tearDown();
     }
 
     public function testShowRegisterById()
