@@ -48,6 +48,12 @@ class ShowRegisterTest extends TestCase
         $this->relationModel = RelationsModel::find($this->testModel->id);
     }
 
+    protected function tearDown(): void
+    {
+        $this->rollbackMigrations();
+        parent::tearDown();
+    }
+
     public function testShowRegisterById()
     {
         // Testa a busca por ID

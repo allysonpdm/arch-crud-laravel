@@ -2,11 +2,9 @@
 
 namespace ArchCrudLaravel\Tests\Traits;
 
-use Illuminate\Support\ServiceProvider;
-
 trait MigrationControl
 {
-    protected function executeMigration(string $provider): void
+    protected function runMigration(string $provider): void
     {
         // Publica a migration
         $this->artisan('vendor:publish', [
@@ -18,12 +16,10 @@ trait MigrationControl
         $this->artisan('migrate');
     }
     
-    protected function tearDown(): void
+    protected function rollbackMigrations(): void
     {
         // Remove a tabela de testes
         $migrator = app('migrator');
         $migrator->rollback([database_path('migrations')]);
-
-        parent::tearDown();
     }
 }
