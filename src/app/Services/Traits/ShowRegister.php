@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\{
 
 trait ShowRegister
 {
+    protected ?string $nameModel;
     protected ?string $nameResource;
     protected mixed $model;
     protected array $request;

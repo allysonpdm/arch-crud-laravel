@@ -2,11 +2,19 @@
 
 namespace ArchCrudLaravel\Tests\Unit\Arch\App\Services\Traits;
 
+use ArchCrudLaravel\App\Models\Tests\{
+    RelationsModel,
+    TestsModel
+};
 use ArchCrudLaravel\App\Services\Traits\ShowRegister;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\{
+    Builder,
+    Model
+};
+use Illuminate\Support\Facades\{
+    App,
+    DB
+};
 use Tests\TestCase;
 
 class ShowRegisterTest extends TestCase
@@ -18,27 +26,27 @@ class ShowRegisterTest extends TestCase
         parent::setUp();
 
         // Configuração inicial
-        $this->model = new class extends Model {
-            protected $table = 'tests';
-        };
+        $this->model = new RelationsModel;
         $this->request = ['testShowRegister' => 'valueTeste'];
-        $this->relationships = ['relationship'];
+        $this->relationships = ['test'];
     }
 
     public function testShowRegisterById()
     {
         // Cria um registro de teste
-        $id = DB::table('tests')->insertGetId([
-            'column' => 'value',
-            'relationship' => 'related_value',
+        $id = TestsModel::create([
+            'key' => 'test Show Register By Id',
+            'relationship' => 'test',
         ]);
+        RelationsModel::create(['test_id' => $id]);
+
 
         // Testa a busca por ID
         $result = $this->showRegister($id);
         $this->assertInstanceOf(get_class($this->model), $result);
         $this->assertEquals($id, $result->id);
         $this->assertEquals('value', $result->column);
-        $this->assertEquals('related_value', $result->relationship);
+        $this->assertEquals('related_value', $result->test);
     }
 
     public function testShowRegisterByRequest()

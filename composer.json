@@ -49,6 +49,7 @@
             "ArchCrudLaravel\\App\\Http\\Requests\\": "src/app/Http/Requests/",
             "ArchCrudLaravel\\App\\Http\\Requests\\Traits\\": "src/app/Http/Requests/Traits/",
             "ArchCrudLaravel\\App\\Models\\": "src/app/Models/",
+            "ArchCrudLaravel\\App\\Models\\Tests\\": "src/app/Models/Tests/",
             "ArchCrudLaravel\\App\\ObjectValues\\": "src/app/ObjectValues/",
             "ArchCrudLaravel\\App\\Rules\\": "src/app/Rules/",
             "ArchCrudLaravel\\App\\Providers\\": "src/app/Providers/",
