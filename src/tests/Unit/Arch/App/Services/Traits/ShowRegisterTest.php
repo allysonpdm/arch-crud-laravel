@@ -90,11 +90,11 @@ class ShowRegisterTest extends TestCase
 
         // Testa a busca com recurso
         $result = $this->showRegister($this->testModel->id);
-        $this->assertInstanceOf($this->nameResource, $result);
-        $this->assertEquals($this->testModel->id, $result->id);
-        $this->assertEquals($this->request['key'], $result->key);
-        $this->assertEquals($this->request['value'], $result->value);
-        $this->assertEquals($this->relationModel, $result->first()->relation);
+        $this->assertIsArray($result);
+        $this->assertEquals($this->testModel->id, $result['id']);
+        $this->assertEquals($this->request['key'], $result['key']);
+        $this->assertEquals($this->request['value'], $result['value']);
+        $this->assertEquals($this->relationModel->toArray(), $result['relation']);
     }
 
 }
