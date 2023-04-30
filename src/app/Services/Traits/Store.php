@@ -42,15 +42,12 @@ trait Store
 
     protected function insert()
     {
-        try {
-            if (empty($this->request)) {
-                throw new CreateException;
-            }
-            $this->model = $this->model::create($this->request);
-            return $this;
-        } catch (Exception $exception) {
-            return $this->exceptionTreatment($exception);
+        if (empty($this->request)) {
+            throw new CreateException;
         }
+        $this->model = $this->model::create($this->request);
+
+        return $this;
     }
 
     protected function afterInsert()

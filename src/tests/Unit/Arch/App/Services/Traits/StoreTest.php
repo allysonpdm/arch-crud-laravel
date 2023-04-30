@@ -7,6 +7,7 @@ use ArchCrudLaravel\App\Models\Tests\{
     RelationsModel,
     TestsModel
 };
+use ArchCrudLaravel\App\Providers\ArchProvider;
 use ArchCrudLaravel\App\Services\Traits\Store;
 use ArchCrudLaravel\Tests\Traits\RemoveMigrations;
 use Illuminate\Database\Eloquent\{
@@ -40,6 +41,7 @@ class StoreTest extends TestCase
             'key' => 'test key store',
             'value' => 'test value storage'
         ];
+        $this->relationships = ['relation'];
     }
 
     protected function tearDown(): void
@@ -50,20 +52,25 @@ class StoreTest extends TestCase
         parent::tearDown();
     }
 
+
     public function testStoreSuccess()
     {
         $response = $this->store($this->request);
+        $body = json_decode($response->getContent());
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(201, $response->getStatusCode());
         $this->assertEquals(1, TestsModel::count());
-        $this->assertEquals('test key store', TestsModel::first()->key);
-        $this->assertEquals('test value storage', TestsModel::first()->value);
+        $this->assertEquals($this->request['key'], $body->key);
+        $this->assertEquals($this->request['value'], $body->value);
     }
 
     public function testStoreEmptyRequest()
     {
-        $this->expectException(CreateException::class);
-        $this->store([]);
+        $response = $this->store([]);
+        $body = $response->getContent();
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals(500, $response->getStatusCode());
+        $this->assertEquals('exceptions.error.create', $body);
     }
 
     public function testBeforeInsert()
@@ -76,15 +83,13 @@ class StoreTest extends TestCase
     {
         $this->insert();
         $this->assertEquals(1, TestsModel::count());
-        $this->assertEquals('test', TestsModel::first()->key);
-        $this->assertEquals('test', TestsModel::first()->value);
+        $this->assertEquals($this->request['key'], $this->model->key);
+        $this->assertEquals($this->request['value'], $this->model->value);
     }
 
     public function testInsertError()
     {
-        DB::shouldReceive('beginTransaction')->once();
-        DB::shouldReceive('rollBack')->once();
-        $this->model = new TestsModel();
+        $this->request = [];
         $this->expectException(CreateException::class);
         $this->insert();
     }
@@ -94,4 +99,5 @@ class StoreTest extends TestCase
         $this->afterInsert();
         $this->assertInstanceOf(StoreTest::class, $this);
     }
+
 }
