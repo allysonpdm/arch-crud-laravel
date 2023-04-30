@@ -8,6 +8,7 @@ use ArchCrudLaravel\App\Models\Tests\{
     TestsModel
 };
 use ArchCrudLaravel\App\Services\Traits\Store;
+use ArchCrudLaravel\App\Tests\Traits\RemoveMigrations;
 use Illuminate\Database\Eloquent\{
     Builder,
     Model
@@ -21,7 +22,7 @@ use Tests\TestCase;
 
 class StoreTest extends TestCase
 {
-    use Store;
+    use Store, RemoveMigrations;
 
     protected function setUp(): void
     {

@@ -9,6 +9,7 @@ use ArchCrudLaravel\App\Models\Tests\{
 use ArchCrudLaravel\App\Services\Traits\ShowRegister;
 use ArchCrudLaravel\App\Providers\ArchProvider;
 use ArchCrudLaravel\App\Http\Resources\Tests\TestResource;
+use ArchCrudLaravel\App\Tests\Traits\RemoveMigrations;
 use Illuminate\Database\Eloquent\{
     Builder,
     Model
@@ -25,7 +26,7 @@ class ShowRegisterTest extends TestCase
     protected TestsModel $testModel;
     protected RelationsModel $relationModel;
 
-    use ShowRegister;
+    use ShowRegister, RemoveMigrations;
 
     protected function setUp(): void
     {
@@ -96,24 +97,4 @@ class ShowRegisterTest extends TestCase
         $this->assertEquals($this->relationModel, $result->first()->relation);
     }
 
-    private function removeMigrations()
-    {
-        $libraryDirectory = __DIR__.'/../../../../../../database/migrations';
-        $projectDirectory = database_path('migrations');
-        $libraryDirectoryIterator = new FilesystemIterator($libraryDirectory);
-
-        $libraryDirectoryFiles = [];
-        foreach ($libraryDirectoryIterator as $fileInfo) {
-            if ($fileInfo->isFile()) {
-                $libraryDirectoryFiles[] = $fileInfo->getFilename();
-            }
-        }
-
-        $projectDirectoryIterator = new FilesystemIterator($projectDirectory);
-        foreach ($projectDirectoryIterator as $fileInfo) {
-            if ($fileInfo->isFile() && in_array($fileInfo->getFilename(), $libraryDirectoryFiles)) {
-                unlink($projectDirectory . '/' . $fileInfo->getFilename());
-            }
-        }
-    }
 }
