@@ -58,7 +58,7 @@ class ShowRegisterTest extends TestCase
     {
         $migrator = app('migrator');
         $migrator->rollback([database_path('migrations')]);
-        $this->removeMigrations(__DIR__.'/../../../../../../database/migrations', database_path('migrations'));
+        $this->removeMigrations();
         parent::tearDown();
     }
 
@@ -80,7 +80,6 @@ class ShowRegisterTest extends TestCase
         $this->assertInstanceOf(get_class($this->model), $result);
         $this->assertEquals($this->request['key'], $result->first()->key);
         $this->assertEquals($this->request['value'], $result->first()->value);
-        $this->assertEquals($this->relationModel, $result->first()->relation);
     }
 
     public function testShowRegisterWithResource()
@@ -94,23 +93,26 @@ class ShowRegisterTest extends TestCase
         $this->assertEquals($this->testModel->id, $result->id);
         $this->assertEquals($this->request['key'], $result->key);
         $this->assertEquals($this->request['value'], $result->value);
+        $this->assertEquals($this->relationModel, $result->first()->relation);
     }
 
-    private function removeMigrations($directoryX, $directoryY)
+    private function removeMigrations()
     {
-        $directoryXIterator = new FilesystemIterator($directoryX);
+        $libraryDirectory = __DIR__.'/../../../../../../database/migrations';
+        $projectDirectory = database_path('migrations');
+        $libraryDirectoryIterator = new FilesystemIterator($libraryDirectory);
 
-        $directoryXFiles = [];
-        foreach ($directoryXIterator as $fileInfo) {
+        $libraryDirectoryFiles = [];
+        foreach ($libraryDirectoryIterator as $fileInfo) {
             if ($fileInfo->isFile()) {
-                $directoryXFiles[] = $fileInfo->getFilename();
+                $libraryDirectoryFiles[] = $fileInfo->getFilename();
             }
         }
 
-        $directoryYIterator = new FilesystemIterator($directoryY);
-        foreach ($directoryYIterator as $fileInfo) {
-            if ($fileInfo->isFile() && in_array($fileInfo->getFilename(), $directoryXFiles)) {
-                unlink($directoryY . '/' . $fileInfo->getFilename());
+        $projectDirectoryIterator = new FilesystemIterator($projectDirectory);
+        foreach ($projectDirectoryIterator as $fileInfo) {
+            if ($fileInfo->isFile() && in_array($fileInfo->getFilename(), $libraryDirectoryFiles)) {
+                unlink($projectDirectory . '/' . $fileInfo->getFilename());
             }
         }
     }

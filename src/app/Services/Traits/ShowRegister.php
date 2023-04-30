@@ -26,6 +26,6 @@ trait ShowRegister
 
         return empty($this->nameResource)
             ? $register
-            : new $this->nameResource($register);
+            : (new $this->nameResource($register))->toArray($register);
     }
 }
