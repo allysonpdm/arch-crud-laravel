@@ -4,7 +4,11 @@ namespace Tests\Unit\App\Services\Traits;
 
 use ArchCrudLaravel\App\Enums\Http\StatusCode;
 use ArchCrudLaravel\App\Exceptions\NotFoundException;
-use ArchCrudLaravel\App\Models\Tests\TestsModel;
+use ArchCrudLaravel\App\Models\Tests\{
+    RelationsModel,
+    TestsModel
+};
+use ArchCrudLaravel\App\Providers\ArchProvider;
 use ArchCrudLaravel\App\Services\Traits\Show;
 use ArchCrudLaravel\Tests\Traits\RemoveMigrations;
 use Illuminate\Http\Response;
@@ -26,8 +30,15 @@ class ShowTest extends TestCase
 
         // Configuração inicial
         $this->model = new TestsModel;
-        $this->request = [];
+        $this->request = [
+            'key' => 'test key show',
+            'value' => 'test value show'
+        ];
         $this->relationships = ['relation'];
+
+        $this->testModel = TestsModel::create($this->request);
+        RelationsModel::create(['test_id' => $this->testModel->id]);
+        $this->relationModel = RelationsModel::find($this->testModel->id);
     }
 
     protected function tearDown(): void
@@ -40,12 +51,11 @@ class ShowTest extends TestCase
 
     public function testShowSuccess()
     {
-        $test = TestsModel::factory()->create();
-        $response = $this->show([], $test->id);
+        $response = $this->show([], $this->testModel->id);
         $body = json_decode($response->getContent());
         $this->assertInstanceOf(Response::class, $response);
         $this->assertEquals(StatusCode::OK->value, $response->getStatusCode());
-        $this->assertEquals($test->id, $body->id);
+        $this->assertEquals($this->testModel->id, $body->id);
     }
 
     public function testShowNotFound()
