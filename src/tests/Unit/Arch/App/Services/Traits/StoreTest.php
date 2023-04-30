@@ -8,7 +8,7 @@ use ArchCrudLaravel\App\Models\Tests\{
     TestsModel
 };
 use ArchCrudLaravel\App\Services\Traits\Store;
-use ArchCrudLaravel\App\Tests\Traits\RemoveMigrations;
+use ArchCrudLaravel\Tests\Traits\RemoveMigrations;
 use Illuminate\Database\Eloquent\{
     Builder,
     Model

@@ -9,7 +9,7 @@ use ArchCrudLaravel\App\Models\Tests\{
 use ArchCrudLaravel\App\Services\Traits\ShowRegister;
 use ArchCrudLaravel\App\Providers\ArchProvider;
 use ArchCrudLaravel\App\Http\Resources\Tests\TestResource;
-use ArchCrudLaravel\App\Tests\Traits\RemoveMigrations;
+use ArchCrudLaravel\Tests\Traits\RemoveMigrations;
 use Illuminate\Database\Eloquent\{
     Builder,
     Model
