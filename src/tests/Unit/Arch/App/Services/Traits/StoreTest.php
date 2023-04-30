@@ -32,8 +32,6 @@ class StoreTest extends TestCase
             '--provider' => ArchProvider::class,
             '--tag' => 'migrations'
         ]);
-
-        // Executa a migration
         $this->artisan('migrate');
 
         // Configuração inicial

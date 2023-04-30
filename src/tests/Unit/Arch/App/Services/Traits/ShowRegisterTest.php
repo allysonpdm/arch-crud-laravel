@@ -37,8 +37,6 @@ class ShowRegisterTest extends TestCase
             '--provider' => ArchProvider::class,
             '--tag' => 'migrations'
         ]);
-
-        // Executa a migration
         $this->artisan('migrate');
 
         // Configuração inicial
@@ -49,7 +47,6 @@ class ShowRegisterTest extends TestCase
         ];
         $this->relationships = ['relation'];
 
-        // Cria um registro de teste
         $this->testModel = TestsModel::create($this->request);
         RelationsModel::create(['test_id' => $this->testModel->id]);
         $this->relationModel = RelationsModel::find($this->testModel->id);
@@ -65,7 +62,6 @@ class ShowRegisterTest extends TestCase
 
     public function testShowRegisterById()
     {
-        // Testa a busca por ID
         $result = $this->showRegister($this->testModel->id);
         $this->assertInstanceOf(get_class($this->model), $result);
         $this->assertEquals($this->testModel->id, $result->id);
@@ -76,7 +72,6 @@ class ShowRegisterTest extends TestCase
 
     public function testShowRegisterByRequest()
     {
-        // Testa a busca por request
         $result = $this->showRegister();
         $this->assertInstanceOf(get_class($this->model), $result);
         $this->assertEquals($this->request['key'], $result->first()->key);
@@ -85,10 +80,7 @@ class ShowRegisterTest extends TestCase
 
     public function testShowRegisterWithResource()
     {
-        // Configura a classe de recurso
         $this->nameResource = TestResource::class;
-
-        // Testa a busca com recurso
         $result = $this->showRegister($this->testModel->id);
         $this->assertIsArray($result);
         $this->assertEquals($this->testModel->id, $result['id']);

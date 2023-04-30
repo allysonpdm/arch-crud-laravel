@@ -10,8 +10,8 @@ class TestResource extends BaseResource
 {
     protected $route = 'test';
     protected null|int|string $id = null;
-    protected mixed $key;
-    protected mixed $value;
+    protected mixed $key = null;
+    protected mixed $value = null;
     public $resource;
 
     /**
