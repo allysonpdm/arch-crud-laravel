@@ -1,6 +1,6 @@
 <?php
 
-namespace ArchCrudLaravel\App\Tests\Traits;
+namespace ArchCrudLaravel\Tests\Traits;
 
 use FilesystemIterator;
 
