@@ -39,7 +39,6 @@ class ShowTest extends TestCase
         ];
         $this->relationships = ['relation'];
 
-
         $this->testModel = $this->nameModel::create($this->request);
         RelationsModel::create(['test_id' => $this->testModel->id]);
         $this->relationModel = RelationsModel::find($this->testModel->id);
