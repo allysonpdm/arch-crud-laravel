@@ -3,7 +3,7 @@
 namespace Tests\Unit\App\Services\Traits;
 
 use ArchCrudLaravel\App\Enums\Http\StatusCode;
-use ArchCrudLaravel\App\Exceptions\NotFoundException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use ArchCrudLaravel\App\Models\Tests\{
     RelationsModel,
     TestsModel
@@ -16,6 +16,8 @@ use Tests\TestCase;
 
 class ShowTest extends TestCase
 {
+    protected int|string $id;
+
     use Show, RemoveMigrations;
 
     protected function setUp(): void
@@ -29,14 +31,16 @@ class ShowTest extends TestCase
         $this->artisan('migrate');
 
         // Configuração inicial
-        $this->model = new TestsModel;
+        $this->nameModel = TestsModel::class;
+        $this->model = new $this->nameModel;
         $this->request = [
             'key' => 'test key show',
             'value' => 'test value show'
         ];
         $this->relationships = ['relation'];
 
-        $this->testModel = TestsModel::create($this->request);
+
+        $this->testModel = $this->nameModel::create($this->request);
         RelationsModel::create(['test_id' => $this->testModel->id]);
         $this->relationModel = RelationsModel::find($this->testModel->id);
     }
@@ -60,8 +64,11 @@ class ShowTest extends TestCase
 
     public function testShowNotFound()
     {
-        $this->expectException(NotFoundException::class);
-        $this->show([], 999);
+        $response = $this->show([], 999);
+        $body = json_decode($response->getContent());
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertEquals(StatusCode::NOT_FOUND->value, $response->getStatusCode());
+        $this->assertEquals('exceptions.error.no_results', $body->Message);
     }
 
     public function testBeforeSelect()
@@ -72,14 +79,16 @@ class ShowTest extends TestCase
 
     public function testSelectSuccess()
     {
-        $test = TestsModel::factory()->create();
+        $test = TestsModel::create($this->request);
+        $this->id = $test->id;
         $this->select();
         $this->assertEquals($test->id, $this->model->id);
     }
 
     public function testSelectNotFound()
     {
-        $this->expectException(NotFoundException::class);
+        $this->expectException(ModelNotFoundException::class);
+        $this->id = 999;
         $this->select();
     }
 
