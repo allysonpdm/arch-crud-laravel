@@ -18,7 +18,7 @@ trait Show
     protected array $request;
     protected array $relationships = [];
 
-    use TransactionControl, ExceptionTreatment, ShowRegister;
+    use CacheControl, TransactionControl, ExceptionTreatment, ShowRegister;
 
     public function show(array $request, string|int $id): Response
     {
