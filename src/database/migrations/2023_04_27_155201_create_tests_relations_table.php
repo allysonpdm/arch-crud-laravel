@@ -17,6 +17,7 @@ class CreateTestsRelationsTable extends Migration
             $table->id();
             $table->foreignId('test_id')->index();
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 
