@@ -4,10 +4,7 @@ namespace ArchCrudLaravel\App\Models\Tests;
 
 use ArchCrudLaravel\App\Models\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\{
-    BelongsTo,
-    HasOne,
-};
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class RelationsModel extends BaseModel
 {
@@ -59,8 +56,8 @@ class RelationsModel extends BaseModel
         return Schema::hasColumn($this->table, $columnName);
     }
 
-    public function test(): BelongsTo
+    public function test(): HasOne
     {
-        return $this->belongsTo(TestsModel::class, 'test_id');
+        return $this->hasOne(TestsModel::class, 'test_id');
     }
 }

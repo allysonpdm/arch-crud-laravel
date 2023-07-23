@@ -18,7 +18,6 @@ class CreateTestsTable extends Migration
             $table->string('key', 30)->index();
             $table->text('value');
             $table->timestamps();
-            $table->timestamp('deleted_at')->nullable();
         });
     }
 
