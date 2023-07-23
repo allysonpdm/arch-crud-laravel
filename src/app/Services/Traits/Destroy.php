@@ -30,7 +30,7 @@ trait Destroy
     protected int|string $id;
     protected mixed $model;
     protected Model $register;
-    protected bool $force;
+    protected bool $force = false;
     protected array $request;
     protected array $relationships = [];
     protected array $ignoreTypesOfRelationships = [];
@@ -50,7 +50,7 @@ trait Destroy
             $this->forgetCache(key: $cacheKey);
             $response = $this->transaction()
                 ->beforeDelete()
-                ->delete($id)
+                ->deleteRecord()
                 ->afterDelete()
                 ->commit()
                 ->model;
@@ -69,7 +69,7 @@ trait Destroy
         return $this;
     }
 
-    protected function delete()
+    public function deleteRecord()
     {
         if (!self::isActive($this->register, $this->model::DELETED_AT, $this->force)) {
             throw new SoftDeleteException;
