@@ -20,7 +20,7 @@ trait Update
     protected Model $register;
     protected array $request;
 
-    use TransactionControl, ExceptionTreatment, ShowRegister, CacheControl;
+    use TransactionControl, Relationships, ExceptionTreatment, ShowRegister, CacheControl;
 
     public function update(array $request, string|int $id): Response
     {
@@ -54,24 +54,20 @@ trait Update
 
     protected function modify()
     {
-        try {
-            if (empty($this->request)) {
-                throw new UpdateException;
-            }
-
-            if (
-                array_key_exists($this->model::DELETED_AT, $this->request) &&
-                $this->request[$this->model::DELETED_AT] === null &&
-                $this->register->{$this->model::DELETED_AT} !== $this->request[$this->model::DELETED_AT]
-            ) {
-                $this->reactivate();
-            } 
-            $this->register->update($this->request);
-
-            return $this;
-        } catch (Exception $exception) {
-            return $this->exceptionTreatment($exception);
+        if (empty($this->request)) {
+            throw new UpdateException;
         }
+
+        if (
+            array_key_exists($this->model::DELETED_AT, $this->request) &&
+            $this->request[$this->model::DELETED_AT] === null &&
+            $this->register->{$this->model::DELETED_AT} !== $this->request[$this->model::DELETED_AT]
+        ) {
+            $this->reactivate();
+        }
+        $this->register->update($this->request);
+
+        return $this;
     }
 
     protected function afterModify()
@@ -86,7 +82,6 @@ trait Update
         }
 
         $this->markModelVisited($this->register);
-
         $this->register->update([$this->model::DELETED_AT => null]);
         $relations = self::getRelationshipNames(model: $this->register);
 

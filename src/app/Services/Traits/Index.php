@@ -33,8 +33,14 @@ trait Index
         $perPage = $request['perPage'] ?? 15;
         $page = $request['page'] ?? 1;
         try {
+
             $cacheKey = $this->createCacheKey(request: $this->request);
-            $response = $this->getCache(key: $cacheKey) ?? $this->transaction()
+            $response = $this->getCache(key: $cacheKey);
+            if (!empty($response)) {
+                return response($response, StatusCode::OK->value);
+            }
+
+            $response = $this->transaction()
                 ->beforeList()
                 ->list()
                 ->afterList()
@@ -92,7 +98,7 @@ trait Index
         $this->model = $this->model
             ->with($this->relationships);
 
-        if(!$this->model->exists()){
+        if (!$this->model->exists()) {
             throw new ModelNotFoundException;
         }
 
@@ -122,3 +128,4 @@ trait Index
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 }
+
