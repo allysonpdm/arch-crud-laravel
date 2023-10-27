@@ -85,17 +85,25 @@ trait Index
     {
         if (!empty($wheres)) {
             foreach ($wheres as $where) {
-                $this->model = $this->model->where($where['column'], $where['condition'], $where['search']);
+                match($where['condition']){
+                    'IS NULL' => $this->model->whereNull($where['column']),
+                    'IS NOT NULL' => $this->model->whereNotNull($where['column']),
+                    default => $this->model->where($where['column'], $where['condition'], $where['search'])
+                };
             }
         }
 
         if (!empty($orWheres)) {
             foreach ($orWheres as $orWhere) {
-                $this->model = $this->model->orWhere($orWhere['column'], $orWhere['condition'], $orWhere['search']);
+                match($orWhere['condition']){
+                    'IS NULL' => $this->model->orWhereNull($orWhere['column']),
+                    'IS NOT NULL' => $this->model->orWhereNotNull($orWhere['column']),
+                    default => $this->model->orWhere($orWhere['column'], $orWhere['condition'], $orWhere['search'])
+                };
             }
         }
 
-        $this->model = $this->model
+        $this->model
             ->with($this->relationships);
 
         if (!$this->model->exists()) {
