@@ -39,7 +39,10 @@ trait IndexRules
                 'required',
                 Rule::in($this->conditionsOperators),
             ],
-            'wheres.*.search' => 'required|string',
+            'wheres.*.search' => [
+                'nullable',
+                'string',
+            ],
 
             'orWheres' => 'array',
             'orWheres.*.column' => [
@@ -53,7 +56,10 @@ trait IndexRules
                 'required',
                 Rule::in($this->conditionsOperators)
             ],
-            'orWheres.*.search' => 'string|required',
+            'orWheres.*.search' => [
+                'nullable',
+                'string',
+            ],
         ];
     }
 }
