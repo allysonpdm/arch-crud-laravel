@@ -109,7 +109,7 @@ trait ExceptionTreatment
             },
             QueryException::class => function ($exception) {
                 $message = match ($exception->getCode()) {
-                    23000 => "Verifique se o relacionamento foi criado e garanta que o mesmo esteja correto. SQLSTATE[{$exception->getCode()}]: ",
+                    23000 => "Verifique se o relacionamento foi criado e garanta que o tipo esteja correto. SQLSTATE[{$exception->getCode()}]: ",
                     default => null
                 };
 
@@ -124,6 +124,10 @@ trait ExceptionTreatment
                 );
             }
         ];
+
+        /**
+         * @var array<class-string, Closure> $exceptionMappings
+         */
         $exceptionMappings = [
             ...$this->defaultExceptionMappings($exceptionMappings),
             ...$this->customExceptionMappings,
@@ -148,7 +152,7 @@ trait ExceptionTreatment
 
     /**
      * @param array<class-string, Closure> $values
-     * @return array<int, <class-string, Closure>>
+     * @return array<class-string, Closure>
      */
     protected function defaultExceptionMappings(array $values): array
     {
@@ -175,6 +179,7 @@ trait ExceptionTreatment
     }
 
     /**
+     * Mapea novas exceptions e o tratamento a ser aplicado respectivamente.
      * @param array<int, CustomExceptionMapping> $mappings
      * @return self
      */
