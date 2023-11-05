@@ -15,6 +15,7 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use InvalidArgumentException;
 
@@ -24,6 +25,7 @@ trait ExceptionTreatment
      * @var array<class-string, Closure>
      */
     protected array $customExceptionMappings = [];
+    protected bool $shouldLog = false;
 
     use TransactionControl;
 
@@ -40,6 +42,13 @@ trait ExceptionTreatment
         $code = empty($code)
             ? StatusCode::INTERNAL_SERVER_ERROR->value
             : $code;
+
+        if($this->shouldLog || app('config')->get('app.debug')){
+            Log::error(
+                message: $exception->getMessage(),
+                context: [$exception]
+            );
+        }
 
         $exceptionMappings = [
             InvalidArgumentException::class => function ($exception) {
