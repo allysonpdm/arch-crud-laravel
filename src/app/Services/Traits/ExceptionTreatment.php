@@ -20,6 +20,9 @@ use InvalidArgumentException;
 
 trait ExceptionTreatment
 {
+    /**
+     * @var array<class-string, Closure>
+     */
     protected array $customExceptionMappings = [];
 
     use TransactionControl;
@@ -134,6 +137,10 @@ trait ExceptionTreatment
         );
     }
 
+    /**
+     * @param array<class-string, Closure> $values
+     * @return array<int, <class-string, Closure>>
+     */
     protected function defaultExceptionMappings(array $values): array
     {
         $mappings = [];
@@ -147,15 +154,13 @@ trait ExceptionTreatment
 
     /**
      * @param array<int, CustomExceptionMapping> $mappings
-     * @return array
+     * @return array<class-string, Closure>
      */
     protected static function reduceMappings(array $mappings): array
     {
         return array_reduce(
             $mappings,
-            function ($result, $mapping) {
-                return array_merge($result, $mapping->toArray());
-            },
+            fn ($result, $mapping) => array_merge($result, $mapping->toArray()),
             []
         );
     }
