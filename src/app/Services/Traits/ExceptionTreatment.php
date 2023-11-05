@@ -41,13 +41,17 @@ trait ExceptionTreatment
         $exceptionMappings = [
             InvalidArgumentException::class => function ($exception) {
                 return response(
-                    content: ['message' => $exception->getMessage()],
+                    content: [
+                        'message' => $exception->getMessage()
+                    ],
                     status: StatusCode::UNPROCESSABLE_ENTITY->value
                 );
             },
             ValidationException::class => function ($exception) {
                 return response(
-                    content: $exception->validator->messages(),
+                    content: [
+                        'message' => $exception->validator->messages()
+                    ],
                     status: StatusCode::UNPROCESSABLE_ENTITY->value
                 );
             },
@@ -61,25 +65,33 @@ trait ExceptionTreatment
             },
             CreateException::class => function ($exception) use ($code) {
                 return response(
-                    content: $exception->getMessage(),
+                    content: [
+                        'message' => $exception->getMessage()
+                    ],
                     status: $code
                 );
             },
             BusinessException::class => function ($exception) use ($code) {
                 return response(
-                    content: $exception->getMessage(),
+                    content: [
+                        'message' => $exception->getMessage()
+                    ],
                     status: $code
                 );
             },
             UpdateException::class => function ($exception) use ($code) {
                 return response(
-                    content: $exception->getMessage(),
+                    content: [
+                        'message' => $exception->getMessage()
+                    ],
                     status: $code
                 );
             },
             SoftDeleteException::class => function ($exception) {
                 return response(
-                    content: $exception->getMessage(),
+                    content: [
+                        'message' => $exception->getMessage()
+                    ],
                     status: StatusCode::OK->value
                 );
             },
@@ -133,6 +145,10 @@ trait ExceptionTreatment
         return self::reduceMappings($mappings);
     }
 
+    /**
+     * @param array<int, CustomExceptionMapping> $mappings
+     * @return array
+     */
     protected static function reduceMappings(array $mappings): array
     {
         return array_reduce(
@@ -144,6 +160,10 @@ trait ExceptionTreatment
         );
     }
 
+    /**
+     * @param array<int, CustomExceptionMapping> $mappings
+     * @return self
+     */
     public function setCustomExceptionMappings(array $mappings): self
     {
         foreach ($mappings as $key => $mapping) {
