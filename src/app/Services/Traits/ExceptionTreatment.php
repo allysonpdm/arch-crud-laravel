@@ -39,16 +39,22 @@ trait ExceptionTreatment
             : $code;
 
         $exceptionMappings = [
+            InvalidArgumentException::class => function ($exception) {
+                return response(
+                    content: ['message' => $exception->getMessage()],
+                    status: StatusCode::UNPROCESSABLE_ENTITY->value
+                );
+            },
             ValidationException::class => function ($exception) {
                 return response(
                     content: $exception->validator->messages(),
                     status: StatusCode::UNPROCESSABLE_ENTITY->value
                 );
             },
-            ModelNotFoundException::class => function ($exception) {
+            ModelNotFoundException::class => function () {
                 return response(
                     content: [
-                        'Message' => __('exceptions.error.no_results')
+                        'message' => __('exceptions.error.no_results')
                     ],
                     status: StatusCode::NOT_FOUND->value
                 );
@@ -78,13 +84,11 @@ trait ExceptionTreatment
                 );
             },
             QueryException::class => function ($exception) {
-                switch ($exception->getCode()) {
-                    case 23000:
-                        $message = "Verifique se o relacionamento foi criado e garanta que o mesmo esteja correto. SQLSTATE[{$exception->getCode()}]: ";
-                        break;
-                    default:
-                        $message = null;
-                }
+                $message = match ($exception->getCode()) {
+                    23000 => "Verifique se o relacionamento foi criado e garanta que o mesmo esteja correto. SQLSTATE[{$exception->getCode()}]: ",
+                    default => null
+                };
+
                 return response(
                     content: [
                         'Exception' => get_class($exception),
