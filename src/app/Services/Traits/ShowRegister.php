@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\{
     Builder,
     Model
 };
+use \Illuminate\Http\Request;
 
 trait ShowRegister
 {
@@ -24,8 +25,14 @@ trait ShowRegister
 
         $register = $this->model::with($this->relationships)->findOrFail($id);
 
-        return empty($this->nameResource)
-            ? $register
-            : (new $this->nameResource($register))->toArray($register);
+        if($this->nameResource){
+            return $register;
+        }
+
+        return match($register instanceof Request){
+            Request::class => (new $this->nameResource($register))->toArray($register),
+            default => $register
+        };
+
     }
 }
