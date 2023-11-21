@@ -85,5 +85,5 @@
         "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
     },
     "type": "library",
-    "version": "2.0.1"
+    "version": "2.0.2"
 }
