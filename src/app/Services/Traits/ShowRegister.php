@@ -29,8 +29,8 @@ trait ShowRegister
             return $register;
         }
 
-        return match($register instanceof Request){
-            Request::class => (new $this->nameResource($register))->toArray($register),
+        return match(true) {
+            $register instanceof Request => (new $this->nameResource($register))->toArray($register),
             default => $register
         };
 
